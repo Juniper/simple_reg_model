@@ -31,9 +31,25 @@ class test_reg32 extends srm_unit_test;
     `TEST_VALUE(32'hdeadbeef, rd_data.field, "get data matches the set data"); 
   endtask
 
+  task test_tree;
+    srm_component leaves[$];
+    regmodel.get_leaf_nodes(leaves);
+    `TEST_VALUE(1, regmodel.is_root_node(), "Root node match"); 
+    `TEST_VALUE(1, regmodel.num_children(), "Root node has 1 child");
+    `TEST_VALUE(1, leaves.size(), "Only 1 table as leaf");
+    `TEST_STRING("regmodel.r1", leaves[0].get_full_name(), "Full name must match");
+  endtask
+
+  task test_address_map;
+    srm_reg#(cpu_table32::r1_struct_t) entry;  
+    `TEST_VALUE(32'h10000, regmodel.get_address("cpu_map"), "Base addr of cpu must match");
+    `TEST_VALUE(32'h10100, regmodel.r1.get_address("cpu_map"), "Start addr of r1 must match");
+  endtask
 
   virtual task run();
     `RUN_TEST(test_set_get_r1);
+    `RUN_TEST(test_tree);
+    `RUN_TEST(test_address_map);
   endtask
 
 endclass

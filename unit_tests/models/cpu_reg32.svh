@@ -42,6 +42,7 @@ class cpu_reg32 extends srm_component;
   function new(string name, srm_component parent);
     super.new(name, parent);
     r1 = new(.name("r1"), .parent(this));
+    add_child(r1);
 
     cpu_map = new(.name("cpu_map"), .base_address(64'h10000));
     cpu_map.add_node(.node(r1), .offset(64'h100));

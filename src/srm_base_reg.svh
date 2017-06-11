@@ -53,7 +53,7 @@ class srm_base_reg extends srm_component;
 
   // Function: get_address
   // Return the address of the register.
-  function srm_addr_t get_address(string addr_map_name);
+  virtual function srm_addr_t get_address(string addr_map_name);
     string key;
     srm_addr_t base_addr;
 

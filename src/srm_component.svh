@@ -86,6 +86,12 @@ class srm_component;
     _children.push_back(child);
   endfunction
 
+  // Functin: number of children
+  // Return the number of children
+  function int num_children();
+    return _children.size();
+  endfunction
+
   // Function: get_root_node
   function srm_component get_root_node();
     srm_component ptr = this;
@@ -125,7 +131,7 @@ class srm_component;
   // Function: add_address_map
   // Add a unique address map for each sw entity.
   //
-  function void add_address_map(srm_address_map addr_map);
+  virtual function void add_address_map(srm_address_map addr_map);
     string n = addr_map.get_name();
     _maps[n] = addr_map;
   endfunction
@@ -134,7 +140,7 @@ class srm_component;
   // Return the address map given the name.
   //
   // Address map must exist otherwise fatal error.
-  function srm_address_map get_address_map(string addr_map_name);
+  virtual function srm_address_map get_address_map(string addr_map_name);
     if(_maps.exists(addr_map_name))
       return _maps[addr_map_name];
     else begin
@@ -148,7 +154,7 @@ class srm_component;
   //
   // The root node maintains all the address map. Lookup the address
   // map based on name as key and return the base address of node.
-  function srm_addr_t get_address(string addr_map_name);
+  virtual function srm_addr_t get_address(string addr_map_name);
     string key;
     srm_address_map addr_map;
     srm_component root = get_root_node();
@@ -164,14 +170,14 @@ class srm_component;
   // Add the adapter to the list.
   //
   // Each node maintains a list of adapters.
-  function void add_adapter(srm_bus_adapter adapter);
+  virtual function void add_adapter(srm_bus_adapter adapter);
     _adapters.push_back(adapter);
   endfunction
 
   // Function: get_adapters
   // Return the list of adapters at this node.
   //
-  function srm_adapters_t get_adapters();
+  virtual function srm_adapters_t get_adapters();
     return _adapters;
   endfunction
 
