@@ -1,0 +1,57 @@
+`ifndef INCLUDED_srm_handle_svh
+`define INCLUDED_srm_handle_svh
+
+typedef class srm_adapter_policy;
+//-----------------------------------------------------------------
+// CLASS: srm_handle
+// Client options for configurating the access.
+//-----------------------------------------------------------------
+
+class srm_handle;
+  // Variable: adapter_policy
+  // Pointer to the adapter policy to use.
+  srm_adapter_policy adapter_policy;
+
+  // Variable: addr_map_name
+  // Name of the address map.
+  string addr_map_name;
+
+  // Variable: auto_predict_model
+  // Update the model value after access to the design automatically.
+  bit auto_predict_model;
+
+  // Variable: skip_read_error_msg
+  // Debug variable to switch off error messages from failing reads.
+  bit skip_read_error_msg; 
+
+  // Varaible: status
+  // Status of the bus xact returned by agent.
+  srm_status_e bus_xact_status;
+
+  // Variable: error_msgs
+  // List of error messages encountered so far.
+  string error_msgs[$];
+
+  //------------------
+  // Group: Initialization
+  //-------------------
+
+  // Function: new
+  function new(srm_adapter_policy adapter_policy, string addr_map_name);
+    this.adapter_policy = adapter_policy;
+    this.addr_map_name = addr_map_name;
+    this.auto_predict_model = 0;
+    this.skip_read_error_msg = 0;
+    this.bus_xact_status = SRM_IS_OK;
+  endfunction
+
+  // Function: append_error
+  // Append error msgs for debug later by the client.
+  //
+  function void append_error(string msg);
+    error_msgs.push_back(msg);
+  endfunction
+
+endclass
+
+`endif

@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'ostruct'
+require 'fileutils'
+require_relative "shell"
+
+options = OpenStruct.new
+options.sim_files = []
+options.testname = ""
+options.output_dir = "run"
+options.logfile = "test.log"
+options.unit_test = "all"
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: srun -f <sim.cfile> -t <testname>"
+
+  opts.on("-f", "--file SIMFILE",
+          "Require the path to the simulation control file") do |sim_file|
+    options.sim_files << sim_file
+  end
+
+  opts.on("-t", "--testname TEST",
+          "Require the name of the uvm top level test to run") do |test|
+    options.testname = test
+  end
+
+  opts.on("-u", "--unit_test TEST",
+          "Optional name of the unit test to run") do |test|
+    options.unit_test = test
+  end
+
+  opts.on("-o", "--out output_dir",
+          "output directory to create the build and run dir.") do |dir|
+    options.output_dir = dir
+  end
+
+  opts.on("-l", "--log logfile", "test.log output file.") do |log|
+    options.logfile = log 
+  end
+
+end.parse(ARGV)
+
+abort "ERROR: Must specify cfile for sim" if options.sim_files.empty?
+options.sim_files.each do |f|
+  abort "ERROR: File #{f} does not exist" unless File.exist?(f)
+end
+
+logfile = options.logfile
+
+cflags_opts = ""
+testname = options.testname || abort("ERROR: UVM test name must be specified")
+uvm_home = ENV["UVM_HOME"] || abort("UVM_HOME must be set in the env")
+svm_home = ENV["SRM_HOME"] || abort("SRM_HOME must be set in the env")
+
+compile_opts = " +define+SVM "
+compile_opts += %Q(+incdir+#{uvm_home}/src +incdir+#{svm_home}/dpi +incdir+#{svm_home}/src #{uvm_home}/src/uvm.sv #{uvm_home}/src/dpi/uvm_dpi.cc )
+loader_opts = ""
+
+runtime_opts = "-l #{options.logfile} "
+runtime_opts += "+UVM_TESTNAME=#{testname} " if testname != ""
+runtime_opts += "+UNIT_TEST_NAME=#{options.unit_test} "
+
+output_dir = options.output_dir
+FileUtils.mkdir_p output_dir unless Dir.exists?(output_dir)
+
+cfile = ""
+options.sim_files.each do |f|
+  f = FileUtils.pwd() + "/#{f} " unless f.match(/^\//)
+  cfile += "-f " + "#{f}"
+end
+
+FileUtils.cd(output_dir) do
+  system("rm -rf #{logfile}")
+  Shell.sh(%Q(ncverilog  #{compile_opts} #{loader_opts} #{runtime_opts}  #{cfile}))
+  sleep 3 unless File.exist?("#{logfile}")  #Wait for the file to be written to disk.
+  puts Shell::parse_verilog_log(logfile); puts; puts 
+  puts Shell.parse_unit_test_result(logfile); puts; puts
+  system("grep SRUN_TEST_PASS #{logfile}") || 
+    abort(Rainbow("ERROR: Test Failed. String SRUN_TEST_PASS not found in #{logfile}").bright.red)
+end
+

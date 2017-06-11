@@ -1,0 +1,6 @@
+run/*
+*.swp
+*.swo
+*.o
+*.so
+*.swn
