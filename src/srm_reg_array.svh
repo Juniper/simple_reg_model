@@ -8,8 +8,8 @@
 
 class srm_reg_array #(type T = int) extends srm_component;
   local srm_addr_t _num_entries;
-  protected srm_reg#(T) _prototype;
-  local srm_reg#(T) _entries[srm_addr_t];
+  protected srm_array_entry#(T) _prototype;
+  local srm_array_entry#(T) _entries[srm_addr_t];
   
   //-----------------
   //Group: Initialization
@@ -24,9 +24,9 @@ class srm_reg_array #(type T = int) extends srm_component;
   //-----------------------
   // Composite 
   //-----------------------
-  function srm_reg#(T) entry_at(srm_addr_t index);
+  function srm_array_entry#(T) entry_at(srm_addr_t index);
     string name;
-    srm_reg#(T) entry;
+    srm_array_entry#(T) entry;
 
     if(!_entries.exists(index)) begin
       //FIXME: need to make it unidirectional so that the node tree does not see

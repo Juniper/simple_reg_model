@@ -12,7 +12,6 @@ typedef class srm_base_field;
 //--------------------------------------------------------
 class srm_base_reg extends srm_component;
   local srm_base_field _fields[$];
-  local srm_addr_t _index;   // For address computation in array.
 
   //------------------
   // Group: Initialization
@@ -21,7 +20,6 @@ class srm_base_reg extends srm_component;
   // Function: new
   function new(string name, srm_component parent);
     super.new(name, parent);
-    _index = 0;
   endfunction
 
   // Function: add_field
@@ -45,20 +43,6 @@ class srm_base_reg extends srm_component;
   //
   virtual function int get_num_fields();
     return _fields.size();
-  endfunction
-
-  //----------------------
-  // Group: Address computation 
-  //----------------------
-
-  // Function: get_address
-  // Return the address of the register.
-  virtual function srm_addr_t get_address(string addr_map_name);
-    string key;
-    srm_addr_t base_addr;
-
-    base_addr = super.get_address(addr_map_name);
-    return base_addr + _index * get_width_bytes();
   endfunction
 
  
@@ -151,15 +135,6 @@ class srm_base_reg extends srm_component;
   //------------------
   // Group: Private API
   //-------------------
- 
-  // Function: __set_index
-  // Store the index of the register.
-  //
-  // This is used to compute the address of the entry of the register array.
-  // By default it is 0 for a single entry register.
-  function void __set_index(srm_addr_t index);
-    _index = index;
-  endfunction
 
   // Function: __write_bytes
   // Send the bus xact to the adapter class. if auto predict is on then the
@@ -237,9 +212,9 @@ class srm_base_reg extends srm_component;
         if(!srm_utils::is_same_bytes(.bytes1(new_field_bytes), .bytes2(current_field_bytes))) begin
 
           // Data Mismatch Detected.
-          msg = $sformatf("Expected Data=%s, Got Data=%s for field \"%s\" in register \"%s\" at index=%0d",
+          msg = $sformatf("Expected Data=%s, Got Data=%s for field \"%s\" in register \"%s\" at addr=0x%0x",
               srm_utils::bytes_2_hex(current_field_bytes), srm_utils::bytes_2_hex(new_field_bytes),
-              _fields[i].get_name(), get_full_name(), _index);
+              _fields[i].get_name(), get_full_name(), bus_xact.addr);
 
           if(!handle.skip_read_error_msg) `uvm_error("ReadFieldMismatch", msg);
           handle.append_error(msg);

@@ -132,15 +132,6 @@ class srm_reg#(type T = int) extends srm_base_reg;
     __write_bytes(handle, bytes, byte_enables);
   endtask
 
-  //------------------
-  // Group: Private 
-  //-------------------
-  virtual function srm_reg#(T) clone(srm_addr_t index);
-    srm_reg#(T) obj;
-    assert(!"Derived class  must override it");
-    return obj;
-  endfunction
-
 
 
 endclass

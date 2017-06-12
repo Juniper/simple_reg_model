@@ -38,6 +38,7 @@ package srm_pkg;
   `include "srm_base_field.svh"
   `include "srm_field.svh"
   `include "srm_reg.svh"
+  `include "srm_array_entry.svh"
   `include "srm_reg_array.svh"
 endpackage
 

@@ -11,7 +11,7 @@ typedef srm_bus_adapter srm_adapters_t[$];
 //------------------------------------------------------------
 class srm_component;
   local string _name;
-  local srm_component _parent;
+  protected srm_component _parent;
   local srm_component _children[$];
   local srm_address_map _maps[string];
   local srm_adapters_t _adapters;

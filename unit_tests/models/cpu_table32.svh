@@ -27,11 +27,11 @@ class cpu_table32 extends srm_component;
   class r1_reg_array extends srm_reg_array#(r1_struct_t);
 
     // Entry in the table.
-    class r1_reg extends srm_reg#(r1_struct_t);
+    class r1_reg extends srm_array_entry#(r1_struct_t);
       srm_field#(bit[31:0]) field;
 
-      function new(string name, srm_component parent);
-        super.new(name, parent);
+      function new(string name, srm_component parent, srm_addr_t index);
+        super.new(name, parent, index);
         field = new(.name("field"), .parent(this), .n_bits(32), .lsb_pos(0),
                   .volatile(0));
         add_field(field);
@@ -39,8 +39,8 @@ class cpu_table32 extends srm_component;
 
       virtual function r1_reg clone(srm_addr_t index);
         r1_reg obj;
-        obj = new(.name($psprintf("%s_%0d", get_name(), index)), .parent(this));
-        obj.__set_index(index);
+        obj = new(.name($psprintf("%s_%0d", get_name(), index)),
+                  .parent(_parent), .index(index));
         return obj;
       endfunction
     endclass
@@ -48,7 +48,7 @@ class cpu_table32 extends srm_component;
     function new(string name,  srm_component parent);
       r1_reg entry;
       super.new(name, parent, .num_entries(10));
-      entry = new(.name("r1_reg_entry"), .parent(this));
+      entry = new(.name("r1_reg_entry"), .parent(this), .index(-1));
       _prototype = entry;
     endfunction
   endclass
