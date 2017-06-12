@@ -5,7 +5,17 @@
 // CLASS: cpu_table32
 // Cpu register map with a table of 10 entries.
 //
-// Address map starts from 32'h10000 and has a table of 10 entries start at 32'h100
+// Address map starts from 32'h10000.
+// Offset:   Register
+//---------------------
+// 'h100     r1 with 10 entries
+// 'h200     r2 with 10 entries
+// 'h300     r3 with 10 entries
+// 'h400     blk4
+//            |
+//            \/
+//           'h10 --> r4 with 10 entries
+//           'h20 --> r5 with 10 entries
 //---------------------------------------------------------
 
 import srm_pkg::*;
@@ -58,14 +68,25 @@ class cpu_table32 extends srm_component;
   //------------------------------------------------------
   srm_address_map cpu_map;
   r1_reg_array r1;
+  r1_reg_array r2;
+  r1_reg_array r3;
 
   function new(string name, srm_component parent);
     super.new(name, parent);
+    cpu_map = new(.name("cpu_map"), .base_address(64'h10000));
+
     r1 = new(.name("r1"), .parent(this));
     add_child(r1);
-
-    cpu_map = new(.name("cpu_map"), .base_address(64'h10000));
     cpu_map.add_node(.node(r1), .offset(64'h100));
+
+    r2 = new(.name("r2"), .parent(this));
+    add_child(r2);
+    cpu_map.add_node(.node(r2), .offset(64'h200));
+
+    r3 = new(.name("r3"), .parent(this));
+    add_child(r3);
+    cpu_map.add_node(.node(r3), .offset(64'h300));
+
 
     add_address_map(cpu_map);
   endfunction

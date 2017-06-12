@@ -48,15 +48,19 @@ class test_table32 extends srm_unit_test;
     srm_component leaves[$];
     regmodel.get_leaf_nodes(leaves);
     `TEST_VALUE(1, regmodel.is_root_node(), "Root node match"); 
-    `TEST_VALUE(1, regmodel.num_children(), "Root node has 1 child");
-    `TEST_VALUE(1, leaves.size(), "Only 1 table as leaf");
-    `TEST_STRING("regmodel.r1", leaves[0].get_full_name(), "Full name must match");
+    `TEST_VALUE(3, regmodel.num_children(), "Root node has 3 children");
+    `TEST_VALUE(3, leaves.size(), "Number of leaves must match");
+    `TEST_STRING("regmodel.r1", leaves[0].get_full_name(), "Name of r1 must match");
+    `TEST_STRING("regmodel.r2", leaves[0].get_full_name(), "Name of r2 must match");
+    `TEST_STRING("regmodel.r3", leaves[0].get_full_name(), "Name of r3 must match");
   endtask
 
   task test_address_map;
     srm_reg#(cpu_table32::r1_struct_t) entry;  
     `TEST_VALUE(32'h10000, regmodel.get_address("cpu_map"), "Start addr of cpu must match");
-    `TEST_VALUE(32'h10100, regmodel.r1.get_address("cpu_map"), "Start addr of table match");
+    `TEST_VALUE(32'h10100, regmodel.r1.get_address("cpu_map"), "Start addr of r1 match");
+    `TEST_VALUE(32'h10200, regmodel.r2.get_address("cpu_map"), "Start addr of r2 match");
+    `TEST_VALUE(32'h10300, regmodel.r3.get_address("cpu_map"), "Start addr of r3 match");
     entry = regmodel.r1.entry_at(0);
     `TEST_VALUE(32'h10100, entry.get_address("cpu_map"), "Start addr of entry#0 must match");
   endtask
