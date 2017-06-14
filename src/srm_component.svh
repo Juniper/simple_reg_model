@@ -13,8 +13,8 @@ class srm_component;
   local string _name;
   protected srm_component _parent;
   local srm_component _children[$];
-  local srm_address_map _maps[string];
-  local srm_adapters_t _adapters;
+  protected srm_addr_t _offset_table[string];
+  protected srm_adapters_t _adapters;
 
   //---------------------
   // Group: Initialization
@@ -82,15 +82,24 @@ class srm_component;
 
   // Function: add_child
   // Add a child below itself.
+  // 
+  // It also creates an entry in the offset table to record the offset.
   function void add_child(srm_component child);
     _children.push_back(child);
   endfunction
 
-  // Functin: number of children
+  // Function: number of children
   // Return the number of children
   function int num_children();
     return _children.size();
   endfunction
+
+  function void get_children(ref srm_component children[$]);
+    foreach(_children[i])
+      children.push_back(_children[i]);
+
+  endfunction
+
 
   // Function: get_root_node
   function srm_component get_root_node();
@@ -125,44 +134,35 @@ class srm_component;
   endfunction
 
   //----------------------
-  // Group: Address computation 
+  // Group: Address Computation
   //----------------------
-
-  // Function: add_address_map
-  // Add a unique address map for each sw entity.
-  //
-  virtual function void add_address_map(srm_address_map addr_map);
-    string n = addr_map.get_name();
-    _maps[n] = addr_map;
+ 
+  // Function: set_offset
+  // Set the offset of the node in the address map.
+  virtual function void set_offset(string addr_map_name, srm_addr_t offset);
+    _offset_table[addr_map_name] = offset;
   endfunction
 
-  // Function: get_address_map
-  // Return the address map given the name.
+  // Function: get_offset
+  // Return the offset of node in address map by adding all the offset in path.
   //
-  // Address map must exist otherwise fatal error.
-  virtual function srm_address_map get_address_map(string addr_map_name);
-    if(_maps.exists(addr_map_name))
-      return _maps[addr_map_name];
-    else begin
-      `uvm_fatal("TbConfigurationError", $psprintf("Could not find addr map \"%s\" in tree",
-                  addr_map_name));
+  // If address map name does not exists, then it is a fatal error.
+  virtual function srm_addr_t get_offset(string addr_map_name);
+    srm_addr_t offset;
+    srm_component p;
+    if(!_offset_table.exists(addr_map_name)) begin
+      `uvm_fatal("TbConfigurationError", 
+        $psprintf("Unknown address map name \"%s\" for get_offset", addr_map_name));
     end
+    offset = _offset_table[addr_map_name];
+    p = get_parent();
+    while(p != null) begin
+      offset += p._offset_table[addr_map_name];
+      p = p.get_parent();
+    end
+    return offset;
   endfunction
 
-  // Function: get_address
-  // Return the base address of the node.
-  //
-  // The root node maintains all the address map. Lookup the address
-  // map based on name as key and return the base address of node.
-  virtual function srm_addr_t get_address(string addr_map_name);
-    string key;
-    srm_address_map addr_map;
-    srm_component root = get_root_node();
-
-    addr_map = root.get_address_map(addr_map_name);
-    return addr_map.get_base_address(this);
-  endfunction
-  
   //----------------------
   // Group: Adapter Management 
   //----------------------

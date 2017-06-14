@@ -31,7 +31,6 @@ package srm_pkg;
   `include "srm_bus_xact.svh"
   `include "srm_handle.svh"
   `include "srm_bus_adapter.svh"
-  `include "srm_address_map.svh"
   `include "srm_component.svh"
   `include "srm_adapter_policy.svh"
   `include "srm_base_reg.svh"

@@ -17,6 +17,8 @@ class test_reg32 extends srm_unit_test;
 
   virtual function void setup();
     regmodel = new(.name("regmodel"), .parent(null));
+    regmodel.set_offset(.addr_map_name("cpu_map"), .offset(64'h10000));
+
     adapter_policy = new();
     cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
     cpu_handle.auto_predict_model = 1;
@@ -46,13 +48,13 @@ class test_reg32 extends srm_unit_test;
 
   task test_address_map;
     srm_reg#(cpu_table32::r1_struct_t) entry;  
-    `TEST_VALUE(32'h10000, regmodel.get_address("cpu_map"), "Base addr of cpu must match");
-    `TEST_VALUE(32'h10100, regmodel.r1.get_address("cpu_map"), "Start addr of r1 must match");
-    `TEST_VALUE(32'h10200, regmodel.r2.get_address("cpu_map"), "Start addr of r2 must match");
-    `TEST_VALUE(32'h10300, regmodel.r3.get_address("cpu_map"), "Start addr of r3 must match");
-    `TEST_VALUE(32'h10400, regmodel.blk4.get_address("cpu_map"), "Start addr of blk4 must match");
-    `TEST_VALUE(32'h10410, regmodel.blk4.r4.get_address("cpu_map"), "Start addr of r4 must match");
-    `TEST_VALUE(32'h10420, regmodel.blk4.r5.get_address("cpu_map"), "Start addr of r5 must match");
+    `TEST_VALUE(32'h10000, regmodel.get_offset("cpu_map"), "Base addr of cpu must match");
+    `TEST_VALUE(32'h10100, regmodel.r1.get_offset("cpu_map"), "Start addr of r1 must match");
+    `TEST_VALUE(32'h10200, regmodel.r2.get_offset("cpu_map"), "Start addr of r2 must match");
+    `TEST_VALUE(32'h10300, regmodel.r3.get_offset("cpu_map"), "Start addr of r3 must match");
+    `TEST_VALUE(32'h10400, regmodel.blk4.get_offset("cpu_map"), "Start addr of blk4 must match");
+    `TEST_VALUE(32'h10410, regmodel.blk4.r4.get_offset("cpu_map"), "Start addr of r4 must match");
+    `TEST_VALUE(32'h10420, regmodel.blk4.r5.get_offset("cpu_map"), "Start addr of r5 must match");
   endtask
 
   virtual task run();

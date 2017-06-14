@@ -29,7 +29,6 @@ class srm_reg_array #(type T = int) extends srm_component;
     srm_array_entry#(T) entry;
 
     if(!_entries.exists(index)) begin
-      //FIXME: need to make it unidirectional so that the node tree does not see
       name = $psprintf("%s_%0d", get_name(), index);
       entry = _prototype.clone(index);
       _entries[index] = entry;

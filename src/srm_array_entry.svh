@@ -27,14 +27,12 @@ class srm_array_entry#(type T = int) extends srm_reg#(T);
   // Group: Address computation 
   //----------------------
 
-  // Function: get_address
-  // Return the address of the register.
-  virtual function srm_addr_t get_address(string addr_map_name);
-    string key;
-    srm_addr_t base_addr;
-
-    base_addr = _parent.get_address(addr_map_name);
-    return base_addr + _index * get_width_bytes();
+  // Function: get_offset
+  // Get the offset of entry 0 and then add the index*width.
+  //
+  virtual function srm_addr_t get_offset(string addr_map_name);
+    srm_addr_t offset = _parent.get_offset(addr_map_name);
+    return offset + (_index * get_width_bytes());
   endfunction
 
 endclass

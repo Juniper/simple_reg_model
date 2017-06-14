@@ -4,6 +4,7 @@ module main;
 
   test_reg32 t1 = new();
   test_table32 t2 = new();
+  test_top t3 = new();
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin

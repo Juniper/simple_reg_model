@@ -147,7 +147,7 @@ class srm_base_reg extends srm_component;
     srm_bus_adapter adapter;
 
     bus_xact.kind = SRM_WRITE;
-    bus_xact.addr = get_address(handle.addr_map_name);
+    bus_xact.addr = get_offset(handle.addr_map_name);
     bus_xact.data = bytes;
     bus_xact.byte_enables = byte_enables;
 
@@ -175,7 +175,7 @@ class srm_base_reg extends srm_component;
     string msg;
 
     bus_xact.kind = SRM_READ;
-    bus_xact.addr = get_address(handle.addr_map_name);
+    bus_xact.addr = get_offset(handle.addr_map_name);
     bus_xact.data = bytes;
     bus_xact.byte_enables = byte_enables;
 
