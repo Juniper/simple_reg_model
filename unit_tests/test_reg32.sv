@@ -47,7 +47,6 @@ class test_reg32 extends srm_unit_test;
   endtask
 
   task test_address_map;
-    srm_reg#(cpu_table32::r1_struct_t) entry;  
     `TEST_VALUE(32'h10000, regmodel.get_offset("cpu_map"), "Base addr of cpu must match");
     `TEST_VALUE(32'h10100, regmodel.r1.get_offset("cpu_map"), "Start addr of r1 must match");
     `TEST_VALUE(32'h10200, regmodel.r2.get_offset("cpu_map"), "Start addr of r2 must match");

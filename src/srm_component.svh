@@ -151,8 +151,12 @@ class srm_component;
     srm_addr_t offset;
     srm_component p;
     if(!_offset_table.exists(addr_map_name)) begin
-      `uvm_fatal("TbConfigurationError", 
-        $psprintf("Unknown address map name \"%s\" for get_offset", addr_map_name));
+      // By default return 0 for root node even when the user has not specified it.
+      if(is_root_node()) 
+        return 0;
+      else 
+        `uvm_fatal("TbConfigurationError", 
+          $psprintf("Unknown address map name \"%s\" for get_offset", addr_map_name));
     end
     offset = _offset_table[addr_map_name];
     p = get_parent();
