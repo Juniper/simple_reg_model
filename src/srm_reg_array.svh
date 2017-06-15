@@ -7,9 +7,9 @@
 //----------------------------------------------------------
 
 class srm_reg_array #(type T = int) extends srm_component;
-  local srm_addr_t _num_entries;
+  protected srm_addr_t _num_entries;
   protected srm_array_entry#(T) _prototype;
-  local srm_array_entry#(T) _entries[srm_addr_t];
+  protected srm_array_entry#(T) _entries[srm_addr_t];
   
   //-----------------
   //Group: Initialization
