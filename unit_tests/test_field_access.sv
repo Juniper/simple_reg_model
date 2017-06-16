@@ -17,6 +17,9 @@ class test_field_access extends srm_unit_test;
   endfunction
 
   task test_reg_field_set();
+    wr_data = 'h0;
+    regmodel.r1.set(wr_data);  // Start with all zeros in reg
+
     regmodel.r1.f0.set('hef);
     rd_data = regmodel.r1.get();
     `TEST_VALUE('hef, rd_data, "Field 0 must match");

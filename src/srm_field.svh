@@ -12,14 +12,17 @@ typedef class srm_handle;
 class srm_field#(type T = int) extends srm_base_field;
 
   local T _entry;
-  
+  local T _reset_values[string];
+  local string _last_reset_kind;
+  local bit _is_initialized;
+
   //---------------------------
   // Group: Initialization
   //---------------------------
-
   function new(string name, srm_base_reg parent, int n_bits, int lsb_pos,
                bit volatile);
     super.new(name, parent, n_bits, lsb_pos, volatile);
+    _is_initialized = 0;
   endfunction
 
   //-------------------------------------
@@ -93,10 +96,25 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   virtual function void set(T data);
     _entry = data;
+    _is_initialized = 1;
   endfunction
 
+  // Function: get
+  // Get the value of the field.
+  // If the field has not been written and has reset then return the last reset kind value.
+  // If not resettable then reading before writing is a fatal error.
   virtual function T get();
-    return _entry;
+    T dummy;
+    if(_is_initialized) begin
+      return _entry;
+    end else if(is_resettable()) begin
+      return _reset_values[_last_reset_kind];
+    end
+    else begin
+      `uvm_error("ReadBeforeWrite", 
+        $sformatf("Uninitialized field \"%s\" that is not resettable.", get_full_name()));
+      return dummy;
+    end
   endfunction
 
   // Function: get_bytes
@@ -154,6 +172,45 @@ class srm_field#(type T = int) extends srm_base_field;
   // The field data is them stripped and compared to the model data.
   virtual task read(srm_handle handle, output T data);
   endtask
+
+  //-------------------------------------
+  // Group: Reset
+  //-------------------------------------
+
+  // Function: set_reset_value
+  //
+  // Sets the reset value of the field under different kinds of reset.
+  virtual function void set_reset_value(T value, input string kind);
+    super.set_has_reset();
+    _reset_values[kind] = value;
+    _last_reset_kind = kind;
+  endfunction
+
+  // Function: get_reset_value
+  //
+  // Get the reset value of the field under different kinds of reset.
+  //
+  virtual function T get_reset_value(string kind);
+    return _reset_values[kind];
+  endfunction
+  
+
+  // Function: reset
+  //
+  // Reset all the entries in the field.
+  //
+  virtual function void reset(string kind);
+    if(is_resettable()) begin
+      if(!_reset_values.exists(kind)) begin
+        `uvm_fatal("ConfigError", $sformatf("Unknown reset type='%s' for reset", kind));
+      end
+      else begin
+        _last_reset_kind = kind;
+        _is_initialized = 0;
+      end
+    end
+  endfunction
+
 
 endclass
 

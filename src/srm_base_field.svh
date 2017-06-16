@@ -14,7 +14,7 @@ virtual class srm_base_field;
   protected int _lsb_pos;
   protected bit _has_reset;
   protected bit _volatile;
-
+  
   //-----------------
   // Group: Initialization
   //-----------------
@@ -60,6 +60,24 @@ virtual class srm_base_field;
   // Function: is_volatile
   function bit is_volatile();
     return _volatile;
+  endfunction
+
+  //-------------------------------------
+  // Group: Reset
+  //-------------------------------------
+
+  // Function: set_has_reset
+  // Indicate whether the field  is resettable.
+  //
+  function void set_has_reset();
+    _has_reset = 1;
+  endfunction
+
+  // Function: is_resettable
+  // Indicate whether the field is resettable ?
+  //
+  function bit is_resettable();
+    return _has_reset;
   endfunction
 
   //-------------------

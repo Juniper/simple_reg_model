@@ -12,6 +12,7 @@
 // {byte_n, byte_n_1,......, byte_1, byte_0} = [msb....lsb]
 //-----------------------------------------------------------------
 typedef struct {
+  string addr_map_name;       // Name of the address map.
   srm_access_e kind;          // Read/Write cmd.
   srm_addr_t addr;            // Byte address of the register.
   srm_data_t data;            // List of bytes to be written/read.
