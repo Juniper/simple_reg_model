@@ -43,13 +43,12 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Function: reset
   // Reset all the leaf nodes.
   virtual function void reset(string kind);
-
     // If reset succeeds then all entries must be deleted.
     if(_prototype.is_resettable(kind)) begin
+      $display("SPS:resetting array with %s", kind);
       _prototype.reset(kind);
       _entries.delete();
     end
-
   endfunction
 
   // Function: is_resettable
@@ -57,6 +56,21 @@ class srm_reg_array #(type T = int) extends srm_component;
   virtual function bit is_resettable(string kind);
     return _prototype.is_resettable(kind);
   endfunction
+
+  // Function: is_reset_present();
+  virtual function bit is_reset_present();
+    return _prototype.is_reset_present();
+  endfunction
+
+  // Group: Debug
+  
+  // Function: get_active_entries
+  // Return the number of entries that have been created.
+  // Useful for unit testing the sparse feature.
+  virtual function int get_active_entries();
+    return _entries.size();
+  endfunction
+
 endclass
 
 `endif

@@ -11,7 +11,9 @@ typedef class srm_base_field;
 // coming from the monitor to update the value.
 //--------------------------------------------------------
 class srm_base_reg extends srm_component;
-  local srm_base_field _fields[$];
+  protected srm_base_field _fields[$];
+  protected int _reset_kind[string];
+  protected string _last_reset_kind;
 
   //------------------
   // Group: Initialization
@@ -49,21 +51,41 @@ class srm_base_reg extends srm_component;
   //------------------
   // Group: Reset
   //-------------------
-  
-  // Function: reset
-  // Reset all the leaf nodes.
-  virtual function void reset(string kind);
-    foreach(_fields[i])
-      _fields[i].reset(kind);
+ 
+  // Function: set_reset_kind
+  // Set the type of reset supported on the register.
+  // The model needs to ensure same kind supported by all the fields
+  // in the register.
+  virtual function void set_reset_kind(string kind);
+    _reset_kind[kind] = 1;
   endfunction
 
   // Function: is_resettable
-  // If a field is resettable then the register is resettable.
-  // It is given that a register must have at least one field.
   virtual function bit is_resettable(string kind);
-    return _fields[0].is_resettable(kind);
+    return _reset_kind.exists(kind);
   endfunction
 
+  // Function: is_reset_present
+  // Check if register has reset. Use the last_reset_kind to get
+  // the value of the register in that case.
+  virtual function bit is_reset_present();
+    return _reset_kind.size() > 0;
+  endfunction
+
+  // Function: reset
+  // If resettable, reset all the fields of the register.
+  virtual function void reset(string kind);
+    if(is_resettable(kind)) begin
+      foreach(_fields[i]) _fields[i].apply_reset(kind);
+      _last_reset_kind = kind;
+    end
+  endfunction
+
+  // Function: get_last_reset_kind
+  // Get the last reset applied kind.
+  virtual function string get_last_reset_kind();
+    return _last_reset_kind;
+  endfunction
 
   //------------------
   // Group: Model Access 

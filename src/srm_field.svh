@@ -13,6 +13,7 @@ class srm_field#(type T = int) extends srm_base_field;
 
   local T _entry;
   local T _reset_values[string];
+  local int _reset_kind[string];
 
   //---------------------------
   // Group: Initialization
@@ -104,8 +105,9 @@ class srm_field#(type T = int) extends srm_base_field;
     T dummy;
     if(_is_initialized) begin
       return _entry;
-    end else if(is_reset_present()) begin
-      return _reset_values[_last_reset_kind];
+    end else if(_parent.is_reset_present()) begin
+      string last_reset_kind = _parent.get_last_reset_kind();
+      return _reset_values[last_reset_kind];
     end
     else begin
       `uvm_error("ReadBeforeWrite", 
@@ -178,7 +180,7 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   // Sets the reset value of the field under different kinds of reset.
   virtual function void set_reset_value(T value, input string kind);
-    super.set_reset(kind);
+    _reset_kind[kind] = 1;
     _reset_values[kind] = value;
   endfunction
 

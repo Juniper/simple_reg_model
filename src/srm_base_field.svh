@@ -12,9 +12,7 @@ virtual class srm_base_field;
   protected srm_base_reg _parent;
   protected int _n_bits;
   protected int _lsb_pos;
-  local int _reset_kind[string];
-  protected string _last_reset_kind;
-  protected bit _is_initialized; // set in derived class sets it.
+  protected bit _is_initialized; // Derived class also sets it in "set" function.
 
   local bit _volatile;
   
@@ -68,39 +66,15 @@ virtual class srm_base_field;
   //-------------------------------------
   // Group: Reset
   //-------------------------------------
-
-  // Sets the reset value of the field under different kinds of reset.
-  virtual function void set_reset(input string kind);
-    _reset_kind[kind] = 1;
-    _last_reset_kind = kind;
-  endfunction
-
-  // Function: is_reset_present 
-  // Indicate whether the field has reset.
-  //
-  virtual function bit is_reset_present();
-    return _reset_kind.size() > 0;
-  endfunction
-
-  // Function: is_resettable
-  // Indicate whether the field is resettable ?
-  //
-  virtual function bit is_resettable(string kind);
-    return _reset_kind.exists(kind);
-  endfunction
-
-  // Function: reset
+  // Function: apply_reset
   //
   // Reset the field with the specified reset.
   //
-  // Ignore if field is not resettable or not of the right kind.
-  virtual function void reset(string kind);
-    if(is_resettable(kind)) begin
-      _last_reset_kind = kind;
-      _is_initialized = 0;
-    end
+  virtual function void apply_reset(string kind);
+    _is_initialized = 0;
   endfunction
-  
+ 
+
   //-------------------
   // Group: Access
   //-------------------

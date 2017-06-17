@@ -8,6 +8,7 @@ module main;
   test_default_offset t4 = new();
   test_field_access t5 = new();
   test_reg_reset t6 = new();
+  test_table_reset t7 = new();
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin
