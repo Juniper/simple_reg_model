@@ -104,7 +104,7 @@ class cpu_multi_field extends srm_component;
         f2 = new(.name("f2"), .parent(this), .n_bits(3), .lsb_pos(3), .volatile(0));
         add_field(f2);
         f2.set_reset_value(.value('h0), .kind("HARD"));
-        f1.set_reset_value(.value('h3), .kind("BIST"));
+        f2.set_reset_value(.value('h7), .kind("BIST"));
 
         f3 = new(.name("f3"), .parent(this), .n_bits(1), .lsb_pos(6), .volatile(0));
         add_field(f3);

@@ -19,9 +19,11 @@ class test_table_reset extends srm_unit_test;
   task test_get_reset_value();
     `TEST_VALUE(1, regmodel.r2.is_resettable("HARD"), "Table must be resettable");
     `TEST_VALUE(1, regmodel.r2.is_reset_present(), "Table must have reset");
-    
     entry = regmodel.r2.entry_at(8);
-    `TEST_VALUE('hff, entry.get(), "read out hard value");
+    `TEST_VALUE('h0, entry.get(), "read out hard value");
+    regmodel.reset("BIST");    
+    entry = regmodel.r2.entry_at(8);
+    `TEST_VALUE('hff, entry.get(), "read out bist value");
   endtask
 
 
@@ -31,13 +33,12 @@ class test_table_reset extends srm_unit_test;
     entry.set(wr_data);
     `TEST_VALUE(1, regmodel.r2.get_active_entries(), "set entry allocated");
     `TEST_VALUE('ha5, entry.get(), "read out set value");
-    regmodel.r2.reset("HARD"); 
+    regmodel.r2.reset("BIST"); 
     `TEST_VALUE('hff, entry.get(), "read out reset value");
-    `TEST_VALUE(0, regmodel.r2.get_active_entries(), "set entry deallocated");
   endtask
   virtual task run();
     `RUN_TEST(test_get_reset_value);
-  //  `RUN_TEST(test_reset_set_value);
+    `RUN_TEST(test_reset_set_value);
   endtask
 
 endclass

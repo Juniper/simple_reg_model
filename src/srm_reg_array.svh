@@ -57,7 +57,7 @@ class srm_reg_array #(type T = int) extends srm_component;
     // If reset succeeds then all entries must be deleted.
     if(_prototype.is_resettable(kind)) begin
       _prototype.reset(kind);
-      _entries.delete();
+      foreach(_entries[i]) _entries[i].reset(kind);
     end
   endfunction
 
