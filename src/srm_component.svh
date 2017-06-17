@@ -206,7 +206,7 @@ class srm_component;
 
   // Task: store 
   // Call store on all the leaf nodes of the tree.
-  //
+  // Leaf class will override this for the base case.
   virtual task store(srm_handle handle);
     srm_component leaves[$];
 
@@ -238,7 +238,16 @@ class srm_component;
 
   endtask
   
- 
+
+  // Function: reset
+  // Reset all the leaf nodes.
+  // Leaf nodes implement the base case.
+  virtual function void reset(string kind);
+    foreach(_children[i])
+      _children[i].reset(kind);
+  endfunction
+
+
 endclass
 
 `endif

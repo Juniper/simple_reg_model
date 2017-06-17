@@ -36,6 +36,27 @@ class srm_reg_array #(type T = int) extends srm_component;
     return _entries[index];
   endfunction
 
+  //------------------
+  // Group: Reset
+  //-------------------
+  
+  // Function: reset
+  // Reset all the leaf nodes.
+  virtual function void reset(string kind);
+
+    // If reset succeeds then all entries must be deleted.
+    if(_prototype.is_resettable(kind)) begin
+      _prototype.reset(kind);
+      _entries.delete();
+    end
+
+  endfunction
+
+  // Function: is_resettable
+  // If the entry is resettable then the array is resettable.
+  virtual function bit is_resettable(string kind);
+    return _prototype.is_resettable(kind);
+  endfunction
 endclass
 
 `endif

@@ -47,6 +47,25 @@ class srm_base_reg extends srm_component;
 
  
   //------------------
+  // Group: Reset
+  //-------------------
+  
+  // Function: reset
+  // Reset all the leaf nodes.
+  virtual function void reset(string kind);
+    foreach(_fields[i])
+      _fields[i].reset(kind);
+  endfunction
+
+  // Function: is_resettable
+  // If a field is resettable then the register is resettable.
+  // It is given that a register must have at least one field.
+  virtual function bit is_resettable(string kind);
+    return _fields[0].is_resettable(kind);
+  endfunction
+
+
+  //------------------
   // Group: Model Access 
   //-------------------
   
