@@ -1,6 +1,7 @@
 @startuml
 class srm_reg_array << template >>
 class srm_reg << template >>
+abstract class srm_array_entry << template >>
 class srm_field << template >>
 abstract class srm_base_field
 abstract class srm_base_reg
@@ -39,7 +40,8 @@ class srm_reg_array {
 
 class srm_array_entry {
   -_index
-  get_offset(addr_map_name)
+  +get_offset(addr_map_name)
+  +clone(index)
 }
 
 class srm_base_field {
