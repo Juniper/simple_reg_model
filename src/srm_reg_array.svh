@@ -40,17 +40,6 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Group: Reset
   //-------------------
   
-  // Function: reset
-  // Reset all the leaf nodes.
-  virtual function void reset(string kind);
-    // If reset succeeds then all entries must be deleted.
-    if(_prototype.is_resettable(kind)) begin
-      $display("SPS:resetting array with %s", kind);
-      _prototype.reset(kind);
-      _entries.delete();
-    end
-  endfunction
-
   // Function: is_resettable
   // If the entry is resettable then the array is resettable.
   virtual function bit is_resettable(string kind);
@@ -62,7 +51,23 @@ class srm_reg_array #(type T = int) extends srm_component;
     return _prototype.is_reset_present();
   endfunction
 
+  // Function: reset
+  // Reset the prototype for future entries and delete existing entries.
+  virtual function void reset(string kind);
+    // If reset succeeds then all entries must be deleted.
+    if(_prototype.is_resettable(kind)) begin
+      _prototype.reset(kind);
+      _entries.delete();
+    end
+  endfunction
+
+  virtual function string get_last_reset_kind();
+    return _prototype.get_last_reset_kind();
+  endfunction
+
+  //------------------
   // Group: Debug
+  //------------------
   
   // Function: get_active_entries
   // Return the number of entries that have been created.

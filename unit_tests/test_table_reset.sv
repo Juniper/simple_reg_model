@@ -37,7 +37,7 @@ class test_table_reset extends srm_unit_test;
   endtask
   virtual task run();
     `RUN_TEST(test_get_reset_value);
-    `RUN_TEST(test_reset_set_value);
+  //  `RUN_TEST(test_reset_set_value);
   endtask
 
 endclass

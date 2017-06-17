@@ -244,7 +244,6 @@ class srm_component;
   // Leaf nodes implement the base case.
   virtual function void reset(string kind);
     foreach(_children[i]) begin
-      $display("SPS:component applying reset %s to node %s", kind, _children[i].get_full_name());
       _children[i].reset(kind);
     end
   endfunction

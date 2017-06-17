@@ -73,7 +73,6 @@ virtual class srm_base_field;
   virtual function void apply_reset(string kind);
     _is_initialized = 0;
   endfunction
- 
 
   //-------------------
   // Group: Access

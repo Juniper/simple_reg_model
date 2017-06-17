@@ -84,30 +84,44 @@ class cpu_multi_field extends srm_component;
       srm_field#(bit[1:0]) f1;
       srm_field#(bit) f0;
 
-      function new(string name, srm_component parent, srm_addr_t index);
-        super.new(name, parent, index);
+      function new(string name, srm_component parent, srm_addr_t index=-1, 
+                                                      string reset_kind="");
+        super.new(name, parent, index, reset_kind);
+        // If resettable, then all fields must be resettable and value defined.
+        set_reset_kind("HARD");
+        set_reset_kind("BIST");
+
         f0 = new(.name("f0"), .parent(this), .n_bits(1), .lsb_pos(0), .volatile(0));
         add_field(f0);
-        f0.set_reset_value(.value(1), .kind("HARD"));
+        f0.set_reset_value(.value(0), .kind("HARD"));
+        f0.set_reset_value(.value(1), .kind("BIST"));
+
         f1 = new(.name("f1"), .parent(this), .n_bits(2), .lsb_pos(1), .volatile(0));
         add_field(f1);
-        f1.set_reset_value(.value('h3), .kind("HARD"));
+        f1.set_reset_value(.value('h0), .kind("HARD"));
+        f1.set_reset_value(.value('h3), .kind("BIST"));
+
         f2 = new(.name("f2"), .parent(this), .n_bits(3), .lsb_pos(3), .volatile(0));
         add_field(f2);
-        f2.set_reset_value(.value('h7), .kind("HARD"));
+        f2.set_reset_value(.value('h0), .kind("HARD"));
+        f1.set_reset_value(.value('h3), .kind("BIST"));
+
         f3 = new(.name("f3"), .parent(this), .n_bits(1), .lsb_pos(6), .volatile(0));
         add_field(f3);
-        f3.set_reset_value(.value('h1), .kind("HARD"));
+        f3.set_reset_value(.value('h0), .kind("HARD"));
+        f3.set_reset_value(.value('h1), .kind("BIST"));
+
         f4 = new(.name("f4"), .parent(this), .n_bits(1), .lsb_pos(7), .volatile(0));
         add_field(f4);
-        f4.set_reset_value(.value('h1), .kind("HARD"));
+        f4.set_reset_value(.value('h0), .kind("HARD"));
+        f4.set_reset_value(.value('h1), .kind("BIST"));
       
       endfunction
 
       virtual function r2_entry clone(srm_addr_t index);
         r2_entry obj;
         obj = new(.name($psprintf("%s_%0d", get_name(), index)),
-                  .parent(this), .index(index));
+                  .parent(_parent), .index(index), .reset_kind(get_last_reset_kind()));
         return obj;
       endfunction
     endclass
@@ -116,7 +130,7 @@ class cpu_multi_field extends srm_component;
     function new(string name, srm_component parent);
       r2_entry entry;
       super.new(name, parent, .num_entries(100));
-      entry = new(.name("r2_entry"), .parent(this), .index(-1));
+      entry = new(.name("r2_entry"), .parent(this));
       _prototype = entry;
     endfunction
 
@@ -150,7 +164,7 @@ class cpu_multi_field extends srm_component;
     add_child(r2);
     r2.set_offset(.addr_map_name("cpu_map"), .offset('h200));
 
-    // Reset the contents at start.
+    // Reset the contents of the entire register model at start.
     reset(.kind("HARD"));
   endfunction
 

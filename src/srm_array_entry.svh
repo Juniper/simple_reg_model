@@ -5,23 +5,21 @@
 // CLASS: srm_array_entry
 // Models the entry of the register array.
 //--------------------------------------------------------
-class srm_array_entry#(type T = int) extends srm_reg#(T);
+virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   local srm_addr_t _index;   // For address computation in array.
   
   // Function: new
-  function new(string name, srm_component parent, srm_addr_t index);
+  function new(string name, srm_component parent, srm_addr_t index, 
+                                                  string reset_kind);
     super.new(name, parent);
     _index = index;
+    _last_reset_kind = reset_kind;
   endfunction
   
   //------------------
   // Group: Private 
   //-------------------
-  virtual function srm_array_entry#(T) clone(srm_addr_t index);
-    srm_array_entry#(T) obj;
-    assert(!"Derived class  must override it");
-    return obj;
-  endfunction
+  pure virtual function srm_array_entry#(T) clone(srm_addr_t index);
 
   //----------------------
   // Group: Address computation 

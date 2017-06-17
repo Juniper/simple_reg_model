@@ -10,7 +10,7 @@ typedef class srm_base_field;
 // field to access the contents of the register and updates 
 // coming from the monitor to update the value.
 //--------------------------------------------------------
-class srm_base_reg extends srm_component;
+virtual class srm_base_reg extends srm_component;
   protected srm_base_field _fields[$];
   protected int _reset_kind[string];
   protected string _last_reset_kind;
