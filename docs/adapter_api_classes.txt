@@ -1,0 +1,26 @@
+@startuml
+title Adapter Class Hierarchy
+
+abstract class srm_bus_adapter
+
+class srm_component {
+  -srm_component: parent
+  -_adapters[]
+  +add_adapter(adapter)
+  +get_adapters(): []
+}
+
+class srm_bus_adapter {
+  -addr_map_name
+  +execute(bus_xact)
+}
+
+class srm_adapter_policy {
+  +get_adapter(srm_component)
+  +is_correct_adapter(adapter)
+}
+
+srm_handle --> srm_adapter_policy
+srm_component "1" o-- "many" srm_bus_adapter
+srm_component --> srm_handle
+@enduml

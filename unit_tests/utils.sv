@@ -10,7 +10,9 @@ class dummy_adapter extends srm_bus_adapter;
   reg [3:0]  byte_enables;
   srm_addr_t last_addr;
 
-  function new(); super.new(.name("dummy_adapter")); endfunction
+  function new(string addr_map_name); 
+    super.new(.addr_map_name(addr_map_name), .name("dummy_adapter")); 
+  endfunction
 
   virtual task execute(ref srm_bus_xact bus_op);
     reg[31:0] temp;

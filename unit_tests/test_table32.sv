@@ -5,10 +5,6 @@ import srm_pkg::*;
 class test_table32 extends srm_unit_test;
 
   cpu_table32 regmodel;
-  dummy_adapter adapter;
-  first_adapter_policy adapter_policy;
-  srm_handle cpu_handle;
-
   cpu_table32::r1_struct_t wr_data, rd_data;
 
   function new();
@@ -18,13 +14,6 @@ class test_table32 extends srm_unit_test;
   virtual function void setup();
     regmodel = new(.name("regmodel"), .parent(null));
     regmodel.set_offset("cpu_map", 64'h10000);
-
-    adapter_policy = new();
-    cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
-    cpu_handle.auto_predict_model = 1;
-
-    adapter = new();
-    regmodel.add_adapter(adapter);
   endfunction
 
   task test_set_get;

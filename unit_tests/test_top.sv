@@ -5,9 +5,6 @@ import srm_pkg::*;
 class test_top extends srm_unit_test;
 
   cpu_top regmodel;
-  dummy_adapter adapter;
-  first_adapter_policy adapter_policy;
-  srm_handle cpu_handle;
 
   function new();
     super.new("test_top");
@@ -16,11 +13,6 @@ class test_top extends srm_unit_test;
   virtual function void setup();
     regmodel = new(.name("regmodel"), .parent(null));
     regmodel.set_offset("cpu_map", 64'hA0000);
-    adapter_policy = new();
-    cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
-    cpu_handle.auto_predict_model = 1;
-    adapter = new();
-    regmodel.add_adapter(adapter);
   endfunction
 
   task test_tree;
