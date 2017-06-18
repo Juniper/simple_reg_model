@@ -36,9 +36,19 @@ class test_table_reset extends srm_unit_test;
     regmodel.r2.reset("BIST"); 
     `TEST_VALUE('hff, entry.get(), "read out reset value");
   endtask
+
+  task test_top_multi_reset();
+   regmodel.reset("BIST"); 
+   entry = regmodel.r2.entry_at(1);
+   `TEST_VALUE('hff, entry.get(), "read out bist value");
+   regmodel.reset("HARD"); 
+   `TEST_VALUE('h0, entry.get(), "read out hard value");
+  endtask
+
   virtual task run();
     `RUN_TEST(test_get_reset_value);
     `RUN_TEST(test_reset_set_value);
+    `RUN_TEST(test_top_multi_reset);
   endtask
 
 endclass

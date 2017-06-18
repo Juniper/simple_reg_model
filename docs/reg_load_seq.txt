@@ -1,0 +1,10 @@
+@startuml
+title Load from design to model with no checks
+sequence -> srm_reg: load 
+srm_reg -> srm_base_reg: __read_bytes
+srm_base_reg -> handle: get_adapter(this)
+srm_base_reg -> adapter: execute(bus_xact)
+adapter --> srm_base_reg: read_bytes
+srm_reg -> srm_reg : set_bytes
+srm_reg --> sequence : SRM_IS_OK
+@enduml

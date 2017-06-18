@@ -1,0 +1,12 @@
+@startuml
+title Store model data into design.
+sequence -> srm_reg: store 
+srm_reg -> srm_reg : get_bytes
+srm_reg -> srm_base_reg: __write_bytes
+srm_base_reg -> handle: get_adapter(this)
+srm_base_reg -> srm_base_reg : get_offset(addr_map_name)
+srm_base_reg -> adapter: execute(bus_xact)
+adapter --> srm_base_reg: SRM_IS_OK 
+srm_base_reg --> srm_reg : SRM_IS_OK
+srm_reg --> sequence : SRM_IS_OK
+@enduml

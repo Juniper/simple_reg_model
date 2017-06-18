@@ -109,7 +109,9 @@ class srm_reg#(type T = int) extends srm_base_reg;
     for(int i = 0; i < num_bytes; i++) byte_enables[i] = 1;
 
     __read_bytes(handle, bytes, byte_enables);
-    
+   
+    if(handle.bus_xact_status == SRM_IS_OK) set_bytes(bytes);
+
      data = bytes_2_data(bytes);
   endtask
 
@@ -130,6 +132,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
     for(int i = 0; i < num_bytes; i++) byte_enables[i] = 1;
 
     __write_bytes(handle, bytes, byte_enables);
+    if(handle.bus_xact_status == SRM_IS_OK) set_bytes(bytes);
   endtask
 
 

@@ -140,7 +140,7 @@ virtual class srm_base_reg extends srm_component;
     byte_enables = new[num_bytes];
     for(int i = 0; i < num_bytes; i++) byte_enables[i] = 1;
 
-    __read_bytes(handle, bytes, byte_enables);
+    __read_bytes(handle, bytes, byte_enables, .skip_check(1));
 
     set_bytes(bytes);
     
@@ -197,6 +197,8 @@ virtual class srm_base_reg extends srm_component;
     adapter = handle.adapter_policy.get_adapter(this);
     adapter.execute(bus_xact);
 
+    handle.bus_xact_status = bus_xact.status;
+
     if(handle.auto_predict_model) begin
       agent_update(bus_xact);
     end
@@ -210,7 +212,8 @@ virtual class srm_base_reg extends srm_component;
   // Checks that the read data matches the model value. Will report
   // error for non volatile fields. Volatile fields are silently updated.
   virtual task __read_bytes(srm_handle handle, ref srm_data_t bytes,
-                            const ref srm_byte_enable_t byte_enables);
+                            const ref srm_byte_enable_t byte_enables,
+                            input bit skip_check=0);
     srm_bus_xact bus_xact;
     srm_bus_adapter adapter;
     srm_data_t current_field_bytes, new_field_bytes;
@@ -233,22 +236,15 @@ virtual class srm_base_reg extends srm_component;
     // Copy the data back to the caller
     for(int i = 0; i < bytes.size(); i++) bytes[i] = bus_xact.data[i];
    
-   if(bus_xact.status == SRM_IS_OK) begin
+   if(bus_xact.status == SRM_IS_OK && !skip_check) begin
 
      // Check the read data against each of the field model values.
      foreach(_fields[i]) begin
-
-      new_field_bytes = srm_utils::extract_field(.bytes(bytes), 
+      // Skip read checks for volatile field
+      if(!_fields[i].is_volatile()) begin
+        new_field_bytes = srm_utils::extract_field(.bytes(bytes), 
                                                  .lsb_pos(_fields[i].get_lsb_pos()),
                                                  .n_bits(_fields[i].get_n_bits()));
-
-      // Skip read checks for volatile field. instead just update.
-      if(_fields[i].is_volatile()) begin
-        _fields[i].set_bytes(new_field_bytes);
-      end
-      else begin
-
-        // Do Read check for each of the fields.
         
         current_field_bytes = _fields[i].get_bytes();
 
