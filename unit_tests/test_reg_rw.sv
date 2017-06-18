@@ -33,13 +33,71 @@ class test_reg_rw extends srm_unit_test;
 
   task test_write_r1;
     wr_data.field = 32'hdeadbeef;
+    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
     regmodel.r1.write(cpu_handle, wr_data);
     rd_data = regmodel.r1.get();
     `TEST_VALUE(32'hdeadbeef, rd_data.field, "written data must match"); 
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "write status must be ok");
   endtask
 
+  task test_read_r1;
+    wr_data.field = 32'h01234567;
+    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+
+    // Ensure that the model and design have the same data.
+    regmodel.r1.set(wr_data);
+    adapter.last_data = wr_data.field;
+
+    regmodel.r1.read(cpu_handle, rd_data);
+    `TEST_VALUE(32'h01234567, rd_data.field, "read data must match"); 
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
+  endtask
+
+  task test_mismatch_read_r1;
+    cpu_reg32::r1_struct_t temp_data;
+    wr_data.field = 32'h01234567;
+    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+
+    // Ensure that the model and design have DIFFERENT data.
+    temp_data.field = 32'h0;
+    regmodel.r1.set(temp_data);
+    adapter.last_data = wr_data.field;
+    cpu_handle.skip_read_error_msg = 1;
+
+    regmodel.r1.read(cpu_handle, rd_data);
+    `TEST_VALUE(32'h01234567, rd_data.field, "read data must return the RTL data"); 
+    `TEST_VALUE(SRM_READ_DATA_MISMATCH, cpu_handle.bus_xact_status, "read status must mismatch");
+    `TEST_VALUE(1, cpu_handle.error_msgs.size(), "Error must be generated");
+  endtask
+
+  task test_load_r1;
+    cpu_reg32::r1_struct_t temp_data;
+    wr_data.field = 32'h01234567;
+
+    // Ensure that the model and design have DIFFERENT data.
+    temp_data.field = 32'h0;
+    regmodel.r1.set(temp_data);
+    adapter.last_data = wr_data.field;
+
+    regmodel.r1.load(cpu_handle);
+    rd_data = regmodel.r1.get();
+    `TEST_VALUE(32'h01234567, rd_data.field, "load data must return the RTL data"); 
+  endtask
+  
+  task test_store_r1;
+    wr_data.field = 32'h01234567;
+
+    regmodel.r1.set(wr_data);
+    regmodel.r1.store(cpu_handle);
+    `TEST_VALUE(32'h01234567, adapter.last_data, "store must write data"); 
+  endtask
+  
   virtual task run();
     `RUN_TEST(test_write_r1);
+    `RUN_TEST(test_read_r1);
+    `RUN_TEST(test_mismatch_read_r1);
+    `RUN_TEST(test_load_r1);
+    `RUN_TEST(test_store_r1);
   endtask
 
 endclass

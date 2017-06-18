@@ -3,7 +3,7 @@
 
 //---------------------------------------------------------
 // CLASS: cpu_table32
-// Cpu register map with a table of 10 entries.
+// Cpu register map with tables of 10 entries.
 //
 // Offset:   Register
 //---------------------

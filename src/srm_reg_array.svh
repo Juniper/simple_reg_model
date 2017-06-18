@@ -22,19 +22,58 @@ class srm_reg_array #(type T = int) extends srm_component;
   endfunction
 
   //-----------------------
-  // Composite 
+  // Group: Introspection 
+  //-----------------------
+  function int get_num_entries();
+    return _num_entries;
+  endfunction
+
+  //-----------------------
+  // Group: Composite 
   //-----------------------
   function srm_array_entry#(T) entry_at(srm_addr_t index);
     string name;
     srm_array_entry#(T) entry;
 
-    if(!_entries.exists(index)) begin
+    if(index >= _num_entries) begin
+      `uvm_fatal("TbConfigurationError", 
+        $psprintf("Index %0d is more than array \"%s\" size of %0d entries",
+                  index, get_full_name(), _num_entries));
+    end else if(!_entries.exists(index)) begin
       name = $psprintf("%s_%0d", get_name(), index);
       entry = _prototype.clone(index);
       _entries[index] = entry;
     end 
+
     return _entries[index];
   endfunction
+
+  //------------------
+  // Group: Model+Design Access 
+  //-------------------
+  
+  // Task: load
+  // Load all the entries of the model from the design.
+  //
+  // No checking is done and the model is silently updated.
+  virtual task load(srm_handle handle);
+    srm_array_entry#(T) entry;
+    for(int i = 0; i < get_num_entries(); i++) begin
+      entry = entry_at(i);
+      entry.load(handle);
+    end
+  endtask
+
+  // Task: store
+  // Store all the entries from the model into the design.
+  //
+  virtual task store(srm_handle handle);
+    srm_array_entry#(T) entry;
+    for(int i = 0; i < get_num_entries(); i++) begin
+      entry = entry_at(i);
+      entry.store(handle);
+    end
+  endtask
 
   //------------------
   // Group: Reset
@@ -69,10 +108,10 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Group: Debug
   //------------------
   
-  // Function: get_active_entries
+  // Function: get_num_active_entries
   // Return the number of entries that have been created.
   // Useful for unit testing the sparse feature.
-  virtual function int get_active_entries();
+  virtual function int get_num_active_entries();
     return _entries.size();
   endfunction
 

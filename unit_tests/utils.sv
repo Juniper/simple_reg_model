@@ -15,8 +15,7 @@ class dummy_adapter extends srm_bus_adapter;
   endfunction
 
   virtual task execute(ref srm_bus_xact bus_op);
-    reg[31:0] temp;
-   
+    reg[31:0]   temp;
 
     if(bus_op.kind == srm_pkg::SRM_WRITE) begin
       last_data = 'd0;

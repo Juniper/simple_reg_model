@@ -31,7 +31,7 @@ class test_table_reset extends srm_unit_test;
     cpu_multi_field::r2_struct_t wr_data = 8'ha5;
     entry = regmodel.r2.entry_at(13);
     entry.set(wr_data);
-    `TEST_VALUE(1, regmodel.r2.get_active_entries(), "set entry allocated");
+    `TEST_VALUE(1, regmodel.r2.get_num_active_entries(), "set entry allocated");
     `TEST_VALUE('ha5, entry.get(), "read out set value");
     regmodel.r2.reset("BIST"); 
     `TEST_VALUE('hff, entry.get(), "read out reset value");

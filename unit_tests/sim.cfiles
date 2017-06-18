@@ -13,4 +13,5 @@ $SRM_HOME/unit_tests/test_field_access.sv
 $SRM_HOME/unit_tests/test_reg_reset.sv
 $SRM_HOME/unit_tests/test_table_reset.sv
 $SRM_HOME/unit_tests/test_reg_rw.sv
+$SRM_HOME/unit_tests/test_table_rw.sv
 $SRM_HOME/unit_tests/main.sv
