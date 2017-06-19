@@ -11,6 +11,8 @@ module main;
   test_table_reset t7 = new();
   test_reg_rw t8 = new();
   test_table_rw t9 = new();
+  test_srm_utils_1 t10 = new();
+  test_srm_utils_2 t11 = new();
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin
