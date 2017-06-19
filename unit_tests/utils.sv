@@ -34,7 +34,11 @@ class dummy_adapter extends srm_bus_adapter;
       temp = last_data;
       // {byte3, byte2, byte1, byte0} = [31:0]
       foreach(bus_op.data[i]) begin
-        bus_op.data[i] = temp[7:0];
+        if(bus_op.byte_enables[i]) begin
+	  bus_op.data[i] = temp[7:0];
+        end else begin
+	  bus_op.data[i] = 8'hff;
+        end
         temp >>= 8;
       end
     end
