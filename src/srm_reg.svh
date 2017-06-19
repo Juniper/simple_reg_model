@@ -97,7 +97,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   // Task will call uvm_error if the field is not volatile and the model value does not
   // match the value read from the design.
   //
-  virtual task read(srm_handle handle, output T data);
+  virtual task read(srm_handle handle);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
@@ -110,9 +110,8 @@ class srm_reg#(type T = int) extends srm_base_reg;
 
     __read_bytes(handle, bytes, byte_enables);
    
-    if(handle.bus_xact_status == SRM_IS_OK) set_bytes(bytes);
+    set_bytes(bytes);
 
-     data = bytes_2_data(bytes);
   endtask
 
   // Task: write
@@ -120,7 +119,9 @@ class srm_reg#(type T = int) extends srm_base_reg;
   //
   // Data is converted to a list of bytes which then updates the 
   // storage inside the model.
-  virtual task write(srm_handle handle, const ref T data);
+  // It is possible to make data as const ref but then I cannot pass 
+  // literal constants. 
+  virtual task write(srm_handle handle, T data);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
@@ -132,7 +133,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
     for(int i = 0; i < num_bytes; i++) byte_enables[i] = 1;
 
     __write_bytes(handle, bytes, byte_enables);
-    if(handle.bus_xact_status == SRM_IS_OK) set_bytes(bytes);
+    set_bytes(bytes);
   endtask
 
 

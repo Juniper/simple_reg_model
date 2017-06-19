@@ -39,7 +39,7 @@ class test_volatile_field extends srm_unit_test;
     regmodel.r1.f2.set('h0);
     `TEST_VALUE(32'h8900cd00, regmodel.r1.get(), "ensure model data is different");
 
-    regmodel.r1.read(cpu_handle, rd_data);
+    regmodel.r1.read(cpu_handle);
     `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
     `TEST_VALUE(32'h89abcdef, regmodel.r1.get(), "read data must be updated in model");
   endtask
@@ -55,7 +55,7 @@ class test_volatile_field extends srm_unit_test;
     entry.f4.set('h0);
     `TEST_VALUE(8'h47, entry.get(), "ensure table model data is different");
 
-    entry.read(cpu_handle, rd_data);
+    entry.read(cpu_handle);
     `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
     `TEST_VALUE(8'hff, entry.get(), "read table data must be updated in model");
   endtask

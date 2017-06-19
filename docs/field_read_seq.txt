@@ -1,0 +1,10 @@
+@startuml
+title field read sequence
+sequence -> srm_field: read 
+srm_field -> srm_utils : set_field_enables
+srm_field -> srm_base_reg : __read
+srm_base_reg --> srm_field : bytes
+srm_field -> srm_base_reg : set_bytes
+note left: byte enables are used.
+srm_field --> sequence : handle.SRM_IS_OK 
+@enduml

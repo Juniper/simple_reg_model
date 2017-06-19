@@ -2,6 +2,7 @@
 title Read from register 
 sequence -> srm_reg: read
 srm_reg -> srm_base_reg: __read_bytes
+note left: All byte enables are on.
 srm_base_reg -> handle: get_adapter(this)
 srm_base_reg -> adapter: execute(bus_xact)
 adapter --> srm_base_reg: read_bytes
@@ -13,5 +14,5 @@ srm_base_reg -> srm_utils : is_same_bytes(read_bytes, expect_bytes)
 srm_base_reg -> srm_base_reg : bytes_2_data
 srm_base_reg --> srm_reg : data 
 srm_reg -> srm_reg : set_bytes
-srm_reg --> sequence : SRM_IS_OK
+srm_reg --> sequence : handle.SRM_IS_OK
 @enduml

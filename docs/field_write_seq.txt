@@ -1,0 +1,11 @@
+@startuml
+title field write sequence
+sequence -> srm_field: write 
+srm_field -> srm_field: data_2_bytes
+srm_field -> srm_base_reg : parent.get_bytes
+srm_field -> srm_utils: merge_bytes
+srm_utils --> srm_field : register_bytes
+srm_field -> srm_base_reg : __write_bytes
+srm_field -> srm_base_reg : set_bytes
+srm_field --> sequence : SRM_IS_OK
+@enduml
