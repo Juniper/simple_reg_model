@@ -1,19 +1,21 @@
-`ifndef INCLUDED_cpu_multi_field_svh
-`define INCLUDED_cpu_multi_field_svh
+`ifndef INCLUDED_cpu_volatile_field_svh
+`define INCLUDED_cpu_volatile_field_svh
 
 //----------------------------------------------------------------
-// CLASS: cpu_multi_field
-// Cpu register and tables with fields.
+// CLASS: cpu_volatile_field
+// Test volatile field in register and table.
 //
 // Offset:   Register
 //--------------------
 // 'h100 :   r1: 32b. Each byte is a field.
-// 'h200 :   r2: 8b multi bit field table with 100 entries. 
+//           f0, f2 are volatile
+// 'h200 :   r2: 8b. table with 100 entries. 
+//           f2, f4 are volatile  
 //----------------------------------------------------------------
 
 import srm_pkg::*;
 
-class cpu_multi_field extends srm_component;
+class cpu_volatile_field extends srm_component;
 
   typedef struct packed {
     bit[7:0] f3;
@@ -39,7 +41,7 @@ class cpu_multi_field extends srm_component;
 
       // 2 types of reset kind. Specify the values for all the fields.
       f0 = new(.name("f0"), .parent(this), .n_bits(8), .lsb_pos(0),
-               .volatile(0));
+               .volatile(1));  // VOLATILE
       add_field(f0);
       f0.set_reset_value(.value(8'hef), .kind("BIST"));
       f0.set_reset_value(.value(8'h67), .kind("HARD"));
@@ -51,7 +53,7 @@ class cpu_multi_field extends srm_component;
       f1.set_reset_value(.value(8'h45), .kind("HARD"));
 
       f2 = new(.name("f2"), .parent(this), .n_bits(8), .lsb_pos(16),
-               .volatile(0));
+               .volatile(1)); // VOLATILE
       add_field(f2);
       f2.set_reset_value(.value(8'hab), .kind("BIST"));
       f2.set_reset_value(.value(8'h23), .kind("HARD"));
@@ -101,8 +103,8 @@ class cpu_multi_field extends srm_component;
         f1.set_reset_value(.value('h0), .kind("HARD"));
         f1.set_reset_value(.value('h3), .kind("BIST"));
 
-        f2 = new(.name("f2"), .parent(this), .n_bits(3), .lsb_pos(3), .volatile(0));
-        add_field(f2);
+        f2 = new(.name("f2"), .parent(this), .n_bits(3), .lsb_pos(3), .volatile(1));
+        add_field(f2); // VOLATILE
         f2.set_reset_value(.value('h0), .kind("HARD"));
         f2.set_reset_value(.value('h7), .kind("BIST"));
 
@@ -111,8 +113,8 @@ class cpu_multi_field extends srm_component;
         f3.set_reset_value(.value('h0), .kind("HARD"));
         f3.set_reset_value(.value('h1), .kind("BIST"));
 
-        f4 = new(.name("f4"), .parent(this), .n_bits(1), .lsb_pos(7), .volatile(0));
-        add_field(f4);
+        f4 = new(.name("f4"), .parent(this), .n_bits(1), .lsb_pos(7), .volatile(1));
+        add_field(f4); // VOLATILE
         f4.set_reset_value(.value('h0), .kind("HARD"));
         f4.set_reset_value(.value('h1), .kind("BIST"));
       

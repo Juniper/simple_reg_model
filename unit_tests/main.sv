@@ -13,6 +13,7 @@ module main;
   test_table_rw t9 = new();
   test_srm_utils_1 t10 = new();
   test_srm_utils_2 t11 = new();
+  test_volatile_field t12 = new();
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin
