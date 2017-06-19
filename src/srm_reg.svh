@@ -81,8 +81,8 @@ class srm_reg#(type T = int) extends srm_base_reg;
 
   // Function: set 
   // Set the value of the data in the model.
-  //
-  virtual function void set(const ref T data);
+  // Could do 'const ref' but that prevents passing a literal constant.
+  virtual function void set(T data);
     srm_data_t bytes;
     bytes = data_2_bytes(data);
     set_bytes(bytes);
@@ -137,6 +137,26 @@ class srm_reg#(type T = int) extends srm_base_reg;
   endtask
 
 
+  // Task: peek 
+  // Read the data from the design with no affect to the model.
+  //
+  // useful for unit testing.
+  //
+  virtual task peek(srm_handle handle, output T data);
+    srm_data_t bytes;
+    srm_byte_enable_t byte_enables;
+    int num_bytes;
+
+    num_bytes = $bits(T)/8;
+    byte_enables = new[num_bytes];
+    bytes = new[num_bytes];
+
+    for(int i = 0; i < num_bytes; i++) byte_enables[i] = 1;
+
+    __read_bytes(handle, bytes, byte_enables, .skip_check(1));
+   
+    data = bytes_2_data(bytes);
+  endtask
 
 endclass
 

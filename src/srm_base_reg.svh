@@ -216,6 +216,8 @@ virtual class srm_base_reg extends srm_component;
                             input bit skip_check=0);
     srm_bus_xact bus_xact;
     srm_bus_adapter adapter;
+    srm_byte_enable_t field_byte_enables;
+    bit field_byte_enables_on;
     srm_data_t current_field_bytes, new_field_bytes;
     string msg;
 
@@ -235,13 +237,21 @@ virtual class srm_base_reg extends srm_component;
 
     // Copy the data back to the caller
     for(int i = 0; i < bytes.size(); i++) bytes[i] = bus_xact.data[i];
-   
-   if(bus_xact.status == SRM_IS_OK && !skip_check) begin
+  
+    // Should we compare the data when the status is not OK ? Not sure ?
+    if(bus_xact.status == SRM_IS_OK && !skip_check) begin
 
      // Check the read data against each of the field model values.
      foreach(_fields[i]) begin
-      // Skip read checks for volatile field
-      if(!_fields[i].is_volatile()) begin
+      // Extract byte enable for field and check if they are all set.
+      field_byte_enables = srm_utils::extract_field_enables(byte_enables,
+                            _fields[i].get_lsb_pos(), _fields[i].get_n_bits());
+      field_byte_enables_on = 1;
+      foreach(field_byte_enables[i]) 
+        if(field_byte_enables[i] == 0) field_byte_enables_on = 0;
+
+      // Skip read checks for volatile field and if byte enables are off
+      if(!_fields[i].is_volatile() && field_byte_enables_on) begin
         new_field_bytes = srm_utils::extract_field(.bytes(bytes), 
                                                  .lsb_pos(_fields[i].get_lsb_pos()),
                                                  .n_bits(_fields[i].get_n_bits()));

@@ -16,6 +16,7 @@ class test_field_access extends srm_unit_test;
     regmodel = new(.name("regmodel"), .parent(null));
   endfunction
 
+
   task test_reg_field_set();
     wr_data = 'h0;
     regmodel.r1.set(wr_data);  // Start with all zeros in reg

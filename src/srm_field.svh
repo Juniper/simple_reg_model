@@ -164,7 +164,8 @@ class srm_field#(type T = int) extends srm_base_field;
     p.__write_bytes(.handle(handle), .bytes(reg_bytes), 
                                                 .byte_enables(byte_enables));
 
-    // For updating the model we don't worry about byte enables since this is a rmw.
+    // For updating the model we don't worry about byte enables since 
+    // we read the entire content of the register from the model.
     p.set_bytes(reg_bytes);
   endtask
 
@@ -174,6 +175,24 @@ class srm_field#(type T = int) extends srm_base_field;
   // A read to the parent register is issued with the correct byte enables.
   // The field data is them stripped and compared to the model data.
   virtual task read(srm_handle handle);
+    srm_byte_enable_t byte_enables;
+    srm_base_reg p;
+    srm_data_t reg_bytes, field_bytes;
+    
+    p= get_parent();
+    
+    reg_bytes = new[p.get_width_bytes()];
+    byte_enables = new[p.get_width_bytes()];
+    for(int i = 0; i < p.get_width_bytes(); i++) byte_enables[i] = 0;
+    srm_utils::set_field_enables(byte_enables, .lsb_pos(get_lsb_pos()),
+                                 .n_bits(get_n_bits()));
+
+    p.__read_bytes(.handle(handle), .bytes(reg_bytes), .byte_enables(byte_enables),
+                   .skip_check(0));
+
+    field_bytes = srm_utils::extract_field(.bytes(reg_bytes), .lsb_pos(_lsb_pos),
+                                           .n_bits(_n_bits));
+    set_bytes(field_bytes);
   endtask
 
   //-------------------------------------

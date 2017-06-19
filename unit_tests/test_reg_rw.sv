@@ -64,7 +64,8 @@ class test_reg_rw extends srm_unit_test;
   endtask
 
   task test_field_read_r1;
-    regmodel.r1.write(cpu_handle, 'h01234567);
+    adapter.last_data = 'h01234567;
+    regmodel.r1.set('h01234567);
     regmodel.r1.field.read(cpu_handle);
     `TEST_VALUE(32'h01234567, regmodel.r1.field.get(), "written data must match"); 
     `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "write status must be ok");
@@ -87,6 +88,19 @@ class test_reg_rw extends srm_unit_test;
     `TEST_VALUE(1, cpu_handle.error_msgs.size(), "Error must be generated");
   endtask
 
+  task test_peek_r1;
+    cpu_reg32::r1_struct_t temp_data;
+    wr_data.field = 32'h01234567;
+
+    // Ensure that the model and design have DIFFERENT data.
+    temp_data.field = 32'h0;
+    regmodel.r1.set(temp_data);
+    adapter.last_data = wr_data.field;
+
+    regmodel.r1.peek(cpu_handle, rd_data);
+    `TEST_VALUE(32'h01234567, rd_data.field, "peek data must return the RTL data"); 
+  endtask
+    
   task test_load_r1;
     cpu_reg32::r1_struct_t temp_data;
     wr_data.field = 32'h01234567;
@@ -114,6 +128,7 @@ class test_reg_rw extends srm_unit_test;
     `RUN_TEST(test_field_write_r1);
     `RUN_TEST(test_read_r1);
     `RUN_TEST(test_field_read_r1);
+    `RUN_TEST(test_peek_r1);
     `RUN_TEST(test_mismatch_read_r1);
     `RUN_TEST(test_load_r1);
     `RUN_TEST(test_store_r1);
