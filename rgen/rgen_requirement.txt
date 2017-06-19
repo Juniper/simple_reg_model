@@ -1,0 +1,9 @@
+Constraint For Register Generator
+
+1. Register must be byte width.
+2. All fields in the register must be contiguous. If not add reserved field.
+3. If a field is resettable then all fields in the register are resettable.
+   Hence a register is resettable if any field are resettable.
+   A node is resettable if all the children are resettable.
+4. A register must have at least one field.
+5. There is always a srm_component as the root node.
