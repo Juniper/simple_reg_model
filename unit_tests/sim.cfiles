@@ -7,6 +7,7 @@ $SRM_HOME/unit_tests/models/cpu_volatile_field.svh
 $SRM_HOME/unit_tests/utils.sv
 $SRM_HOME/unit_tests/srm_unit_test.sv
 $SRM_HOME/unit_tests/test_reg32.sv
+$SRM_HOME/unit_tests/test_reg32_rand.sv
 $SRM_HOME/unit_tests/test_table32.sv
 $SRM_HOME/unit_tests/test_top.sv
 $SRM_HOME/unit_tests/test_default_offset.sv

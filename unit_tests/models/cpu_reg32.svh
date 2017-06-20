@@ -18,6 +18,7 @@
 //---------------------------------------------------------
 
 import srm_pkg::*;
+import uvm_pkg::*;
 
 class cpu_reg32 extends srm_component;
 
@@ -28,6 +29,21 @@ class cpu_reg32 extends srm_component;
   typedef struct packed {
     bit[31:0] field;
   } r1_struct_t;
+
+  // Constraint class
+  class r1_constr extends uvm_object;
+    `uvm_object_utils(r1_constr)
+    rand bit [31:0] field;
+
+    function new(string name="r1_constr");
+      super.new(name);
+    endfunction
+
+    function r1_struct_t get_data();
+      r1_struct_t d;
+      d.field = field;
+    endfunction
+  endclass
 
   class r1_reg extends srm_reg#(r1_struct_t);
 
