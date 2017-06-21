@@ -1,3 +1,4 @@
+$SRM_HOME/src/srm_pkg.sv
 $SRM_HOME/tests/cluelogic/jelly_bean_if.sv
 $SRM_HOME/tests/cluelogic/jelly_bean_pkg.sv
 $SRM_HOME/tests/cluelogic/tutorial_9.sv

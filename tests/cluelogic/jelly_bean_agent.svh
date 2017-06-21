@@ -33,11 +33,13 @@ class jelly_bean_agent extends uvm_agent;
                                                           .parent( this ) );
          jb_drvr = jelly_bean_driver::type_id::create( .name( "jb_drvr" ), 
                                                        .parent( this ) );
+         jb_reg_adapter = new(.name("jb_reg_adapter"), .addr_map_name("cpu_map"),
+                           .sqr(jb_seqr));
       end
       jb_mon = jelly_bean_monitor::type_id::create( .name( "jb_mon" ),
                                                     .parent( this ) );
-      jb_reg_adapter = jelly_bean_reg_adapter::type_id::create( .name( "jb_reg_adapter" ),
-                                                                .parent( this ) );
+
+
    endfunction: build_phase
 
    function void connect_phase( uvm_phase phase );

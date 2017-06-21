@@ -9,6 +9,8 @@ class jelly_bean_base_test extends uvm_test;
    jelly_bean_env_config   jb_env_cfg;
    jelly_bean_agent_config jb_agent_cfg;
    jelly_bean_reg_block    jb_reg_block;
+   first_adapter_policy    adapter_policy;
+   reg_map_handle          handle;
 
    function new( string name, uvm_component parent );
       super.new( name, parent );
@@ -17,9 +19,10 @@ class jelly_bean_base_test extends uvm_test;
    function void build_phase(uvm_phase phase);
       super.build_phase(phase);
 
-      jb_reg_block = jelly_bean_reg_block::type_id::create( "jb_reg_block" );
-      jb_reg_block.build();
-
+      jb_reg_block = new("jb_reg_block", null);
+      adapter_policy  = new();
+      handle = new(.adapter_policy(adapter_policy));
+      
       jb_env_cfg = jelly_bean_env_config::type_id::create( "jb_env_cfg" );
       jb_env_cfg.jb_reg_block = jb_reg_block;
 
@@ -44,6 +47,7 @@ class jelly_bean_base_test extends uvm_test;
 
    virtual function void start_of_simulation_phase( uvm_phase phase );
       super.start_of_simulation_phase( phase );
+      jb_reg_block.add_adapter(jb_env.jb_agent.jb_reg_adapter);
       uvm_top.print_topology();
    endfunction: start_of_simulation_phase
 
