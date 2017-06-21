@@ -248,6 +248,19 @@ class srm_component;
     end
   endfunction
 
+  //------------------
+  // Group: Model Update
+  //-------------------
+
+  // Function: predictor_update
+  // Update the component due to the bus transaction.
+  virtual function void predictor_update(const ref srm_bus_xact xact);
+    if(xact.kind == SRM_WRITE) begin
+    end
+    else begin
+    end
+  endfunction
+
 
 endclass
 

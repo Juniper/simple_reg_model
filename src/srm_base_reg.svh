@@ -4,7 +4,7 @@
 typedef class srm_base_field;
 //--------------------------------------------------------
 // CLASS: srm_base_reg
-// Register base model
+// Abstract register base model:
 //
 // Register without the template data. This allows the base 
 // field to access the contents of the register and updates 
@@ -163,17 +163,6 @@ virtual class srm_base_reg extends srm_component;
   endtask
 
   //------------------
-  // Group: Model Update
-  //-------------------
-  //
-  virtual function void agent_update(const ref srm_bus_xact xact);
-    if(xact.kind == SRM_WRITE) begin
-    end
-    else begin
-    end
-  endfunction
-
-  //------------------
   // Group: Private API
   //-------------------
 
@@ -200,7 +189,7 @@ virtual class srm_base_reg extends srm_component;
     handle.bus_xact_status = bus_xact.status;
 
     if(handle.auto_predict_model) begin
-      agent_update(bus_xact);
+      predictor_update(bus_xact);
     end
 
   endtask

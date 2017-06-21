@@ -48,8 +48,15 @@ class jelly_bean_base_test extends uvm_test;
    virtual function void start_of_simulation_phase( uvm_phase phase );
       super.start_of_simulation_phase( phase );
       jb_reg_block.add_adapter(jb_env.jb_agent.jb_reg_adapter);
+      //FIXME: predictor regmodel needs to be reverse hookup
+      jb_env.jb_agent.jb_reg_predictor.regmodel = jb_reg_block;
+
       uvm_top.print_topology();
    endfunction: start_of_simulation_phase
+
+   virtual function void final_phase(uvm_phase phase);
+    $display("SRUN_TEST_PASS");
+   endfunction
 
 endclass: jelly_bean_base_test
 
