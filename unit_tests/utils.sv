@@ -14,7 +14,7 @@ class dummy_adapter extends srm_bus_adapter;
     super.new(name);
   endfunction
 
-  virtual task execute(ref srm_generic_xact_t generic_xact);
+  virtual task execute(ref srm_generic_xact_t generic_xact, int seq_priority);
     reg[31:0]   temp;
 
     if(generic_xact.kind == srm_pkg::SRM_WRITE) begin

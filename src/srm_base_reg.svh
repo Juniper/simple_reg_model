@@ -33,6 +33,9 @@ virtual class srm_base_reg extends srm_component;
   //------------------
   // Group: Introspection
   //-------------------
+  // Function: get_width_bytes
+  // Returns the width of the register in bytes
+  //
   virtual function int get_width_bytes();
     int num_bits = 0;
     foreach(_fields[i]) num_bits += _fields[i].get_n_bits();

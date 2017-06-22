@@ -16,6 +16,7 @@ module main;
   test_volatile_field t12 = new();
   test_field_rw t13 = new();
   test_reg32_rand t14 = new();
+  test_bus_predictor t15 = new();
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin

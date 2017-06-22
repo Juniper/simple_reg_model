@@ -167,6 +167,18 @@ class srm_component;
     return offset;
   endfunction
 
+  // Function: size
+  // Get the size of the address map
+
+  // Function: address_2_instance
+  // Get the instance of the node given the address.
+  //
+  // Must call this from the root node.
+  virtual function srm_component address_2_instance(srm_addr_t addr);
+    srm_component node;
+    return node;
+  endfunction
+
   //----------------------
   // Group: Adapter Management 
   //----------------------
