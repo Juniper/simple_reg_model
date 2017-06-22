@@ -10,42 +10,42 @@ class dummy_adapter extends srm_bus_adapter;
   reg [3:0]  byte_enables;
   srm_addr_t last_addr;
 
-  function new(string addr_map_name); 
-    super.new(.addr_map_name(addr_map_name), .name("dummy_adapter")); 
+  function new(string name);
+    super.new(name);
   endfunction
 
-  virtual task execute(ref srm_bus_xact bus_op);
+  virtual task execute(ref srm_generic_xact_t generic_xact);
     reg[31:0]   temp;
 
-    if(bus_op.kind == srm_pkg::SRM_WRITE) begin
+    if(generic_xact.kind == srm_pkg::SRM_WRITE) begin
       last_data = 'd0;
       bus_data = 'd0;
       byte_enables = 'd0;
       // [31:0] = {byte3, byte2, byte1, byte0}
-      for(int i = bus_op.data.size()-1; i >= 0; i--) begin
+      for(int i = generic_xact.data.size()-1; i >= 0; i--) begin
         last_data <<= 8;
         bus_data <<= 8;
-        if(bus_op.byte_enables[i]) last_data[7:0] = bus_op.data[i];
-        bus_data[7:0] = bus_op.data[i];
+        if(generic_xact.byte_enables[i]) last_data[7:0] = generic_xact.data[i];
+        bus_data[7:0] = generic_xact.data[i];
       end
-      last_addr = bus_op.addr;
+      last_addr = generic_xact.addr;
     end else begin
       // CHEAT HERE: return a hardwired data instead of actually doing a wr sequence.
       temp = last_data;
       // {byte3, byte2, byte1, byte0} = [31:0]
-      foreach(bus_op.data[i]) begin
-        if(bus_op.byte_enables[i]) begin
-	  bus_op.data[i] = temp[7:0];
+      foreach(generic_xact.data[i]) begin
+        if(generic_xact.byte_enables[i]) begin
+	      generic_xact.data[i] = temp[7:0];
         end else begin
-	  bus_op.data[i] = 8'hff;
+	      generic_xact.data[i] = 8'hff;
         end
         temp >>= 8;
       end
     end
-    foreach(bus_op.byte_enables[i]) begin
-      byte_enables[i] = bus_op.byte_enables[i];
+    foreach(generic_xact.byte_enables[i]) begin
+      byte_enables[i] = generic_xact.byte_enables[i];
     end
-    bus_op.status = srm_pkg::SRM_IS_OK;
+    generic_xact.status = srm_pkg::SRM_IS_OK;
   endtask
 
 endclass

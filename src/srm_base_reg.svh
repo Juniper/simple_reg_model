@@ -167,29 +167,29 @@ virtual class srm_base_reg extends srm_component;
   //-------------------
 
   // Function: __write_bytes
-  // Send the bus xact to the adapter class. if auto predict is on then the
+  // Send the bus xact to the adapter class. if no response from adapter then the
   // model value is updated at the end otherwise done later by the xact from monitor.
   //
   // For use by framework classes only.
   virtual task __write_bytes(srm_handle handle, const ref srm_data_t bytes, 
                        const ref srm_byte_enable_t byte_enables);
-    srm_bus_xact bus_xact;
+    srm_generic_xact_t generic_xact;
     srm_bus_adapter adapter;
 
-    bus_xact.addr_map_name = handle.addr_map_name;
-    bus_xact.kind = SRM_WRITE;
-    bus_xact.addr = get_offset(handle.addr_map_name);
-    bus_xact.data = bytes;
-    bus_xact.byte_enables = byte_enables;
+    generic_xact.addr_map_name = handle.addr_map_name;
+    generic_xact.kind = SRM_WRITE;
+    generic_xact.addr = get_offset(handle.addr_map_name);
+    generic_xact.data = bytes;
+    generic_xact.byte_enables = byte_enables;
 
     // Launch the operation
     adapter = handle.adapter_policy.get_adapter(this);
-    adapter.execute(bus_xact);
+    adapter.execute(generic_xact);
 
-    handle.bus_xact_status = bus_xact.status;
+    handle.generic_xact_status = generic_xact.status;
 
-    if(handle.auto_predict_model) begin
-      predictor_update(bus_xact);
+    if(adapter.no_response_generated) begin
+      predictor_update(generic_xact);
     end
 
   endtask
@@ -203,32 +203,32 @@ virtual class srm_base_reg extends srm_component;
   virtual task __read_bytes(srm_handle handle, ref srm_data_t bytes,
                             const ref srm_byte_enable_t byte_enables,
                             input bit skip_check=0);
-    srm_bus_xact bus_xact;
+    srm_generic_xact_t generic_xact;
     srm_bus_adapter adapter;
     srm_byte_enable_t field_byte_enables;
     bit field_byte_enables_on;
     srm_data_t current_field_bytes, new_field_bytes;
     string msg;
 
-    bus_xact.addr_map_name = handle.addr_map_name;
-    bus_xact.kind = SRM_READ;
-    bus_xact.addr = get_offset(handle.addr_map_name);
-    bus_xact.data = bytes;
-    bus_xact.byte_enables = byte_enables;
+    generic_xact.addr_map_name = handle.addr_map_name;
+    generic_xact.kind = SRM_READ;
+    generic_xact.addr = get_offset(handle.addr_map_name);
+    generic_xact.data = bytes;
+    generic_xact.byte_enables = byte_enables;
 
     // Launch the operation
     adapter = handle.adapter_policy.get_adapter(this);
-    adapter.execute(bus_xact);
+    adapter.execute(generic_xact);
     
-    handle.bus_xact_status = bus_xact.status;
+    handle.generic_xact_status = generic_xact.status;
 
     // Wait for the read to complete and data to be returned by the agent.
 
     // Copy the data back to the caller
-    for(int i = 0; i < bytes.size(); i++) bytes[i] = bus_xact.data[i];
+    for(int i = 0; i < bytes.size(); i++) bytes[i] = generic_xact.data[i];
   
     // Should we compare the data when the status is not OK ? Not sure ?
-    if(bus_xact.status == SRM_IS_OK && !skip_check) begin
+    if(generic_xact.status == SRM_IS_OK && !skip_check) begin
 
      // Check the read data against each of the field model values.
      foreach(_fields[i]) begin
@@ -252,11 +252,11 @@ virtual class srm_base_reg extends srm_component;
           // Data Mismatch Detected.
           msg = $sformatf("Expected Data=%s, Got Data=%s for field \"%s\" in register \"%s\" at addr=0x%0x",
               srm_utils::bytes_2_hex(current_field_bytes), srm_utils::bytes_2_hex(new_field_bytes),
-              _fields[i].get_name(), get_full_name(), bus_xact.addr);
+              _fields[i].get_name(), get_full_name(), generic_xact.addr);
 
           if(!handle.skip_read_error_msg) `uvm_error("ReadFieldMismatch", msg);
           handle.append_error(msg);
-          handle.bus_xact_status = SRM_READ_DATA_MISMATCH;
+          handle.generic_xact_status = SRM_READ_DATA_MISMATCH;
 
         end
 

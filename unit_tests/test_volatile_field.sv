@@ -25,8 +25,8 @@ class test_volatile_field extends srm_unit_test;
     regmodel = new(.name("regmodel"), .parent(null));
     adapter_policy = new();
     cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
-    cpu_handle.auto_predict_model = 1;
-    adapter = new(.addr_map_name("cpu_map"));
+    adapter = new(.name("cpu_map_adapter"));
+    adapter.no_response_generated = 1;
     regmodel.add_adapter(adapter);
   endfunction
 
@@ -40,7 +40,7 @@ class test_volatile_field extends srm_unit_test;
     `TEST_VALUE(32'h8900cd00, regmodel.r1.get(), "ensure model data is different");
 
     regmodel.r1.read(cpu_handle);
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
     `TEST_VALUE(32'h89abcdef, regmodel.r1.get(), "read data must be updated in model");
   endtask
 
@@ -56,7 +56,7 @@ class test_volatile_field extends srm_unit_test;
     `TEST_VALUE(8'h47, entry.get(), "ensure table model data is different");
 
     entry.read(cpu_handle);
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
     `TEST_VALUE(8'hff, entry.get(), "read table data must be updated in model");
   endtask
 

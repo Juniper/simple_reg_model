@@ -8,15 +8,21 @@
 // Derived class must override the execute method to convert the generic
 // bus operation to a design specific transaction.
 //-----------------------------------------------------------------
-virtual class srm_bus_adapter extends uvm_object;
-  string _addr_map_name;
+class srm_bus_adapter extends uvm_object;
 
-  function new(string name="", string addr_map_name);
+  `uvm_object_utils(srm_bus_adapter)
+
+  // Variable: no_response_generated
+  // Update the model value after access to the design automatically.
+  bit no_response_generated;
+
+  function new(string name="");
     super.new(name);
-    _addr_map_name = addr_map_name;
+    no_response_generated = 0;
   endfunction
 
- pure virtual task execute(ref srm_bus_xact bus_op);
+ virtual task execute(ref srm_generic_xact_t generic_xact);
+ endtask
 
 endclass
 

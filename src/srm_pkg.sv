@@ -28,7 +28,7 @@ package srm_pkg;
   } srm_hier_e;
 
   `include "srm_utils.svh"
-  `include "srm_bus_xact.svh"
+  `include "srm_generic_xact.svh"
   `include "srm_handle.svh"
   `include "srm_bus_adapter.svh"
   `include "srm_component.svh"

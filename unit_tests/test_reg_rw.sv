@@ -26,32 +26,32 @@ class test_reg_rw extends srm_unit_test;
 
     adapter_policy = new();
     cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
-    cpu_handle.auto_predict_model = 1;
-    adapter = new(.addr_map_name("cpu_map"));
+    adapter = new(.name("cpu_map_adapter"));
+    adapter.no_response_generated = 1;
     regmodel.add_adapter(adapter);
   endfunction
 
   task test_write_r1;
     wr_data.field = 32'hdeadbeef;
-    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+    cpu_handle.generic_xact_status = SRM_NOT_OK; // Just for testing overwrite
     regmodel.r1.write(cpu_handle, wr_data);
     rd_data = regmodel.r1.get();
     `TEST_VALUE(32'hdeadbeef, rd_data.field, "written data must match"); 
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "write status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "write status must be ok");
   endtask
 
   task test_field_write_r1;
-    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+    cpu_handle.generic_xact_status = SRM_NOT_OK; // Just for testing overwrite
     regmodel.r1.write(cpu_handle, 'h0);
     regmodel.r1.field.write(cpu_handle, 'h01234567);
     rd_data = regmodel.r1.get();
     `TEST_VALUE(32'h01234567, rd_data.field, "written data must match"); 
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "write status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "write status must be ok");
   endtask
 
   task test_read_r1;
     wr_data.field = 32'h01234567;
-    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+    cpu_handle.generic_xact_status = SRM_NOT_OK; // Just for testing overwrite
 
     // Ensure that the model and design have the same data.
     regmodel.r1.set(wr_data);
@@ -60,7 +60,7 @@ class test_reg_rw extends srm_unit_test;
     regmodel.r1.read(cpu_handle);
     rd_data = regmodel.r1.get();
     `TEST_VALUE(32'h01234567, rd_data.field, "read data must match"); 
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
   endtask
 
   task test_field_read_r1;
@@ -68,13 +68,13 @@ class test_reg_rw extends srm_unit_test;
     regmodel.r1.set('h01234567);
     regmodel.r1.field.read(cpu_handle);
     `TEST_VALUE(32'h01234567, regmodel.r1.field.get(), "written data must match"); 
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "write status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "write status must be ok");
   endtask
 
   task test_mismatch_read_r1;
     cpu_reg32::r1_struct_t temp_data;
     wr_data.field = 32'h01234567;
-    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+    cpu_handle.generic_xact_status = SRM_NOT_OK; // Just for testing overwrite
 
     // Ensure that the model and design have DIFFERENT data.
     temp_data.field = 32'h0;
@@ -84,7 +84,7 @@ class test_reg_rw extends srm_unit_test;
 
     regmodel.r1.read(cpu_handle);
     `TEST_VALUE(32'h01234567, regmodel.r1.field.get(), "read data must return the RTL data"); 
-    `TEST_VALUE(SRM_READ_DATA_MISMATCH, cpu_handle.bus_xact_status, "read status must mismatch");
+    `TEST_VALUE(SRM_READ_DATA_MISMATCH, cpu_handle.generic_xact_status, "read status must mismatch");
     `TEST_VALUE(1, cpu_handle.error_msgs.size(), "Error must be generated");
   endtask
 

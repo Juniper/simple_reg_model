@@ -254,7 +254,7 @@ class srm_component;
 
   // Function: predictor_update
   // Update the component due to the bus transaction.
-  virtual function void predictor_update(const ref srm_bus_xact xact);
+  virtual function void predictor_update(const ref srm_generic_xact_t xact);
     if(xact.kind == SRM_WRITE) begin
     end
     else begin

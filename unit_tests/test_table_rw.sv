@@ -27,18 +27,18 @@ class test_table_rw extends srm_unit_test;
 
     adapter_policy = new();
     cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
-    cpu_handle.auto_predict_model = 1;
-    adapter = new(.addr_map_name("cpu_map"));
+    adapter = new(.name("cpu_map_adapter"));
+    adapter.no_response_generated = 1;
     regmodel.add_adapter(adapter);
   endfunction
 
   task test_write_r1;
 
-    cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+    cpu_handle.generic_xact_status = SRM_NOT_OK; // Just for testing overwrite
     wr_data.field = 32'hdeadbeef;
     entry = regmodel.r1.entry_at(9);
     entry.write(cpu_handle, wr_data);
-    `TEST_VALUE(SRM_IS_OK, cpu_handle.bus_xact_status, "read status must be ok");
+    `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
     `TEST_VALUE(wr_data.field, adapter.last_data, "adapter write data must match");
     `TEST_VALUE('h10100 + 9*4, adapter.last_addr, "adapter write addr must match");
     rd_data = entry.get();
@@ -48,7 +48,7 @@ class test_table_rw extends srm_unit_test;
   task test_write_r1_incr;
 
     for(int i = 0; i < regmodel.r1.get_num_entries(); i++) begin
-      cpu_handle.bus_xact_status = SRM_NOT_OK; // Just for testing overwrite
+      cpu_handle.generic_xact_status = SRM_NOT_OK; // Just for testing overwrite
       wr_data.field = i;
       entry = regmodel.r1.entry_at(i);
       entry.write(cpu_handle, wr_data);

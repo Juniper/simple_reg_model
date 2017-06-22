@@ -1,8 +1,8 @@
-`ifndef INCLUDED_srm_bus_xact_svh
-`define INCLUDED_srm_bus_xact_svh
+`ifndef INCLUDED_srm_generic_xact_svh
+`define INCLUDED_srm_generic_xact_svh
 
 //-----------------------------------------------------------------
-// STRUCT: srm_bus_xact
+// STRUCT: srm_generic_xact
 // Generic bus xact emitted by the register model.
 //
 // The adapter class will translate this generic xact into design specific
@@ -18,7 +18,7 @@ typedef struct {
   srm_data_t data;            // List of bytes to be written/read.
   srm_byte_enable_t byte_enables; // List of byte enables.
   srm_status_e status;        // Return value from agent.
-} srm_bus_xact;
+} srm_generic_xact_t;
 
 
 `endif

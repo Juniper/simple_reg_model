@@ -30,17 +30,17 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   // Function: bus2reg
   // Convert the bus transacation to a generic register transaction
   // FIXME:Pure is not compiling.
-  virtual function srm_bus_xact bus2reg(BUSTYPE tr);
-    srm_bus_xact x;
+  virtual function srm_generic_xact_t bus_2_generic_xact(BUSTYPE tr);
+    srm_generic_xact_t x;
     return x;
   endfunction
 
   // Function: write
   // Not a user level method. Do not call directly.
   virtual function void write(BUSTYPE tr);
-    srm_bus_xact xact;
+    srm_generic_xact_t xact;
 
-    xact = bus2reg(tr);
+    xact = bus_2_generic_xact(tr);
     regmodel.predictor_update(xact);
   endfunction
 
