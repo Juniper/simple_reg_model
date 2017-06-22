@@ -21,7 +21,7 @@ class srm_bus_adapter extends uvm_object;
     no_response_generated = 0;
   endfunction
 
- virtual task execute(ref srm_generic_xact_t generic_xact);
+ virtual task execute(ref srm_generic_xact_t generic_xact, int seq_priority);
  endtask
 
 endclass

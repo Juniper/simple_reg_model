@@ -9,8 +9,8 @@ class jelly_bean_reg_predictor extends srm_bus_predictor#(jelly_bean_transaction
       super.new( name, parent );
    endfunction: new
 
-  virtual function srm_bus_xact bus2reg(jelly_bean_transaction tr);
-    srm_bus_xact xact;
+  virtual function srm_generic_xact_t bus_2_generic_xact(jelly_bean_transaction tr);
+    srm_generic_xact_t xact;
     return xact;
   endfunction
 

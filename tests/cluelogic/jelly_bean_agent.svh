@@ -35,8 +35,8 @@ class jelly_bean_agent extends uvm_agent;
                                                           .parent( this ) );
          jb_drvr = jelly_bean_driver::type_id::create( .name( "jb_drvr" ), 
                                                        .parent( this ) );
-         jb_reg_adapter = new(.name("jb_reg_adapter"), .addr_map_name("cpu_map"),
-                           .sqr(jb_seqr));
+         jb_reg_adapter = jelly_bean_reg_adapter::type_id::create(.name("jb_adapter"),
+                                                                  .parent(this));
          jb_reg_predictor = jelly_bean_reg_predictor::type_id::create(.name("jb_predictor"),
                                                                        .parent(this));
       end
@@ -52,7 +52,9 @@ class jelly_bean_agent extends uvm_agent;
       if ( jb_agent_cfg.active == UVM_ACTIVE ) begin
          jb_drvr.seq_item_port.connect( jb_seqr.seq_item_export );
          jb_drvr.jb_if = jb_agent_cfg.jb_if;
-         jb_mon.jb_ap.connect( jb_reg_predictor.bus_in );
+         jb_reg_adapter.set_sequencer(jb_seqr);
+         if(!jb_reg_adapter.no_response_generated) 
+          jb_mon.jb_ap.connect( jb_reg_predictor.bus_in );
       end
       jb_mon.jb_ap.connect(jb_ap);
    endfunction: connect_phase

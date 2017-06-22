@@ -184,7 +184,7 @@ virtual class srm_base_reg extends srm_component;
 
     // Launch the operation
     adapter = handle.adapter_policy.get_adapter(this);
-    adapter.execute(generic_xact);
+    adapter.execute(generic_xact, handle.seq_priority);
 
     handle.generic_xact_status = generic_xact.status;
 
@@ -218,7 +218,7 @@ virtual class srm_base_reg extends srm_component;
 
     // Launch the operation
     adapter = handle.adapter_policy.get_adapter(this);
-    adapter.execute(generic_xact);
+    adapter.execute(generic_xact, handle.seq_priority);
     
     handle.generic_xact_status = generic_xact.status;
 
