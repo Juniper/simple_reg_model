@@ -39,9 +39,11 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   // Not a user level method. Do not call directly.
   virtual function void write(BUSTYPE tr);
     srm_generic_xact_t xact;
+    srm_component root;
 
     xact = bus_2_generic_xact(tr);
-    regmodel.predictor_update(xact);
+    root = regmodel.get_root_node();
+    root.predictor_update(xact);
   endfunction
 
 endclass
