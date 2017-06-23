@@ -53,11 +53,8 @@ class jelly_bean_agent extends uvm_agent;
          jb_drvr.seq_item_port.connect( jb_seqr.seq_item_export );
          jb_drvr.jb_if = jb_agent_cfg.jb_if;
          jb_reg_adapter.set_sequencer(jb_seqr);
-         // If adapter is configured to send no response back then no predictor xact.
-         if(!jb_reg_adapter.no_response_generated) begin
-           jb_mon.jb_ap.connect( jb_reg_predictor.bus_in );
-           jb_reg_predictor.regmodel = jb_agent_cfg.regmodel;
-         end
+         jb_mon.jb_ap.connect( jb_reg_predictor.bus_in );
+         jb_reg_predictor.regmodel = jb_agent_cfg.regmodel;
       end
       jb_mon.jb_ap.connect(jb_ap);
    endfunction: connect_phase

@@ -23,7 +23,7 @@ class jelly_bean_reg_sequence extends uvm_sequence#(uvm_sequence_item);
       wr_data.sour       = 1;
    
       jb_reg_block.jb_recipe_reg.write(handle, wr_data);
-      jb_reg_block.jb_taste_reg.read(handle);
+      jb_reg_block.jb_taste_reg.read(handle, rd_data);
    endtask: body
      
 endclass: jelly_bean_reg_sequence
