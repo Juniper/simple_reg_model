@@ -14,6 +14,7 @@ class srm_component;
   protected srm_component _parent;
   local srm_component _children[$];
   protected srm_addr_t _offset_table[string];
+  protected srm_addr_t _size_table[string];
   protected srm_adapters_t _adapters;
 
   //---------------------
@@ -167,16 +168,52 @@ class srm_component;
     return offset;
   endfunction
 
-  // Function: size
-  // Get the size of the address map
+  // Function: set_size
+  // Set the size of the node in the address map.
+  virtual function void set_size(string addr_map_name, srm_addr_t size);
+    _size_table[addr_map_name] = size;
+  endfunction
+
+  // Function: get_size
+  // Return the number of bytes in address map.
+  //
+  virtual function srm_addr_t get_size(string addr_map_name);
+    srm_addr_t size = 0;
+    srm_addr_t node_size;
+    if(!_size_table.exists(addr_map_name)) begin
+      foreach(_children[i]) begin
+        node_size = _children[i]._offset_table[addr_map_name] 
+                             + _children[i].get_size(addr_map_name);
+        if(node_size > size) size = node_size;
+      end
+      _size_table[addr_map_name] = size;
+    end
+    return _size_table[addr_map_name];
+  endfunction
 
   // Function: address_2_instance
   // Get the instance of the node given the address.
   //
-  // Must call this from the root node.
-  virtual function srm_component address_2_instance(srm_addr_t addr);
-    srm_component node;
-    return node;
+  virtual function srm_component address_2_instance(string addr_map_name, srm_addr_t addr);
+    srm_component root = get_root_node();
+    return root.__address_2_instance(addr_map_name, addr);
+  endfunction
+
+  virtual function srm_component __address_2_instance(string addr_map_name, srm_addr_t addr);
+    srm_addr_t start_addr, end_addr;
+    
+    foreach(_children[i]) begin
+      start_addr = _children[i].get_offset(addr_map_name);
+      end_addr = start_addr + _children[i].get_size(addr_map_name);
+      $display("SPS:address_2_instance:%s:offset=0x%0x,start=0x%0x,end=0x%0x", _children[i].get_full_name(), addr, start_addr, end_addr);
+      if((addr >= start_addr) && (addr < end_addr)) begin
+        if(_children[i].is_leaf_node())
+          return _children[i];
+        else
+          return _children[i].__address_2_instance(addr_map_name, addr);  
+      end
+    end
+    return null;
   endfunction
 
   //----------------------

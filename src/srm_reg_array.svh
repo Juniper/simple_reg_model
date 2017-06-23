@@ -115,6 +115,15 @@ class srm_reg_array #(type T = int) extends srm_component;
     return _entries.size();
   endfunction
 
+  // Function: get_size
+  // Return the number of bytes in address map.
+  //
+  virtual function srm_addr_t get_size(string addr_map_name);
+    if(!_size_table.exists(addr_map_name))
+      _size_table[addr_map_name] = _prototype.get_width_bytes() * _num_entries;
+    return _size_table[addr_map_name];
+  endfunction
+
 endclass
 
 `endif

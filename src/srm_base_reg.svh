@@ -43,6 +43,15 @@ virtual class srm_base_reg extends srm_component;
     return num_bits/8;
   endfunction
 
+  // Function: get_size
+  // Return the number of bytes in address map.
+  //
+  virtual function srm_addr_t get_size(string addr_map_name);
+    if(!_size_table.exists(addr_map_name)) 
+      _size_table[addr_map_name] = get_width_bytes();
+    return _size_table[addr_map_name];
+  endfunction
+
   // Function: get_num_fields
   // Return the number of fields in the entry.
   //
