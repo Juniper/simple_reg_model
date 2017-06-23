@@ -205,7 +205,6 @@ class srm_component;
     foreach(_children[i]) begin
       start_addr = _children[i].get_offset(addr_map_name);
       end_addr = start_addr + _children[i].get_size(addr_map_name);
-      $display("SPS:address_2_instance:%s:offset=0x%0x,start=0x%0x,end=0x%0x", _children[i].get_full_name(), addr, start_addr, end_addr);
       if((addr >= start_addr) && (addr < end_addr)) begin
         if(_children[i].is_leaf_node())
           return _children[i];

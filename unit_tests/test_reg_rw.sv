@@ -64,7 +64,7 @@ class test_reg_rw extends srm_unit_test;
   task test_field_read_r1;
     adapter.last_data = 'h01234567;
     regmodel.r1.set('h01234567);
-    regmodel.r1.field.read(cpu_handle);
+    regmodel.r1.field.read(cpu_handle, rd_data);
     `TEST_VALUE(32'h01234567, regmodel.r1.field.get(), "written data must match"); 
     `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "write status must be ok");
   endtask
