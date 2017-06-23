@@ -200,9 +200,8 @@ virtual class srm_base_reg extends srm_component;
 
     handle.generic_xact_status = generic_xact.status;
 
-    if(adapter.no_response_generated) begin
-      predictor_update(generic_xact);
-    end
+    // Update the model at the end.
+    predictor_update(generic_xact);
 
   endtask
 

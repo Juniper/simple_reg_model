@@ -26,7 +26,6 @@ class test_volatile_field extends srm_unit_test;
     adapter_policy = new();
     cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
-    adapter.no_response_generated = 1;
     regmodel.add_adapter(adapter);
   endfunction
 
