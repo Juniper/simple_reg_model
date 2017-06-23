@@ -38,13 +38,14 @@ class test_volatile_field extends srm_unit_test;
     regmodel.r1.f2.set('h0);
     `TEST_VALUE(32'h8900cd00, regmodel.r1.get(), "ensure model data is different");
 
-    regmodel.r1.read(cpu_handle);
+    regmodel.r1.read(cpu_handle, rd_data);
     `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
     `TEST_VALUE(32'h89abcdef, regmodel.r1.get(), "read data must be updated in model");
   endtask
 
   task test_table_volatile;
     cpu_volatile_field::r2_table::r2_entry entry;  
+    cpu_volatile_field::r2_struct_t rd_data;
     regmodel.reset("BIST");
     regmodel.r2.store(cpu_handle);
     `TEST_VALUE(8'hff, adapter.last_data, "ensure that table data is written");
@@ -54,7 +55,7 @@ class test_volatile_field extends srm_unit_test;
     entry.f4.set('h0);
     `TEST_VALUE(8'h47, entry.get(), "ensure table model data is different");
 
-    entry.read(cpu_handle);
+    entry.read(cpu_handle, rd_data);
     `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
     `TEST_VALUE(8'hff, entry.get(), "read table data must be updated in model");
   endtask

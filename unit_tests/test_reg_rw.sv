@@ -56,8 +56,7 @@ class test_reg_rw extends srm_unit_test;
     regmodel.r1.set(wr_data);
     adapter.last_data = wr_data.field;
 
-    regmodel.r1.read(cpu_handle);
-    rd_data = regmodel.r1.get();
+    regmodel.r1.read(cpu_handle, rd_data);
     `TEST_VALUE(32'h01234567, rd_data.field, "read data must match"); 
     `TEST_VALUE(SRM_IS_OK, cpu_handle.generic_xact_status, "read status must be ok");
   endtask
@@ -81,7 +80,7 @@ class test_reg_rw extends srm_unit_test;
     adapter.last_data = wr_data.field;
     cpu_handle.skip_read_error_msg = 1;
 
-    regmodel.r1.read(cpu_handle);
+    regmodel.r1.read(cpu_handle, rd_data);
     `TEST_VALUE(32'h01234567, regmodel.r1.field.get(), "read data must return the RTL data"); 
     `TEST_VALUE(SRM_READ_DATA_MISMATCH, cpu_handle.generic_xact_status, "read status must mismatch");
     `TEST_VALUE(1, cpu_handle.error_msgs.size(), "Error must be generated");

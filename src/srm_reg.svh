@@ -97,7 +97,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   // Task will call uvm_error if the field is not volatile and the model value does not
   // match the value read from the design.
   //
-  virtual task read(srm_handle handle);
+  virtual task read(srm_handle handle, ref T data);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
@@ -112,6 +112,8 @@ class srm_reg#(type T = int) extends srm_base_reg;
    
     set_bytes(bytes);
 
+    // Return data to the user.
+    data = bytes_2_data(bytes);
   endtask
 
   // Task: write
