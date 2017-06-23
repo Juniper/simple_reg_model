@@ -42,13 +42,15 @@ class test_field_rw extends srm_unit_test;
   endtask
 
   task test_reg_field_read();
+    bit[7:0] value;
     regmodel.reset("HARD");
     regmodel.r1.store(cpu_handle);
     
-    regmodel.r1.f2.read(cpu_handle);
+    regmodel.r1.f2.read(cpu_handle, value);
     
     `TEST_VALUE(4'b0100, adapter.byte_enables, "Byte enable for f2 should be off");
     `TEST_VALUE('h01234567, regmodel.r1.get(), "read field should not change the contents");
+    `TEST_VALUE('h23, value, "read field should not change the contents");
   endtask
 
   virtual task run();

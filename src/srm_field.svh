@@ -174,7 +174,7 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   // A read to the parent register is issued with the correct byte enables.
   // The field data is them stripped and compared to the model data.
-  virtual task read(srm_handle handle);
+  virtual task read(srm_handle handle, output T data);
     srm_byte_enable_t byte_enables;
     srm_base_reg p;
     srm_data_t reg_bytes, field_bytes;
@@ -193,6 +193,8 @@ class srm_field#(type T = int) extends srm_base_field;
     field_bytes = srm_utils::extract_field(.bytes(reg_bytes), .lsb_pos(_lsb_pos),
                                            .n_bits(_n_bits));
     set_bytes(field_bytes);
+
+    data = bytes_2_data(field_bytes);
   endtask
 
   //-------------------------------------
