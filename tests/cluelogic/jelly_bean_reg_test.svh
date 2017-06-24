@@ -15,7 +15,7 @@ class jelly_bean_reg_test extends jelly_bean_base_test;
       phase.raise_objection( .obj( this ) );
       jb_reg_seq = jelly_bean_reg_sequence::type_id::create( .name( "jb_reg_seq" ) );
       jb_reg_seq.jb_reg_block = jb_reg_block;
-      jb_reg_seq.handle = handle;
+      jb_reg_seq.handle = jb_fd_handle;
       jb_reg_seq.start( .sequencer( jb_env.jb_agent.jb_seqr ) );
       
       #100ns;

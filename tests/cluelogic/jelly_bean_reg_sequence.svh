@@ -7,7 +7,7 @@ class jelly_bean_reg_sequence extends uvm_sequence#(uvm_sequence_item);
    `uvm_object_utils( jelly_bean_reg_sequence )
 
    jelly_bean_reg_block       jb_reg_block;
-   reg_map_handle             handle;
+   srm_base_handle            handle;
 
    function new( string name = "" );
       super.new( name );

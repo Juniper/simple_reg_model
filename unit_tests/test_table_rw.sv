@@ -12,7 +12,7 @@ class test_table_rw extends srm_unit_test;
   cpu_table32 regmodel;
   dummy_adapter adapter;
   first_adapter_policy adapter_policy;
-  srm_handle cpu_handle;
+  srm_base_handle cpu_handle;
 
   cpu_table32::r1_struct_t wr_data, rd_data;
   srm_reg#(cpu_table32::r1_struct_t) entry;  
@@ -26,7 +26,8 @@ class test_table_rw extends srm_unit_test;
     regmodel.set_offset(.addr_map_name("cpu_map"), .offset(64'h10000));
 
     adapter_policy = new();
-    cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
+    cpu_handle = new("cpu_handle");
+    cpu_handle.initialize(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
     regmodel.add_adapter(adapter);
   endfunction

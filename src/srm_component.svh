@@ -1,7 +1,7 @@
 `ifndef INCLUDED_srm_component_svh
 `define INCLUDED_srm_component_svh
 
-typedef class srm_handle;
+typedef class srm_base_handle;
 typedef srm_bus_adapter srm_adapters_t[$];
 
 //------------------------------------------------------------
@@ -241,7 +241,7 @@ class srm_component;
   // Task: load
   // Call load on all the leaf nodes of the tree.
   //
-  virtual task load(srm_handle handle);
+  virtual task load(srm_base_handle handle);
     srm_component leaves[$];
 
     get_leaf_nodes(leaves);
@@ -255,7 +255,7 @@ class srm_component;
   // Task: store 
   // Call store on all the leaf nodes of the tree.
   // Leaf class will override this for the base case.
-  virtual task store(srm_handle handle);
+  virtual task store(srm_base_handle handle);
     srm_component leaves[$];
 
     get_leaf_nodes(leaves);
@@ -270,7 +270,7 @@ class srm_component;
   // Task: store_update 
   // Call store_update on all the children of the node.
   //
-  virtual task store_update(srm_handle handle, const ref srm_component node, 
+  virtual task store_update(srm_base_handle handle, const ref srm_component node, 
                             bit skip_duplicate);
     srm_component next_node;
 

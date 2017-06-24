@@ -56,7 +56,7 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Load all the entries of the model from the design.
   //
   // No checking is done and the model is silently updated.
-  virtual task load(srm_handle handle);
+  virtual task load(srm_base_handle handle);
     srm_array_entry#(T) entry;
     for(int i = 0; i < get_num_entries(); i++) begin
       entry = entry_at(i);
@@ -67,7 +67,7 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Task: store
   // Store all the entries from the model into the design.
   //
-  virtual task store(srm_handle handle);
+  virtual task store(srm_base_handle handle);
     srm_array_entry#(T) entry;
     for(int i = 0; i < get_num_entries(); i++) begin
       entry = entry_at(i);

@@ -7,14 +7,18 @@
 class jelly_bean_reg_block extends srm_component;
 
   typedef struct packed {
+    bit[5:0] reserved;
     bit[1:0] taste;
   } taste_t;
 
   class jelly_bean_taste_reg extends srm_reg#(taste_t);
+    srm_field#(bit[5:0]) reserved;
     srm_field#(bit[1:0]) taste;
 
     function new(string name, srm_component parent);
       super.new(name, parent);
+      reserved = new(.name("reserved"), .parent(this), .n_bits(6), .lsb_pos(2), .volatile(0));
+      add_field(reserved);
       taste = new(.name("taste"), .parent(this), .n_bits(2), .lsb_pos(0),
                   .volatile(1));
       add_field(taste);
@@ -70,6 +74,7 @@ class jelly_bean_reg_block extends srm_component;
     function new(string name, srm_component parent);
       super.new(name, parent);
       reserved = new(.name("reserved"), .parent(this), .n_bits(1), .lsb_pos(7), .volatile(0));
+      add_field(reserved);
 
       sour = new(.name("sour"), .parent(this), .n_bits(1), .lsb_pos(6), .volatile(0));
       add_field(sour);

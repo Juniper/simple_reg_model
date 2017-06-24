@@ -29,7 +29,7 @@ package srm_pkg;
 
   `include "srm_utils.svh"
   `include "srm_generic_xact.svh"
-  `include "srm_handle.svh"
+  `include "srm_base_handle.svh"
   `include "srm_bus_adapter.svh"
   `include "srm_component.svh"
   `include "srm_bus_predictor.svh"

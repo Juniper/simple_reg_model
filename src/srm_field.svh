@@ -1,7 +1,7 @@
 `ifndef INCLUDED_srm_field_svh
 `define INCLUDED_srm_field_svh
 
-typedef class srm_handle;
+typedef class srm_base_handle;
 //---------------------------------------------------
 // CLASS: srm_field
 // Template class to model the fields in a register.
@@ -145,7 +145,7 @@ class srm_field#(type T = int) extends srm_base_field;
   // other field values are set to the value from the model.
   // It is possible to make data as const ref but then I cannot pass 
   // literal constants. 
-  virtual task write(srm_handle handle, T data);
+  virtual task write(srm_base_handle handle, T data);
     srm_data_t field_bytes, reg_bytes;
     srm_byte_enable_t byte_enables;
     srm_base_reg p;
@@ -174,7 +174,7 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   // A read to the parent register is issued with the correct byte enables.
   // The field data is them stripped and compared to the model data.
-  virtual task read(srm_handle handle, output T data);
+  virtual task read(srm_base_handle handle, output T data);
     srm_byte_enable_t byte_enables;
     srm_base_reg p;
     srm_data_t reg_bytes, field_bytes;

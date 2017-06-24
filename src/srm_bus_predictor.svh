@@ -19,6 +19,11 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   // the run phase.
   srm_component regmodel;
 
+  // Variable: addr_map_name 
+  // This is used to find the corresponding register. Must be configured before
+  // the run phase.
+  string addr_map_name;
+
   // Function: new
   // Create a new instance of this type, giving the optional ~name~ and ~parent~.
   //
@@ -39,11 +44,15 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   // Not a user level method. Do not call directly.
   virtual function void write(BUSTYPE tr);
     srm_generic_xact_t xact;
-    srm_component root;
-
+    srm_component node;
     xact = bus_2_generic_xact(tr);
-    root = regmodel.get_root_node();
-    root.predictor_update(xact);
+    node = regmodel.address_2_instance(addr_map_name, xact.addr);
+    if(node == null) begin
+      `uvm_fatal("TbConfigurationError", 
+        $psprintf("Could not find node for address=0x%0x in address map \"%s\"", 
+                                                       xact.addr, addr_map_name));
+    end
+    node.predictor_update(xact);
   endfunction
 
 endclass

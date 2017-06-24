@@ -1,13 +1,15 @@
-`ifndef INCLUDED_srm_handle_svh
-`define INCLUDED_srm_handle_svh
+`ifndef INCLUDED_srm_base_handle_svh
+`define INCLUDED_srm_base_handle_svh
 
 typedef class srm_adapter_policy;
 //-----------------------------------------------------------------
-// CLASS: srm_handle
+// CLASS: srm_base_handle
 // Client options for configurating the access.
 //-----------------------------------------------------------------
 
-class srm_handle;
+class srm_base_handle extends uvm_object;
+
+  `uvm_object_utils(srm_base_handle)
 
   // Variable: priority
   // Priority of the sub sequence.
@@ -36,9 +38,12 @@ class srm_handle;
   //------------------
   // Group: Initialization
   //-------------------
+  function new(string name="");
+    super.new(name);
+  endfunction
 
-  // Function: new
-  function new(srm_adapter_policy adapter_policy, string addr_map_name);
+  // Function: initialize 
+  virtual function void initialize(srm_adapter_policy adapter_policy, string addr_map_name);
     this.adapter_policy = adapter_policy;
     this.addr_map_name = addr_map_name;
     this.skip_read_error_msg = 0;

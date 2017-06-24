@@ -143,7 +143,7 @@ virtual class srm_base_reg extends srm_component;
   // Load the design data into the model.
   //
   // No checking is done and the model is silently updated.
-  virtual task load(srm_handle handle);
+  virtual task load(srm_base_handle handle);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes = get_width_bytes(); 
@@ -161,7 +161,7 @@ virtual class srm_base_reg extends srm_component;
   // Task: store
   // Store the model data into the design.
   //
-  virtual task store(srm_handle handle);
+  virtual task store(srm_base_handle handle);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes = get_width_bytes(); 
@@ -183,7 +183,7 @@ virtual class srm_base_reg extends srm_component;
   // model value is updated at the end otherwise done later by the xact from monitor.
   //
   // For use by framework classes only.
-  virtual task __write_bytes(srm_handle handle, const ref srm_data_t bytes, 
+  virtual task __write_bytes(srm_base_handle handle, const ref srm_data_t bytes, 
                        const ref srm_byte_enable_t byte_enables);
     srm_generic_xact_t generic_xact;
     srm_bus_adapter adapter;
@@ -211,7 +211,7 @@ virtual class srm_base_reg extends srm_component;
   //
   // Checks that the read data matches the model value. Will report
   // error for non volatile fields. Volatile fields are silently updated.
-  virtual task __read_bytes(srm_handle handle, ref srm_data_t bytes,
+  virtual task __read_bytes(srm_base_handle handle, ref srm_data_t bytes,
                             const ref srm_byte_enable_t byte_enables,
                             input bit skip_check=0);
     srm_generic_xact_t generic_xact;

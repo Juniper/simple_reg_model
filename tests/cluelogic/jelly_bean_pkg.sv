@@ -5,8 +5,9 @@ package jelly_bean_pkg;
   import srm_pkg::*;
   `include "uvm_macros.svh"
 
-  `include "reg_map_handle.svh"
-  `include "first_adapter_policy.svh"
+  `include "jelly_bean_frontdoor_handle.svh"
+  `include "frontdoor_adapter_policy.svh"
+  `include "backdoor_adapter_policy.svh"
   `include "jelly_bean_types.svh"
   `include "jelly_bean_transaction.svh"
   `include "jelly_bean_reg_block.svh"
@@ -16,7 +17,8 @@ package jelly_bean_pkg;
   `include "jelly_bean_sequence.svh"
   `include "jelly_bean_reg_sequence.svh"
   `include "jelly_bean_sequencer.svh"
-  `include "jelly_bean_reg_adapter.svh"
+  `include "jelly_bean_frontdoor_adapter.svh"
+  `include "jelly_bean_backdoor_adapter.svh"
   `include "jelly_bean_monitor.svh"
   `include "jelly_bean_driver.svh"
   `include "jelly_bean_agent.svh"

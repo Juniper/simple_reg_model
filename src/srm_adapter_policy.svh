@@ -8,8 +8,14 @@
 // Walk from the leaf to the root looking for correct adapter.
 //
 //-----------------------------------------------------------------
-class srm_adapter_policy;
+class srm_adapter_policy extends uvm_object;
+  `uvm_object_utils(srm_adapter_policy)
+
   srm_bus_adapter adapters[$];
+
+  function new(string name="");
+    super.new(name);
+  endfunction
 
   virtual function srm_bus_adapter get_adapter(srm_component obj);
     srm_component ptr = obj;

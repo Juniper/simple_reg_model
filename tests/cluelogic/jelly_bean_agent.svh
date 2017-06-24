@@ -11,7 +11,7 @@ class jelly_bean_agent extends uvm_agent;
    jelly_bean_sequencer    jb_seqr;
    jelly_bean_driver       jb_drvr;
    jelly_bean_monitor      jb_mon;
-   jelly_bean_reg_adapter  jb_reg_adapter;
+   jelly_bean_frontdoor_adapter  jb_fd_adapter;
    jelly_bean_reg_predictor jb_reg_predictor;
 
    function new( string name, uvm_component parent );
@@ -35,7 +35,7 @@ class jelly_bean_agent extends uvm_agent;
                                                           .parent( this ) );
          jb_drvr = jelly_bean_driver::type_id::create( .name( "jb_drvr" ), 
                                                        .parent( this ) );
-         jb_reg_adapter = jelly_bean_reg_adapter::type_id::create(.name("jb_adapter"),
+         jb_fd_adapter = jelly_bean_frontdoor_adapter::type_id::create(.name("jb_fd_adapter"),
                                                                   .parent(this));
          jb_reg_predictor = jelly_bean_reg_predictor::type_id::create(.name("jb_predictor"),
                                                                        .parent(this));
@@ -52,9 +52,11 @@ class jelly_bean_agent extends uvm_agent;
       if ( jb_agent_cfg.active == UVM_ACTIVE ) begin
          jb_drvr.seq_item_port.connect( jb_seqr.seq_item_export );
          jb_drvr.jb_if = jb_agent_cfg.jb_if;
-         jb_reg_adapter.set_sequencer(jb_seqr);
+         jb_fd_adapter.set_sequencer(jb_seqr);
+         jb_agent_cfg.regmodel.add_adapter(jb_fd_adapter);
          jb_mon.jb_ap.connect( jb_reg_predictor.bus_in );
          jb_reg_predictor.regmodel = jb_agent_cfg.regmodel;
+         jb_reg_predictor.addr_map_name = "reg_map";
       end
       jb_mon.jb_ap.connect(jb_ap);
    endfunction: connect_phase

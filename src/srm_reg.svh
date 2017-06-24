@@ -97,7 +97,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   // Task will call uvm_error if the field is not volatile and the model value does not
   // match the value read from the design.
   //
-  virtual task read(srm_handle handle, ref T data);
+  virtual task read(srm_base_handle handle, ref T data);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
@@ -123,7 +123,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   // storage inside the model.
   // It is possible to make data as const ref but then I cannot pass 
   // literal constants. 
-  virtual task write(srm_handle handle, T data);
+  virtual task write(srm_base_handle handle, T data);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
@@ -144,7 +144,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   //
   // useful for unit testing.
   //
-  virtual task peek(srm_handle handle, output T data);
+  virtual task peek(srm_base_handle handle, output T data);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;

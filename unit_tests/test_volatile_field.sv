@@ -14,7 +14,7 @@ class test_volatile_field extends srm_unit_test;
   
   dummy_adapter adapter;
   first_adapter_policy adapter_policy;
-  srm_handle cpu_handle;
+  srm_base_handle cpu_handle;
   cpu_volatile_field::r1_struct_t wr_data, rd_data;
 
   function new();
@@ -24,7 +24,8 @@ class test_volatile_field extends srm_unit_test;
   virtual function void setup();
     regmodel = new(.name("regmodel"), .parent(null));
     adapter_policy = new();
-    cpu_handle = new(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
+    cpu_handle = new();
+    cpu_handle.initialize(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
     regmodel.add_adapter(adapter);
   endfunction

@@ -1,12 +1,11 @@
-
 //------------------------------------------------------------------------------
-// Class: jelly_bean_reg_adapter
+// Class: jelly_bean_frontdoor_adapter
 // Executes the transaction on the sequencer.
 //------------------------------------------------------------------------------
 
-class jelly_bean_reg_adapter extends srm_bus_adapter;
+class jelly_bean_frontdoor_adapter extends srm_bus_adapter;
 
-   `uvm_object_utils(jelly_bean_reg_adapter)
+   `uvm_object_utils(jelly_bean_frontdoor_adapter)
 
    jelly_bean_sequencer _sqr;
 
@@ -51,5 +50,5 @@ class jelly_bean_reg_adapter extends srm_bus_adapter;
       seq.start(_sqr, null, seq_priority);
    endtask
 
-endclass: jelly_bean_reg_adapter
+endclass: jelly_bean_frontdoor_adapter
 

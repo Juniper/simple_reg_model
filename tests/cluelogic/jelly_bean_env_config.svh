@@ -9,7 +9,7 @@ class jelly_bean_env_config extends uvm_object;
    bit has_jb_sb    = 1;
    
    jelly_bean_agent_config jb_agent_cfg;
-   jelly_bean_reg_block    jb_reg_block;
+   jelly_bean_reg_block    regmodel;
 
    function new( string name = "" );
       super.new( name );
