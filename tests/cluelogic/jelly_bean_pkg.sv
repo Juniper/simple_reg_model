@@ -5,7 +5,6 @@ package jelly_bean_pkg;
   import srm_pkg::*;
   `include "uvm_macros.svh"
 
-  `include "jelly_bean_frontdoor_handle.svh"
   `include "frontdoor_adapter_policy.svh"
   `include "backdoor_adapter_policy.svh"
   `include "jelly_bean_types.svh"

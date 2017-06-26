@@ -20,6 +20,7 @@ class jelly_bean_backdoor_adapter extends srm_bus_adapter;
         `uvm_fatal("TbConfigurationError", "Could not read the backdoor path \"top.dut.taste\"");
       end
       generic_xact.data[0] = {6'd0, taste};
+      $display(">>>BackdoorRead from taste register=0x%0x", generic_xact.data[0]);
     end
     else begin
       data = generic_xact.data[0];
@@ -27,6 +28,7 @@ class jelly_bean_backdoor_adapter extends srm_bus_adapter;
       assert(uvm_hdl_deposit("top.dut.sugar_free", data[5]));
       assert(uvm_hdl_deposit("top.dut.color", data[4:3]));
       assert(uvm_hdl_deposit("top.dut.flavor", data[2:0]));
+      $display(">>>BackdoorWrite to recipe register=0x%0x", data);
     end
 
    endtask

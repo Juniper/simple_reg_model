@@ -85,7 +85,7 @@ module top;
    reg clk;
    
    jelly_bean_if     jb_if( clk );
-   jelly_bean_taster jb_taster( jb_if );
+   jelly_bean_taster dut( jb_if );
 
    initial begin
       clk = 0;

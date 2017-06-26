@@ -9,8 +9,10 @@ class jelly_bean_base_test extends uvm_test;
    jelly_bean_env_config   jb_env_cfg;
    jelly_bean_agent_config jb_agent_cfg;
    jelly_bean_reg_block    jb_reg_block;
-   frontdoor_adapter_policy    fd_policy;
-   jelly_bean_frontdoor_handle jb_fd_handle;
+   frontdoor_adapter_policy  fd_policy;
+   backdoor_adapter_policy   bd_policy;
+   srm_base_handle jb_fd_handle;
+   srm_base_handle jb_bd_handle;
 
    function new( string name, uvm_component parent );
       super.new( name, parent );
@@ -20,10 +22,14 @@ class jelly_bean_base_test extends uvm_test;
       super.build_phase(phase);
 
       jb_reg_block = new("jb_reg_block", null);
-      fd_policy = frontdoor_adapter_policy::type_id::create("jb_fd_policy");
 
-      jb_fd_handle = jelly_bean_frontdoor_handle::type_id::create("jb_fd_handle");
+      fd_policy = frontdoor_adapter_policy::type_id::create("jb_fd_policy");
+      jb_fd_handle = srm_base_handle::type_id::create("jb_fd_handle");
       jb_fd_handle.initialize(.adapter_policy(fd_policy), .addr_map_name("reg_map"));
+      
+      bd_policy = backdoor_adapter_policy::type_id::create("jb_bd_policy");
+      jb_bd_handle = srm_base_handle::type_id::create("jb_bd_handle");
+      jb_bd_handle.initialize(.adapter_policy(bd_policy), .addr_map_name("reg_map"));
       
       jb_env_cfg = jelly_bean_env_config::type_id::create( "jb_env_cfg" );
       jb_env_cfg.regmodel = jb_reg_block;
@@ -55,7 +61,4 @@ class jelly_bean_base_test extends uvm_test;
    virtual function void final_phase(uvm_phase phase);
     $display("SRUN_TEST_PASS");
    endfunction
-
-endclass: jelly_bean_base_test
-
-
+endclass
