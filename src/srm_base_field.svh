@@ -15,7 +15,8 @@ virtual class srm_base_field;
   protected bit _is_initialized; // Derived class also sets it in "set" function.
 
   local bit _volatile;
-  
+  protected srm_base_policy _policy_map[string];
+
   //-----------------
   // Group: Initialization
   //-----------------
@@ -85,6 +86,25 @@ virtual class srm_base_field;
   // Function: set_bytes
   // Virtual function that will be implemented by srm_field.
   pure virtual function void set_bytes(const ref srm_data_t bytes);
+
+  //-----------------
+  // Group: Field Policy 
+  //-----------------
+  // Function: set_policy
+  // Set policy per address map name.
+  function set_policy(string addr_map_name, srm_base_policy policy);
+    _policy_map[addr_map_name] = policy;
+  endfunction
+
+  // Function: get_policy
+  // Get policy on the address map name
+  function srm_base_policy get_policy(string addr_map_name);
+    srm_base_policy p =  _policy_map[addr_map_name];
+    if(p == null) begin
+      p = srm_rw_policy::get();
+    end
+    return p;
+  endfunction
 
 endclass
 

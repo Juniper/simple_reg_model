@@ -4,3 +4,4 @@ run/*
 *.o
 *.so
 *.swn
+docs/images

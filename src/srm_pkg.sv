@@ -34,6 +34,8 @@ package srm_pkg;
   `include "srm_component.svh"
   `include "srm_bus_predictor.svh"
   `include "srm_adapter_policy.svh"
+  `include "srm_base_policy.svh"
+  `include "srm_field_policies.svh"
   `include "srm_base_reg.svh"
   `include "srm_base_field.svh"
   `include "srm_field.svh"

@@ -6,6 +6,9 @@ srm_field -> srm_base_reg : parent.get_bytes
 srm_field -> srm_utils: merge_bytes
 srm_utils --> srm_field : register_bytes
 srm_field -> srm_base_reg : __write_bytes
-srm_field -> srm_base_reg : set_bytes
+srm_field -> srm_base_policy: write_policy(field, bytes)
+note left: skip or modify the existing bytes
+srm_base_policy --> srm_field: allow_update, new_bytes 
+srm_field -> srm_field : set_bytes
 srm_field --> sequence : SRM_IS_OK
 @enduml

@@ -14,5 +14,5 @@ srm_base_reg -> srm_utils : is_same_bytes(read_bytes, expect_bytes)
 srm_base_reg -> srm_base_reg : bytes_2_data
 srm_base_reg --> srm_reg : data 
 srm_reg -> srm_reg : set_bytes
-srm_reg --> sequence : handle.SRM_IS_OK
+srm_reg --> sequence : data
 @enduml

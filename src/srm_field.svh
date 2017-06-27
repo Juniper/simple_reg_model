@@ -146,11 +146,14 @@ class srm_field#(type T = int) extends srm_base_field;
   // It is possible to make data as const ref but then I cannot pass 
   // literal constants. 
   virtual task write(srm_base_handle handle, T data);
+    srm_base_policy policy;
+    int allow_update;
     srm_data_t field_bytes, reg_bytes;
     srm_byte_enable_t byte_enables;
     srm_base_reg p;
 
     field_bytes = data_2_bytes(data);
+
     p= get_parent();
     reg_bytes = p.get_bytes();
     srm_utils::merge_field(.reg_bytes(reg_bytes), .field_bytes(field_bytes),
@@ -164,9 +167,11 @@ class srm_field#(type T = int) extends srm_base_field;
     p.__write_bytes(.handle(handle), .bytes(reg_bytes), 
                                                 .byte_enables(byte_enables));
 
-    // For updating the model we don't worry about byte enables since 
-    // we read the entire content of the register from the model.
-    p.set_bytes(reg_bytes);
+    policy = get_policy(handle.addr_map_name);
+    allow_update = policy.write_policy(this, field_bytes);
+    if(allow_update) begin
+      set_bytes(field_bytes);
+    end
   endtask
 
   // Task: read
@@ -175,6 +180,8 @@ class srm_field#(type T = int) extends srm_base_field;
   // A read to the parent register is issued with the correct byte enables.
   // The field data is them stripped and compared to the model data.
   virtual task read(srm_base_handle handle, output T data);
+    srm_base_policy policy;
+    int allow_update;
     srm_byte_enable_t byte_enables;
     srm_base_reg p;
     srm_data_t reg_bytes, field_bytes;
@@ -192,9 +199,19 @@ class srm_field#(type T = int) extends srm_base_field;
 
     field_bytes = srm_utils::extract_field(.bytes(reg_bytes), .lsb_pos(_lsb_pos),
                                            .n_bits(_n_bits));
-    set_bytes(field_bytes);
+    
+    data = bytes_2_data(field_bytes); // Return the data from design to the caller.
 
-    data = bytes_2_data(field_bytes);
+    // Volatile fields needs to be updated. Sometimes the fields have side affect of doing a read.
+    // For example "ReadSet" causes the read to set all the bits of the field. This type of behavior
+    // is treated as read followed by an embedded write that sets the bits.
+
+    policy = get_policy(handle.addr_map_name);
+    allow_update = policy.read_policy(this, field_bytes);
+    if(allow_update) begin
+      set_bytes(field_bytes);
+    end
+
   endtask
 
   //-------------------------------------

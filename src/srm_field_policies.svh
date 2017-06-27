@@ -1,0 +1,679 @@
+`ifndef INCLUDED_srm_field_policies_svh
+`define INCLUDED_srm_field_policies_svh
+
+// List of all the field level policies defined.
+
+// Class: srm_rw_policy
+// Read Write Policy
+//
+class srm_rw_policy extends srm_base_policy;
+  local static srm_rw_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_rw_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 1; // Update the model.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 1; // Write as is
+  endfunction
+
+endclass
+
+// Class: srm_ro_policy
+// Read Only Policy
+class srm_ro_policy extends srm_base_policy;
+  local static srm_ro_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_ro_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 1; // Update the model
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Write has no effect
+  endfunction
+
+endclass
+
+// Class: srm_rc_policy
+// Read clears all the bits. Write has no effect.
+class srm_rc_policy extends srm_base_policy;
+  local static srm_rc_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_rc_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h0;
+
+    return 1; // Update the model
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Skip the update to the model.
+  endfunction
+
+endclass
+
+// Class: srm_rs_policy
+// Read sets all the bits. Write has no effect.
+class srm_rs_policy extends srm_base_policy;
+  local static srm_rs_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_rs_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'hff;
+
+    return 1; // Update the model
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Skip the update to the model.
+  endfunction
+
+endclass
+
+// Class: srm_wrc_policy
+// Read clears all the bits. Write as is.
+class srm_wrc_policy extends srm_base_policy;
+  local static srm_wrc_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wrc_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h0;
+
+    return 1; // Update the model
+  endfunction
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 1; // Write as is
+  endfunction
+
+endclass
+
+// Class: srm_wrs_policy
+// Read sets all the bits. Write as is.
+class srm_wrs_policy extends srm_base_policy;
+  local static srm_wrs_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wrs_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'hff;
+
+    return 1; // Update the model
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 1; // Write as is
+  endfunction
+
+endclass
+
+// Class: srm_wc_policy
+// Write clears all the bits. Read has no effect.
+class srm_wc_policy extends srm_base_policy;
+  local static srm_wc_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wc_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h0;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_ws_policy
+// Write sets all the bits. Read has no effect.
+class srm_ws_policy extends srm_base_policy;
+  local static srm_ws_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_ws_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'hff;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_wsrc_policy
+// Write sets all the bits. Read clears all the fields.
+class srm_wsrc_policy extends srm_base_policy;
+  local static srm_wsrc_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wsrc_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h0;
+
+    return 1; // Update the model
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'hff;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_wcrs_policy
+// Write clears all the bits. Read sets all the bits.
+class srm_wcrs_policy extends srm_base_policy;
+  local static srm_wcrs_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wcrs_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'hff;
+
+    return 1; // Update the model
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h0;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w1c_policy
+// Write 1-clears the bit, 0-no effect, Read: no affect
+class srm_w1c_policy extends srm_base_policy;
+  local static srm_w1c_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w1c_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Read has no effect.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = new_byte[j] ? 'h0 : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w1s_policy
+// Write 1-clears the bit, 0-no effect, Read: no affect
+class srm_w1s_policy extends srm_base_policy;
+  local static srm_w1s_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w1s_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Read has no effect.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = new_byte[j] ? 'h1 : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w1t_policy
+// Write 1-toggles the bit, 0-no effect, Read: no affect
+class srm_w1t_policy extends srm_base_policy;
+  local static srm_w1t_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w1t_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Read has no effect.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = new_byte[j] ? ~current_byte[j] : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w0c_policy
+// Write 1- no effect, 0- clear, Read: no affect
+class srm_w0c_policy extends srm_base_policy;
+  local static srm_w0c_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w0c_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Read has no effect.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = ~new_byte[j] ? 'h0 : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+
+// Class: srm_w0s_policy
+// Write 1- no effect, 0- set, Read: no affect
+class srm_w0s_policy extends srm_base_policy;
+  local static srm_w0s_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w0s_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Read has no effect.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = ~new_byte[j] ? 'h1 : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w0t_policy
+// Write 1- no effect, 0- toggle, Read: no affect
+class srm_w0t_policy extends srm_base_policy;
+  local static srm_w0t_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w0t_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Read has no effect.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = new_byte[j] ? current_byte[j]  : ~current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+
+// Class: srm_w1src_policy
+// Write 1- set effect, 0-no effect , Read: clears 
+class srm_w1src_policy extends srm_base_policy;
+  local static srm_w1src_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w1src_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++) begin
+      bytes[i] = 'h0;
+    end
+    return 1;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = new_byte[j] ? 'h1  : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w1crs_policy
+// Write 1- clear, 0-no effect , Read: sets 
+class srm_w1crs_policy extends srm_base_policy;
+  local static srm_w1crs_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w1crs_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++) begin
+      bytes[i] = 'hff;
+    end
+    return 1;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = new_byte[j] ? 'h0  : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+endclass
+
+// Class: srm_w0src_policy
+// Write 1- no effect, 0-sets  , Read: clears 
+class srm_w0src_policy extends srm_base_policy;
+  local static srm_w0src_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w0src_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++) begin
+      bytes[i] = 'h00;
+    end
+    return 1;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = ~new_byte[j] ? 'h1  : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_w0crs_policy
+// Write 1- no effect, 0- clears, Read: sets 
+class srm_w0crs_policy extends srm_base_policy;
+  local static srm_w0crs_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_w0crs_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++) begin
+      bytes[i] = 'hff;
+    end
+    return 1;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    reg[7:0] current_byte, new_byte;
+    srm_data_t current_value;
+    current_value = field.get_bytes();
+
+    for(int i = 0; i < bytes.size(); i++) begin
+      current_byte = current_value[i];
+      new_byte = bytes[i];
+      for(int j = 0; j < 8; j++) begin
+        new_byte[j] = ~new_byte[j] ? 'h0  : current_byte[j];
+      end
+      bytes[i] = new_byte;
+    end
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+`endif
