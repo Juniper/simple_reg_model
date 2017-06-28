@@ -137,9 +137,6 @@ class test_field_policies extends srm_unit_test;
     `TEST_VALUE('h01234567, regmodel.r1.get(), "Setup the register");
 
     regmodel.r1.f0.set_policy("cpu_map", srm_w1t_policy::get());
-
-
-  //------------------------------------------------------
     regmodel.r1.f0.write(cpu_handle, 'ha5);
     // 1 to clear: 0x67 with 0xa5
     `TEST_VALUE('hc2, regmodel.r1.f0.get(), "write as is");
