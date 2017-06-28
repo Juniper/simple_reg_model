@@ -98,9 +98,11 @@ class srm_reg#(type T = int) extends srm_base_reg;
   // match the value read from the design.
   //
   virtual task read(srm_base_handle handle, ref T data);
-    srm_data_t bytes;
+    srm_data_t bytes, field_bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
+    srm_base_policy policy;
+    bit allow_update;
 
     num_bytes = $bits(T)/8;
     byte_enables = new[num_bytes];
@@ -110,7 +112,15 @@ class srm_reg#(type T = int) extends srm_base_reg;
 
     __read_bytes(handle, bytes, byte_enables);
    
-    set_bytes(bytes);
+    foreach(_fields[i]) begin
+      field_bytes = srm_utils::extract_field(bytes, _fields[i].get_lsb_pos(),
+                                                    _fields[i].get_n_bits());
+      policy = _fields[i].get_policy(handle.addr_map_name);
+      allow_update = policy.read_policy(_fields[i], field_bytes);
+      if(allow_update) begin
+        _fields[i].set_bytes(field_bytes);
+      end
+    end
 
     // Return data to the user.
     data = bytes_2_data(bytes);
@@ -124,8 +134,10 @@ class srm_reg#(type T = int) extends srm_base_reg;
   // It is possible to make data as const ref but then I cannot pass 
   // literal constants. 
   virtual task write(srm_base_handle handle, T data);
-    srm_data_t bytes;
+    srm_data_t bytes, field_bytes;
     srm_byte_enable_t byte_enables;
+    srm_base_policy policy;
+    bit allow_update;
     int num_bytes;
 
     num_bytes = $bits(T)/8;
@@ -135,7 +147,17 @@ class srm_reg#(type T = int) extends srm_base_reg;
     for(int i = 0; i < num_bytes; i++) byte_enables[i] = 1;
 
     __write_bytes(handle, bytes, byte_enables);
-    set_bytes(bytes);
+   
+    foreach(_fields[i]) begin
+      field_bytes = srm_utils::extract_field(bytes, _fields[i].get_lsb_pos(),
+                                                    _fields[i].get_n_bits());
+      policy = _fields[i].get_policy(handle.addr_map_name);
+      allow_update = policy.write_policy(_fields[i], field_bytes);
+      if(allow_update) begin
+        _fields[i].set_bytes(field_bytes);
+      end
+    end
+
   endtask
 
 

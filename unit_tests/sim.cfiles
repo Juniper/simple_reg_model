@@ -18,6 +18,7 @@ $SRM_HOME/unit_tests/test_reg_rw.sv
 $SRM_HOME/unit_tests/test_table_rw.sv
 $SRM_HOME/unit_tests/test_field_rw.sv
 $SRM_HOME/unit_tests/test_field_policies.sv
+$SRM_HOME/unit_tests/test_leaf_policies.sv
 $SRM_HOME/unit_tests/test_srm_utils_1.sv
 $SRM_HOME/unit_tests/test_srm_utils_2.sv
 $SRM_HOME/unit_tests/test_volatile_field.sv

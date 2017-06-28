@@ -748,15 +748,12 @@ class srm_w0crs_policy extends srm_base_policy;
     srm_data_t current_value;
     current_value = field.get_bytes();
 
-    $display("================SPS:W0CRS: Write policy called");
     for(int i = 0; i < bytes.size(); i++) begin
       current_byte = current_value[i];
       new_byte = bytes[i];
-      $display("SPS:%0d:pre new_byte=0x%0x", i, new_byte);
       for(int j = 0; j < 8; j++) begin
         new_byte[j] = ~new_byte[j] ? 'h0  : current_byte[j];
       end
-      $display("SPS:%0d:post new_byte=0x%0x", i, new_byte);
       bytes[i] = new_byte;
     end
 
