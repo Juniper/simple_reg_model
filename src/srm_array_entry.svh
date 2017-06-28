@@ -33,18 +33,6 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
     return offset + (_index * get_width_bytes());
   endfunction
 
-  //----------------------
-  // Group: Debug Routine
-  //----------------------
-  virtual function void dump();
-    srm_base_policy p;
-    $display("Dumping %s", get_full_name());
-    foreach(_fields[i]) begin
-      $display("\tField:%s", _fields[i].get_name());
-      p = _fields[i].get_policy("cpu_map");
-      $display("\tPolicy:%s", p.get_name());
-    end
-  endfunction
 
   
 endclass

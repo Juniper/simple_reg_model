@@ -45,7 +45,6 @@ class test_field_policies extends srm_unit_test;
 
     regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
     entry = regmodel.r2.entry_at(3);
-    entry.dump();
     p = srm_rc_policy::get();
     `TEST_VALUE(p, entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
     `TEST_VALUE(p, entry.f4.get_policy("cpu_map"), "Sets the table entry policy for f4");
@@ -143,6 +142,28 @@ class test_field_policies extends srm_unit_test;
 
   endtask
 
+  task test_w0crs_table_field();
+    srm_base_policy p;
+    bit temp;
+    cpu_multi_field::r2_table::r2_entry  entry;
+
+    regmodel.r2.set_policy("cpu_map", srm_w0crs_policy::get());
+
+    entry = regmodel.r2.entry_at(1);
+    `TEST_VALUE(srm_w0crs_policy::get(), entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
+
+    entry.set(8'ha5);
+    entry.f0.write(cpu_handle, 8'h0);
+    // 1- no effect, 0-clears
+    `TEST_VALUE(8'h0, entry.f0.get(), "Write 0 clears");
+
+    adapter.last_data = 'h24; // Model the dut behavior
+    entry.f0.read(cpu_handle, temp);
+    `TEST_VALUE('h0, temp, "Read f0 returns the rtl data");
+    `TEST_VALUE('h1, entry.f0.get(), "Policy must set f0 entry");
+
+  endtask
+
   virtual task run();
     `RUN_TEST(test_reg_set_policy);
     `RUN_TEST(test_table_set_policy);
@@ -152,6 +173,7 @@ class test_field_policies extends srm_unit_test;
     `RUN_TEST(test_write_read_clear_field);
     `RUN_TEST(test_write_1_clear_field);
     `RUN_TEST(test_write_1_toggle_field);
+    `RUN_TEST(test_w0crs_table_field);
   endtask
 
 endclass

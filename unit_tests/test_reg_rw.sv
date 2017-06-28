@@ -87,19 +87,6 @@ class test_reg_rw extends srm_unit_test;
     `TEST_VALUE(1, cpu_handle.error_msgs.size(), "Error must be generated");
   endtask
 
-  task test_peek_r1;
-    cpu_reg32::r1_struct_t temp_data;
-    wr_data.field = 32'h01234567;
-
-    // Ensure that the model and design have DIFFERENT data.
-    temp_data.field = 32'h0;
-    regmodel.r1.set(temp_data);
-    adapter.last_data = wr_data.field;
-
-    regmodel.r1.peek(cpu_handle, rd_data);
-    `TEST_VALUE(32'h01234567, rd_data.field, "peek data must return the RTL data"); 
-  endtask
-    
   task test_load_r1;
     cpu_reg32::r1_struct_t temp_data;
     wr_data.field = 32'h01234567;
@@ -127,7 +114,6 @@ class test_reg_rw extends srm_unit_test;
     `RUN_TEST(test_field_write_r1);
     `RUN_TEST(test_read_r1);
     `RUN_TEST(test_field_read_r1);
-    `RUN_TEST(test_peek_r1);
     `RUN_TEST(test_mismatch_read_r1);
     `RUN_TEST(test_load_r1);
     `RUN_TEST(test_store_r1);
