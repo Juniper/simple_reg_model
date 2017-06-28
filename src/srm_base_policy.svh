@@ -3,6 +3,11 @@
 
 typedef class srm_base_field;
 virtual class srm_base_policy;
+
+  // Function: get_name
+  // Name of the policy
+  pure virtual function string get_name();
+
   // Function: read_policy
   // Update the contents of the model due to the sideaffect of
   // doing a read from the field.

@@ -17,6 +17,10 @@ class srm_rw_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "RW";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     return 1; // Update the model.
@@ -35,6 +39,10 @@ class srm_ro_policy extends srm_base_policy;
   local static srm_ro_policy _policy;
 
   local function new();
+  endfunction
+
+  virtual function string get_name();
+    return "RO";
   endfunction
 
   static function srm_ro_policy get();
@@ -67,6 +75,10 @@ class srm_rc_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "RC";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     for(int i = 0; i < bytes.size(); i++)
@@ -88,6 +100,10 @@ class srm_rs_policy extends srm_base_policy;
   local static srm_rs_policy _policy;
 
   local function new();
+  endfunction
+
+  virtual function string get_name();
+    return "RS";
   endfunction
 
   static function srm_rs_policy get();
@@ -118,6 +134,10 @@ class srm_wrc_policy extends srm_base_policy;
   local function new();
   endfunction
 
+  virtual function string get_name();
+    return "WRC";
+  endfunction
+
   static function srm_wrc_policy get();
     if(_policy == null) _policy = new();
     return _policy;
@@ -144,6 +164,11 @@ class srm_wrs_policy extends srm_base_policy;
 
   local function new();
   endfunction
+  
+  virtual function string get_name();
+    return "WRS";
+  endfunction
+
 
   static function srm_wrs_policy get();
     if(_policy == null) _policy = new();
@@ -178,6 +203,10 @@ class srm_wc_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "WC";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     return 0;
@@ -204,6 +233,10 @@ class srm_ws_policy extends srm_base_policy;
   static function srm_ws_policy get();
     if(_policy == null) _policy = new();
     return _policy;
+  endfunction
+
+  virtual function string get_name();
+    return "WS";
   endfunction
 
   virtual function bit read_policy(srm_base_field field, 
@@ -233,6 +266,11 @@ class srm_wsrc_policy extends srm_base_policy;
     if(_policy == null) _policy = new();
     return _policy;
   endfunction
+  
+  virtual function string get_name();
+    return "WSRC";
+  endfunction
+
 
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
@@ -265,6 +303,10 @@ class srm_wcrs_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "WCRS";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     for(int i = 0; i < bytes.size(); i++)
@@ -295,6 +337,11 @@ class srm_w1c_policy extends srm_base_policy;
     if(_policy == null) _policy = new();
     return _policy;
   endfunction
+  
+  virtual function string get_name();
+    return "W1C";
+  endfunction
+
 
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
@@ -333,6 +380,11 @@ class srm_w1s_policy extends srm_base_policy;
     if(_policy == null) _policy = new();
     return _policy;
   endfunction
+  
+  virtual function string get_name();
+    return "W1S";
+  endfunction
+
 
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
@@ -372,6 +424,10 @@ class srm_w1t_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "W1T";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     return 0; // Read has no effect.
@@ -408,6 +464,10 @@ class srm_w0c_policy extends srm_base_policy;
   static function srm_w0c_policy get();
     if(_policy == null) _policy = new();
     return _policy;
+  endfunction
+  
+  virtual function string get_name();
+    return "W0C";
   endfunction
 
   virtual function bit read_policy(srm_base_field field, 
@@ -448,6 +508,11 @@ class srm_w0s_policy extends srm_base_policy;
     if(_policy == null) _policy = new();
     return _policy;
   endfunction
+  
+  virtual function string get_name();
+    return "W0S";
+  endfunction
+
 
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
@@ -487,6 +552,10 @@ class srm_w0t_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "W0T";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     return 0; // Read has no effect.
@@ -524,6 +593,10 @@ class srm_w1src_policy extends srm_base_policy;
   static function srm_w1src_policy get();
     if(_policy == null) _policy = new();
     return _policy;
+  endfunction
+  
+  virtual function string get_name();
+    return "W1SRC";
   endfunction
 
   virtual function bit read_policy(srm_base_field field, 
@@ -567,6 +640,10 @@ class srm_w1crs_policy extends srm_base_policy;
     return _policy;
   endfunction
 
+  virtual function string get_name();
+    return "W1CRS";
+  endfunction
+
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);
     for(int i = 0; i < bytes.size(); i++) begin
@@ -605,6 +682,10 @@ class srm_w0src_policy extends srm_base_policy;
   static function srm_w0src_policy get();
     if(_policy == null) _policy = new();
     return _policy;
+  endfunction
+
+  virtual function string get_name();
+    return "W0SRC";
   endfunction
 
   virtual function bit read_policy(srm_base_field field, 
@@ -647,6 +728,11 @@ class srm_w0crs_policy extends srm_base_policy;
     if(_policy == null) _policy = new();
     return _policy;
   endfunction
+  
+  virtual function string get_name();
+    return "W0CRS";
+  endfunction
+
 
   virtual function bit read_policy(srm_base_field field, 
                                         ref srm_data_t bytes);

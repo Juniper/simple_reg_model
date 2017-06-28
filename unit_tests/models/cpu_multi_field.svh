@@ -122,6 +122,7 @@ class cpu_multi_field extends srm_component;
         r2_entry obj;
         obj = new(.name($psprintf("%s_%0d", get_name(), index)),
                   .parent(_parent), .index(index), .reset_kind(get_last_reset_kind()));
+        copy_policies(obj);
         return obj;
       endfunction
     endclass

@@ -30,6 +30,23 @@ virtual class srm_base_reg extends srm_component;
     _fields.push_back(f);
   endfunction
 
+  // Function: set_policy
+  // Sets the policy on all the field nodes.
+  //
+  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
+    foreach(_fields[i]) begin
+      _fields[i].set_policy(addr_map_name, policy);
+    end
+  endfunction
+
+  // Function: copy_policies
+  // Private function to copy the policies of the fields.
+  virtual function void copy_policies(srm_base_reg other);
+    foreach(_fields[i]) begin
+      _fields[i].copy_policies(other._fields[i]);
+    end
+  endfunction
+
   //------------------
   // Group: Introspection
   //-------------------

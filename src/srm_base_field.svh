@@ -92,18 +92,26 @@ virtual class srm_base_field;
   //-----------------
   // Function: set_policy
   // Set policy per address map name.
-  function set_policy(string addr_map_name, srm_base_policy policy);
+  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
     _policy_map[addr_map_name] = policy;
   endfunction
 
   // Function: get_policy
   // Get policy on the address map name
-  function srm_base_policy get_policy(string addr_map_name);
+  virtual function srm_base_policy get_policy(string addr_map_name);
     srm_base_policy p =  _policy_map[addr_map_name];
     if(p == null) begin
       p = srm_rw_policy::get();
     end
     return p;
+  endfunction
+
+  // Function: copy_policies
+  // Private function to copy the policies of the fields.
+  virtual function void copy_policies(srm_base_field other);
+    foreach(_policy_map[i]) begin
+      other._policy_map[i] = _policy_map[i];
+    end
   endfunction
 
 endclass

@@ -31,6 +31,26 @@ class test_field_policies extends srm_unit_test;
     regmodel.add_adapter(adapter);
   endfunction
 
+  task test_reg_set_policy();
+    srm_base_policy p;
+    regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
+    p = srm_rc_policy::get();
+    `TEST_VALUE(p, regmodel.r1.f0.get_policy("cpu_map"), "Sets the register policy");
+    `TEST_VALUE(p, regmodel.r1.f3.get_policy("cpu_map"), "Sets the register policy");
+  endtask
+
+  task test_table_set_policy();
+    srm_base_policy p;
+    cpu_multi_field::r2_table::r2_entry  entry;
+
+    regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
+    entry = regmodel.r2.entry_at(3);
+    entry.dump();
+    p = srm_rc_policy::get();
+    `TEST_VALUE(p, entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
+    `TEST_VALUE(p, entry.f4.get_policy("cpu_map"), "Sets the table entry policy for f4");
+  endtask
+
   task test_read_only_field();
     bit[7:0] rd_byte;
     
@@ -118,6 +138,8 @@ class test_field_policies extends srm_unit_test;
 
     regmodel.r1.f0.set_policy("cpu_map", srm_w1t_policy::get());
 
+
+  //------------------------------------------------------
     regmodel.r1.f0.write(cpu_handle, 'ha5);
     // 1 to clear: 0x67 with 0xa5
     `TEST_VALUE('hc2, regmodel.r1.f0.get(), "write as is");
@@ -125,6 +147,8 @@ class test_field_policies extends srm_unit_test;
   endtask
 
   virtual task run();
+    `RUN_TEST(test_reg_set_policy);
+    `RUN_TEST(test_table_set_policy);
     `RUN_TEST(test_read_only_field);
     `RUN_TEST(test_read_clear_field);
     `RUN_TEST(test_read_set_field);

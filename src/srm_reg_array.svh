@@ -48,6 +48,14 @@ class srm_reg_array #(type T = int) extends srm_component;
     return _entries[index];
   endfunction
 
+
+  // Function: set_policy
+  // Sets the policy on all the field nodes.
+  //
+  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
+    _prototype.set_policy(addr_map_name, policy);
+  endfunction
+
   //------------------
   // Group: Model+Design Access 
   //-------------------
