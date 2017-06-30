@@ -762,4 +762,141 @@ class srm_w0crs_policy extends srm_base_policy;
 
 endclass
 
+// Class: srm_wo_policy
+// Write as is, Read: error 
+class srm_wo_policy extends srm_base_policy;
+  local static srm_wo_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wo_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+  
+  virtual function string get_name();
+    return "wo";
+  endfunction
+
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    `uvm_error("RegModel", 
+          $sformatf("%s field \"%s\" no read allowed in map",
+                get_name(), field.get_name()));
+    return 0;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_woc_policy
+// Write clears all bits, Read: error 
+class srm_woc_policy extends srm_base_policy;
+  local static srm_woc_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_woc_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+  
+  virtual function string get_name();
+    return "woc";
+  endfunction
+
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    `uvm_error("RegModel", 
+          $sformatf("%s field \"%s\" no read allowed in map",
+                get_name(), field.get_name()));
+    return 0;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h0;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Class: srm_wos_policy
+// Write sets all bits, Read: error 
+class srm_wos_policy extends srm_base_policy;
+  local static srm_wos_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wos_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+  
+  virtual function string get_name();
+    return "wos";
+  endfunction
+
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    `uvm_error("RegModel", 
+          $sformatf("%s field \"%s\" no read allowed in map",
+                get_name(), field.get_name()));
+    return 0;
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'hff;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
+
+// Policy for reserved field.
+// Write: clear the field, Read : ignored.
+class srm_wor_policy extends srm_base_policy;
+  local static srm_wor_policy _policy;
+
+  local function new();
+  endfunction
+
+  static function srm_wor_policy get();
+    if(_policy == null) _policy = new();
+    return _policy;
+  endfunction
+  
+  virtual function string get_name();
+    return "wor";
+  endfunction
+
+
+  virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    return 0; // Do not ignore the model.
+  endfunction
+
+  virtual function bit write_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+    for(int i = 0; i < bytes.size(); i++)
+      bytes[i] = 'h00;
+
+    return 1; // Update the model
+  endfunction
+
+endclass
 `endif

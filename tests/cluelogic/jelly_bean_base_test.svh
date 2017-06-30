@@ -59,6 +59,13 @@ class jelly_bean_base_test extends uvm_test;
    endfunction: start_of_simulation_phase
 
    virtual function void final_phase(uvm_phase phase);
-    $display("SRUN_TEST_PASS");
+    uvm_report_server foo;
+    int err_cnt;
+    foo = _global_reporter.get_report_server();
+    err_cnt = foo.get_severity_count(UVM_ERROR);
+    if(err_cnt == 0)
+      $display("SRUN_TEST_PASS");
+    else
+      $display("SRUN_TEST_FAIL with %0d err cnt", err_cnt);
    endfunction
 endclass

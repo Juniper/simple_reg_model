@@ -19,9 +19,12 @@ class jelly_bean_reg_block extends srm_component;
       super.new(name, parent);
       reserved = new(.name("reserved"), .parent(this), .n_bits(6), .lsb_pos(2), .volatile(0));
       add_field(reserved);
+      reserved.set_reset_value(.value('h0), .kind("HARD"));
+
       taste = new(.name("taste"), .parent(this), .n_bits(2), .lsb_pos(0),
                   .volatile(1));
       add_field(taste);
+      set_policy(.addr_map_name("reg_map"), .policy(srm_pkg::srm_ro_policy::get()));
     endfunction
   endclass
 
@@ -75,6 +78,7 @@ class jelly_bean_reg_block extends srm_component;
       super.new(name, parent);
       reserved = new(.name("reserved"), .parent(this), .n_bits(1), .lsb_pos(7), .volatile(0));
       add_field(reserved);
+      reserved.set_reset_value(.value('h0), .kind("HARD"));
 
       sour = new(.name("sour"), .parent(this), .n_bits(1), .lsb_pos(6), .volatile(0));
       add_field(sour);
@@ -93,6 +97,7 @@ class jelly_bean_reg_block extends srm_component;
       add_field(flavor);
       flavor.set_reset_value(.value('h0), .kind("HARD"));
 
+      set_policy(.addr_map_name("reg_map"), .policy(srm_pkg::srm_wo_policy::get()));
     endfunction
   endclass
 
