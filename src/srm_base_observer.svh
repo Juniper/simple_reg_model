@@ -2,7 +2,7 @@
 `define INCLUDED_srm_base_observer
 
 virtual class srm_base_observer;
-  pure virtual function void sample(input srm_generic_xact_t xact); 
+  pure virtual function void sample(const ref srm_generic_xact_t xact); 
 endclass
 
 `endif
