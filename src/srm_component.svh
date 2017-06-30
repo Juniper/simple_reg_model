@@ -14,9 +14,11 @@ class srm_component;
   local string _name;
   protected srm_component _parent;
   local srm_component _children[$];
+
   protected srm_addr_t _offset_table[string];
   protected srm_addr_t _size_table[string];
   protected srm_adapters_t _adapters;
+  protected srm_base_observer _observers[$];
 
   //---------------------
   // Group: Initialization
@@ -316,6 +318,33 @@ class srm_component;
     if(xact.kind == SRM_WRITE) begin
     end
     else begin
+    end
+  endfunction
+
+  //----------------------
+  // Group: Observer Interface 
+  //----------------------
+
+  // Function: attach
+  // Attach an observer to all the leaf nodes.
+  //
+  // No reason for non leaf nodes to detect a read/write.
+  virtual function void attach(srm_base_observer observer);
+    srm_component leaves[$];
+
+    get_leaf_nodes(leaves);
+
+    foreach(leaves[i]) begin
+      leaves[i]._observers.push_back(observer);
+    end
+
+  endfunction
+
+  // Function: notify_sample
+  // Call sample on all the observers listening.
+  virtual function void notify_sample(const ref srm_generic_xact_t xact);
+    for(int i = 0; i < _observers.size(); i++) begin
+      _observers[i].sample(xact);
     end
   endfunction
 

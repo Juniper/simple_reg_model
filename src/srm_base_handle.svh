@@ -23,6 +23,10 @@ class srm_base_handle extends uvm_object;
   // Name of the address map.
   string addr_map_name;
 
+  // Variable: enable_functional_coverage
+  // Enables functional coverage for all the access to the design.
+  bit enable_functional_coverage;
+
   // Variable: skip_read_error_msg
   // Debug variable to switch off error messages from failing reads.
   bit skip_read_error_msg; 

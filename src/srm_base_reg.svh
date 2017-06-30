@@ -191,6 +191,17 @@ virtual class srm_base_reg extends srm_component;
 
   endtask
 
+  //----------------------
+  // Group: Observer Interface 
+  //----------------------
+
+  // Function: attach
+  // Attach an observer to itself.
+  //
+  virtual function void attach(srm_base_observer observer);
+    _observers.push_back(observer);
+  endfunction
+
   //------------------
   // Group: Private API
   //-------------------
@@ -216,6 +227,11 @@ virtual class srm_base_reg extends srm_component;
     adapter.execute(generic_xact, handle.seq_priority);
 
     handle.generic_xact_status = generic_xact.status;
+
+    // Notify any observers for functional coverage.
+    if(handle.enable_functional_coverage) begin
+      notify_sample(generic_xact);
+    end
 
     // Update the model at the end.
     predictor_update(generic_xact);
@@ -251,6 +267,11 @@ virtual class srm_base_reg extends srm_component;
     handle.generic_xact_status = generic_xact.status;
 
     // Wait for the read to complete and data to be returned by the agent.
+
+    // Notify any observers for functional coverage.
+    if(handle.enable_functional_coverage) begin
+      notify_sample(generic_xact);
+    end
 
     // Copy the data back to the caller
     for(int i = 0; i < bytes.size(); i++) bytes[i] = generic_xact.data[i];

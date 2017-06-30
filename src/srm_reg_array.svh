@@ -132,6 +132,17 @@ class srm_reg_array #(type T = int) extends srm_component;
     return _size_table[addr_map_name];
   endfunction
 
+  //----------------------
+  // Group: Observer Interface 
+  //----------------------
+
+  // Function: attach
+  // Attach an observer to prototype.
+  //
+  virtual function void attach(srm_base_observer observer);
+    _prototype._observers.push_back(observer);
+  endfunction
+
 endclass
 
 `endif
