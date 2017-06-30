@@ -348,6 +348,21 @@ class srm_component;
     end
   endfunction
 
+  // Function: get_num_observers
+  // Returns the number of observers on the node.
+  //
+  // For unit testing.
+  virtual function int get_num_observers();
+    return _observers.size();
+  endfunction
+
+  // Function: get_observer
+  // Returns the observer at the index.
+  //
+  // For unit testing.
+  virtual function srm_base_observer get_observer(int index);
+    return _observers[index];
+  endfunction
 
 endclass
 
