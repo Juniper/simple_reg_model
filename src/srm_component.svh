@@ -340,14 +340,6 @@ class srm_component;
 
   endfunction
 
-  // Function: notify_sample
-  // Call sample on all the observers listening.
-  virtual function void notify_sample(const ref srm_generic_xact_t xact);
-    for(int i = 0; i < _observers.size(); i++) begin
-      _observers[i].sample(xact);
-    end
-  endfunction
-
   // Function: get_num_observers
   // Returns the number of observers on the node.
   //

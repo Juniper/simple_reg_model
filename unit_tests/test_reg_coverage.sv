@@ -6,10 +6,10 @@ class test_reg_coverage extends srm_unit_test;
   
   // Define a custom coverage model.
   class reg32_fcov_model extends srm_base_observer;
-    srm_generic_xact_t _xact;
+    cpu_reg32::r1_struct_t data;
 
     covergroup reg32_covergroup;
-      coverpoint {_xact.addr };
+      coverpoint {data.field == 32'hdeadbeef };
     endgroup
 
     function new();
@@ -17,8 +17,12 @@ class test_reg_coverage extends srm_unit_test;
       reg32_covergroup = new();
     endfunction
 
-    virtual function void sample(const ref srm_generic_xact_t xact);
-      _xact = xact;
+    virtual function void sample(srm_base_reg entry);
+      srm_data_t bytes = entry.get_bytes();
+      data = 'h0;
+      for(int i = 0; i < bytes.size(); i++) begin
+        data[i*8 -: 8] = bytes[i];
+      end
       reg32_covergroup.sample();
     endfunction
 
@@ -62,7 +66,6 @@ class test_reg_coverage extends srm_unit_test;
     wr_data.field = 32'hdeadbeef;
     cpu_handle.enable_functional_coverage = 1;
     regmodel.r1.write(cpu_handle, wr_data);
-    `TEST_VALUE(8'hef, fcov_inst._xact.data[0] , "xact must be available for coverage");
   endtask
 
   task test_r1_write_not_sample;
@@ -70,10 +73,7 @@ class test_reg_coverage extends srm_unit_test;
     `TEST_VALUE(1, regmodel.r1.get_num_observers(), "r1 must have 1 observer");
     wr_data.field = 32'hdeadbeef;
     cpu_handle.enable_functional_coverage = 0;
-    fcov_inst._xact.data = new[1];
-    fcov_inst._xact.data[0] = 'ha5;
     regmodel.r1.write(cpu_handle, wr_data);
-    `TEST_VALUE('ha5, fcov_inst._xact.data[0] , "handle must disable the sample.");
   endtask
 
   virtual task run();
