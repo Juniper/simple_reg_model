@@ -14,14 +14,14 @@ class test_reg_coverage extends srm_unit_test;
 
     function new();
       super.new("reg32_fcov_model");
-      reg32_covergroup = new();
+      reg32_covergroup = new;
     endfunction
 
     virtual function void sample(srm_base_reg entry);
       srm_data_t bytes = entry.get_bytes();
       data = 'h0;
       for(int i = 0; i < bytes.size(); i++) begin
-        data[i*8 -: 8] = bytes[i];
+        data[i*8 +: 8] = bytes[i];
       end
       reg32_covergroup.sample();
     endfunction
@@ -63,23 +63,27 @@ class test_reg_coverage extends srm_unit_test;
     regmodel.r1.attach(fcov_inst);
     `TEST_VALUE(1, regmodel.r1.get_num_observers(), "r1 must have 1 observer");
     `TEST_VALUE(0, regmodel.r2.get_num_observers(), "r2 must have 0 observer");
-    wr_data.field = 32'hdeadbeef;
-    cpu_handle.enable_functional_coverage = 1;
+    wr_data.field = 32'h0;
     regmodel.r1.write(cpu_handle, wr_data);
+
+    cpu_handle.enable_functional_coverage = 0;
+    wr_data.field = 32'hdeadbeef;
+    regmodel.r1.write(cpu_handle, wr_data);
+    `TEST_VALUE(0, fcov_inst.reg32_covergroup.get_coverage(), "no coverage achieved");
+    
+    cpu_handle.enable_functional_coverage = 1;
+    // Dummy write required for coverage. don't know why.
+    wr_data.field = 32'h0;
+    regmodel.r1.write(cpu_handle, wr_data);
+    wr_data.field = 32'hdeadbeef;
+    regmodel.r1.write(cpu_handle, wr_data);
+    `TEST_VALUE(100, fcov_inst.reg32_covergroup.get_coverage(), "coverage target achieved");
   endtask
 
-  task test_r1_write_not_sample;
-    regmodel.r1.attach(fcov_inst);
-    `TEST_VALUE(1, regmodel.r1.get_num_observers(), "r1 must have 1 observer");
-    wr_data.field = 32'hdeadbeef;
-    cpu_handle.enable_functional_coverage = 0;
-    regmodel.r1.write(cpu_handle, wr_data);
-  endtask
 
   virtual task run();
     `RUN_TEST(test_attach_observer);
     `RUN_TEST(test_r1_write_sample);
-    `RUN_TEST(test_r1_write_not_sample);
   endtask
 
 endclass
