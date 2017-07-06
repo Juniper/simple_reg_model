@@ -192,7 +192,7 @@ virtual class srm_base_reg extends srm_component;
   endtask
 
   //----------------------
-  // Group: Observer Interface 
+  // Group: Coverage Interface 
   //----------------------
 
   // Function: attach

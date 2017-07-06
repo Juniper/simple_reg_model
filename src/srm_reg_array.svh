@@ -133,15 +133,31 @@ class srm_reg_array #(type T = int) extends srm_component;
   endfunction
 
   //----------------------
-  // Group: Observer Interface 
+  // Group: Coverage Interface 
   //----------------------
 
   // Function: attach
-  // Attach an observer to prototype.
+  // Attach an observer to itself.
   //
   virtual function void attach(srm_base_coverage observer);
-    _prototype._coverage_cbs.push_back(observer);
+    _coverage_cbs.push_back(observer);
   endfunction
+
+  // Function: detach
+  // Detach an observer if it exists.
+  //
+  virtual function void detach(srm_base_coverage observer);
+    foreach(_coverage_cbs[i]) begin
+      if(_coverage_cbs[i] == observer) _coverage_cbs.delete(i);
+    end
+  endfunction
+
+  // Function: detach_all
+  // Detach all observers
+  virtual function void detach_all();
+    _coverage_cbs = {};
+  endfunction
+
 
 endclass
 

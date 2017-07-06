@@ -25,4 +25,5 @@ $SRM_HOME/unit_tests/test_volatile_field.sv
 $SRM_HOME/unit_tests/test_bus_predictor.sv
 $SRM_HOME/unit_tests/test_reg_coverage.sv
 $SRM_HOME/unit_tests/test_model_coverage.sv
+$SRM_HOME/unit_tests/test_table_coverage.sv
 $SRM_HOME/unit_tests/main.sv
