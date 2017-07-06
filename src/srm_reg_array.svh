@@ -140,22 +140,30 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Attach an observer to itself.
   //
   virtual function void attach(srm_base_coverage observer);
-    _coverage_cbs.push_back(observer);
+    _prototype._coverage_cbs.push_back(observer);
   endfunction
 
   // Function: detach
   // Detach an observer if it exists.
   //
   virtual function void detach(srm_base_coverage observer);
-    foreach(_coverage_cbs[i]) begin
-      if(_coverage_cbs[i] == observer) _coverage_cbs.delete(i);
+    foreach(_prototype._coverage_cbs[i]) begin
+      if(_prototype._coverage_cbs[i] == observer) _prototype._coverage_cbs.delete(i);
     end
   endfunction
 
   // Function: detach_all
   // Detach all observers
   virtual function void detach_all();
-    _coverage_cbs = {};
+    _prototype._coverage_cbs = {};
+  endfunction
+
+  // Function: get_num_coverage_cbs
+  // Returns the number of coverage callbacks on the node.
+  //
+  // For unit testing.
+  virtual function int get_num_coverage_cbs();
+    return _prototype._coverage_cbs.size();
   endfunction
 
 

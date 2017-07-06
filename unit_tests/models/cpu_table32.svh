@@ -51,6 +51,10 @@ class cpu_table32 extends srm_component;
         r1_reg obj;
         obj = new(.name($psprintf("%s_%0d", get_name(), index)),
                   .parent(_parent), .index(index), .reset_kind(get_last_reset_kind()));
+        copy_policies(obj);
+        copy_coverage_cbs(obj);
+        $display("\nSPS: Calling clone with %0d cbs\n\n", get_num_coverage_cbs());
+        $display("SPS: NUmber of coverage cbs=%0d", obj.get_num_coverage_cbs());
         return obj;
       endfunction
     endclass

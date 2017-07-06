@@ -84,11 +84,13 @@ class test_table_coverage extends srm_unit_test;
 
   task test_r1_write_sample;
     srm_reg#(cpu_table32::r1_struct_t) entry;  
-    entry = regmodel.r1.entry_at(0);
 
-    regmodel.r1.attach(fcov_inst);
-    wr_data.field = 32'h0;
     cpu_handle.enable_functional_coverage = 1;
+    regmodel.r1.attach(fcov_inst);
+    `TEST_VALUE(1, regmodel.r1.get_num_coverage_cbs(), "r1 must have 1 observer");
+
+    entry = regmodel.r1.entry_at(0);
+    wr_data.field = 32'h0;
     entry.write(cpu_handle, wr_data);
     `TEST_VALUE(50, $rtoi(fcov_inst.r1_covergroup.get_coverage()), "coverage false achieved");
 

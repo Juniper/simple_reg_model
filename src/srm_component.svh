@@ -375,14 +375,6 @@ class srm_component;
     return _coverage_cbs.size();
   endfunction
 
-  // Function: get_observer
-  // Returns the observer at the index.
-  //
-  // For unit testing.
-  virtual function srm_base_coverage get_observer(int index);
-    return _coverage_cbs[index];
-  endfunction
-
 endclass
 
 `endif
