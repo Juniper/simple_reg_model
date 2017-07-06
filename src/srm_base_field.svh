@@ -114,6 +114,12 @@ virtual class srm_base_field;
     end
   endfunction
 
+  // Function: set_policy_map 
+  // Private function to clone the policies of the fields.
+  virtual function void set_policy_map(srm_base_field other);
+    other._policy_map = _policy_map;
+  endfunction
+
 endclass
 
 `endif
