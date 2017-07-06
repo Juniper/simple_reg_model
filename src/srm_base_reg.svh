@@ -202,6 +202,21 @@ virtual class srm_base_reg extends srm_component;
     _observers.push_back(observer);
   endfunction
 
+  // Function: detach
+  // Detach an observer if it exists.
+  //
+  virtual function void detach(srm_base_observer observer);
+    foreach(_observers[i]) begin
+      if(_observers[i] == observer) _observers.delete(i);
+    end
+  endfunction
+
+  // Function: detach_all
+  // Detach all observers
+  virtual function void detach_all();
+    _observers = {};
+  endfunction
+
   //------------------
   // Group: Private API
   //-------------------

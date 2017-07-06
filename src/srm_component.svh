@@ -335,11 +335,38 @@ class srm_component;
     get_leaf_nodes(leaves);
 
     foreach(leaves[i]) begin
-      leaves[i]._observers.push_back(observer);
+      leaves[i].attach(observer);
     end
 
   endfunction
 
+  // Function: detach
+  // Detach all the instances of the observer
+  //
+  virtual function void detach(srm_base_observer observer);
+    srm_component leaves[$];
+
+    get_leaf_nodes(leaves);
+
+    foreach(leaves[i]) begin
+      leaves[i].detach(observer);
+    end
+
+  endfunction
+  
+  // Function: detach_all
+  // Detach all the the observers
+  //
+  virtual function void detach_all();
+    srm_component leaves[$];
+
+    get_leaf_nodes(leaves);
+
+    foreach(leaves[i]) begin
+      leaves[i].detach_all();
+    end
+
+  endfunction
   // Function: get_num_observers
   // Returns the number of observers on the node.
   //

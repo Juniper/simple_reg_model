@@ -59,6 +59,22 @@ class test_reg_coverage extends srm_unit_test;
     `TEST_VALUE(1, regmodel.r3.get_num_observers(), "r3 must have 1 observer");
   endtask
 
+  task test_detach_observer;
+    regmodel.detach(fcov_inst);
+    `TEST_VALUE(0, regmodel.get_num_observers(), "Observer only at leaf node");
+    `TEST_VALUE(0, regmodel.r1.get_num_observers(), "r1 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r2.get_num_observers(), "r2 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r3.get_num_observers(), "r3 must have 0 observer");
+  endtask
+
+  task test_detach_all;
+    regmodel.detach_all();
+    `TEST_VALUE(0, regmodel.get_num_observers(), "Observer only at leaf node");
+    `TEST_VALUE(0, regmodel.r1.get_num_observers(), "r1 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r2.get_num_observers(), "r2 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r3.get_num_observers(), "r3 must have 0 observer");
+  endtask
+
   task test_r1_write_sample;
     regmodel.r1.attach(fcov_inst);
     `TEST_VALUE(1, regmodel.r1.get_num_observers(), "r1 must have 1 observer");
@@ -83,6 +99,8 @@ class test_reg_coverage extends srm_unit_test;
 
   virtual task run();
     `RUN_TEST(test_attach_observer);
+    `RUN_TEST(test_detach_observer);
+    `RUN_TEST(test_detach_all);
     `RUN_TEST(test_r1_write_sample);
   endtask
 
