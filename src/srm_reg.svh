@@ -159,8 +159,8 @@ class srm_reg#(type T = int) extends srm_base_reg;
     end
 
     if(handle.enable_functional_coverage) begin
-      for(int i = 0; i < _observers.size(); i++) begin
-        _observers[i].sample(this);
+      for(int i = 0; i < _coverage_cbs.size(); i++) begin
+        _coverage_cbs[i].post_write(this);
       end
     end
 

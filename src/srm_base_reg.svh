@@ -198,23 +198,23 @@ virtual class srm_base_reg extends srm_component;
   // Function: attach
   // Attach an observer to itself.
   //
-  virtual function void attach(srm_base_observer observer);
-    _observers.push_back(observer);
+  virtual function void attach(srm_base_coverage observer);
+    _coverage_cbs.push_back(observer);
   endfunction
 
   // Function: detach
   // Detach an observer if it exists.
   //
-  virtual function void detach(srm_base_observer observer);
-    foreach(_observers[i]) begin
-      if(_observers[i] == observer) _observers.delete(i);
+  virtual function void detach(srm_base_coverage observer);
+    foreach(_coverage_cbs[i]) begin
+      if(_coverage_cbs[i] == observer) _coverage_cbs.delete(i);
     end
   endfunction
 
   // Function: detach_all
   // Detach all observers
   virtual function void detach_all();
-    _observers = {};
+    _coverage_cbs = {};
   endfunction
 
   //------------------

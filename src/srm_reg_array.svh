@@ -139,8 +139,8 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Function: attach
   // Attach an observer to prototype.
   //
-  virtual function void attach(srm_base_observer observer);
-    _prototype._observers.push_back(observer);
+  virtual function void attach(srm_base_coverage observer);
+    _prototype._coverage_cbs.push_back(observer);
   endfunction
 
 endclass

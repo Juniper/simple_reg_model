@@ -20,6 +20,7 @@ module main;
   test_field_policies t16 = new();
   test_leaf_policies t17 = new();
   test_reg_coverage t18 = new();
+  test_model_coverage t19 = new();
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin

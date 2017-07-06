@@ -18,7 +18,7 @@ class srm_component;
   protected srm_addr_t _offset_table[string];
   protected srm_addr_t _size_table[string];
   protected srm_adapters_t _adapters;
-  protected srm_base_observer _observers[$];
+  protected srm_base_coverage _coverage_cbs[$];
 
   //---------------------
   // Group: Initialization
@@ -329,7 +329,7 @@ class srm_component;
   // Attach an observer to all the leaf nodes.
   //
   // No reason for non leaf nodes to detect a read/write.
-  virtual function void attach(srm_base_observer observer);
+  virtual function void attach(srm_base_coverage observer);
     srm_component leaves[$];
 
     get_leaf_nodes(leaves);
@@ -343,7 +343,7 @@ class srm_component;
   // Function: detach
   // Detach all the instances of the observer
   //
-  virtual function void detach(srm_base_observer observer);
+  virtual function void detach(srm_base_coverage observer);
     srm_component leaves[$];
 
     get_leaf_nodes(leaves);
@@ -355,7 +355,7 @@ class srm_component;
   endfunction
   
   // Function: detach_all
-  // Detach all the the observers
+  // Detach all the the coverage callbacks 
   //
   virtual function void detach_all();
     srm_component leaves[$];
@@ -367,20 +367,20 @@ class srm_component;
     end
 
   endfunction
-  // Function: get_num_observers
-  // Returns the number of observers on the node.
+  // Function: get_num_coverage_cbs
+  // Returns the number of coverage callbacks on the node.
   //
   // For unit testing.
-  virtual function int get_num_observers();
-    return _observers.size();
+  virtual function int get_num_coverage_cbs();
+    return _coverage_cbs.size();
   endfunction
 
   // Function: get_observer
   // Returns the observer at the index.
   //
   // For unit testing.
-  virtual function srm_base_observer get_observer(int index);
-    return _observers[index];
+  virtual function srm_base_coverage get_observer(int index);
+    return _coverage_cbs[index];
   endfunction
 
 endclass

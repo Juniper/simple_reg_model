@@ -5,7 +5,7 @@ import srm_pkg::*;
 class test_reg_coverage extends srm_unit_test;
   
   // Define a custom coverage model.
-  class reg32_fcov_model extends srm_base_observer;
+  class reg32_fcov_model extends srm_base_coverage;
     cpu_reg32::r1_struct_t data;
 
     covergroup reg32_covergroup;
@@ -17,7 +17,7 @@ class test_reg_coverage extends srm_unit_test;
       reg32_covergroup = new;
     endfunction
 
-    virtual function void sample(srm_base_reg entry);
+    virtual function void post_write(srm_base_reg entry);
       srm_data_t bytes = entry.get_bytes();
       data = 'h0;
       for(int i = 0; i < bytes.size(); i++) begin
@@ -53,39 +53,39 @@ class test_reg_coverage extends srm_unit_test;
 
   task test_attach_observer;
     regmodel.attach(fcov_inst);
-    `TEST_VALUE(0, regmodel.get_num_observers(), "Observer only at leaf node");
-    `TEST_VALUE(1, regmodel.r1.get_num_observers(), "r1 must have 1 observer");
-    `TEST_VALUE(1, regmodel.r2.get_num_observers(), "r2 must have 1 observer");
-    `TEST_VALUE(1, regmodel.r3.get_num_observers(), "r3 must have 1 observer");
+    `TEST_VALUE(0, regmodel.get_num_coverage_cbs(), "Observer only at leaf node");
+    `TEST_VALUE(1, regmodel.r1.get_num_coverage_cbs(), "r1 must have 1 observer");
+    `TEST_VALUE(1, regmodel.r2.get_num_coverage_cbs(), "r2 must have 1 observer");
+    `TEST_VALUE(1, regmodel.r3.get_num_coverage_cbs(), "r3 must have 1 observer");
   endtask
 
   task test_detach_observer;
     regmodel.detach(fcov_inst);
-    `TEST_VALUE(0, regmodel.get_num_observers(), "Observer only at leaf node");
-    `TEST_VALUE(0, regmodel.r1.get_num_observers(), "r1 must have 0 observer");
-    `TEST_VALUE(0, regmodel.r2.get_num_observers(), "r2 must have 0 observer");
-    `TEST_VALUE(0, regmodel.r3.get_num_observers(), "r3 must have 0 observer");
+    `TEST_VALUE(0, regmodel.get_num_coverage_cbs(), "Observer only at leaf node");
+    `TEST_VALUE(0, regmodel.r1.get_num_coverage_cbs(), "r1 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r2.get_num_coverage_cbs(), "r2 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r3.get_num_coverage_cbs(), "r3 must have 0 observer");
   endtask
 
   task test_detach_all;
     regmodel.detach_all();
-    `TEST_VALUE(0, regmodel.get_num_observers(), "Observer only at leaf node");
-    `TEST_VALUE(0, regmodel.r1.get_num_observers(), "r1 must have 0 observer");
-    `TEST_VALUE(0, regmodel.r2.get_num_observers(), "r2 must have 0 observer");
-    `TEST_VALUE(0, regmodel.r3.get_num_observers(), "r3 must have 0 observer");
+    `TEST_VALUE(0, regmodel.get_num_coverage_cbs(), "Observer only at leaf node");
+    `TEST_VALUE(0, regmodel.r1.get_num_coverage_cbs(), "r1 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r2.get_num_coverage_cbs(), "r2 must have 0 observer");
+    `TEST_VALUE(0, regmodel.r3.get_num_coverage_cbs(), "r3 must have 0 observer");
   endtask
 
   task test_r1_write_sample;
     regmodel.r1.attach(fcov_inst);
-    `TEST_VALUE(1, regmodel.r1.get_num_observers(), "r1 must have 1 observer");
-    `TEST_VALUE(0, regmodel.r2.get_num_observers(), "r2 must have 0 observer");
+    `TEST_VALUE(1, regmodel.r1.get_num_coverage_cbs(), "r1 must have 1 observer");
+    `TEST_VALUE(0, regmodel.r2.get_num_coverage_cbs(), "r2 must have 0 observer");
     wr_data.field = 32'h0;
     regmodel.r1.write(cpu_handle, wr_data);
 
     cpu_handle.enable_functional_coverage = 0;
     wr_data.field = 32'hdeadbeef;
     regmodel.r1.write(cpu_handle, wr_data);
-    `TEST_VALUE(0, fcov_inst.reg32_covergroup.get_coverage(), "no coverage achieved");
+    `TEST_VALUE(0, $rtoi(fcov_inst.reg32_covergroup.get_coverage()), "no coverage achieved");
     
     cpu_handle.enable_functional_coverage = 1;
     // Dummy write required for coverage. don't know why.
@@ -93,7 +93,7 @@ class test_reg_coverage extends srm_unit_test;
     regmodel.r1.write(cpu_handle, wr_data);
     wr_data.field = 32'hdeadbeef;
     regmodel.r1.write(cpu_handle, wr_data);
-    `TEST_VALUE(100, fcov_inst.reg32_covergroup.get_coverage(), "coverage target achieved");
+    `TEST_VALUE(100, $rtoi(fcov_inst.reg32_covergroup.get_coverage()), "coverage target achieved");
   endtask
 
 
