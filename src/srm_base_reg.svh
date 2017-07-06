@@ -39,22 +39,6 @@ virtual class srm_base_reg extends srm_component;
     end
   endfunction
 
-  // Function: copy_policies
-  // Private function to copy the policies of the fields.
-  // FIXME: declare a clone method.
-  virtual function void copy_policies(srm_base_reg other);
-    foreach(_fields[i]) begin
-      _fields[i].copy_policies(other._fields[i]);
-    end
-  endfunction
-
-  // Function: copy_coverage_cbs
-  // Private function to copy the policies of the fields.
-  virtual function void copy_coverage_cbs(srm_base_reg other);
-    foreach(_coverage_cbs[i]) begin
-      other._coverage_cbs[i] = _coverage_cbs[i];
-    end
-  endfunction
   //------------------
   // Group: Introspection
   //-------------------

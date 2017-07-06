@@ -21,6 +21,13 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   //-------------------
   pure virtual function srm_array_entry#(T) clone(srm_addr_t index);
 
+  virtual function void initialize(srm_array_entry#(T) obj);
+    foreach(obj._fields[i])
+      obj._fields[i].set_policy_map(_fields[i]);
+
+    obj._coverage_cbs = _coverage_cbs;
+  endfunction
+
   //----------------------
   // Group: Address computation 
   //----------------------
