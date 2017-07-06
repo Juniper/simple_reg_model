@@ -106,18 +106,11 @@ virtual class srm_base_field;
     return p;
   endfunction
 
-  // Function: copy_policies
-  // Private function to copy the policies of the fields.
-  virtual function void copy_policies(srm_base_field other);
-    foreach(_policy_map[i]) begin
-      other._policy_map[i] = _policy_map[i];
-    end
-  endfunction
 
   // Function: set_policy_map 
   // Private function to clone the policies of the fields.
   virtual function void set_policy_map(srm_base_field other);
-    other._policy_map = _policy_map;
+    _policy_map = other._policy_map;
   endfunction
 
 endclass
