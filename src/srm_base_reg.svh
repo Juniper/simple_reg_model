@@ -238,6 +238,13 @@ virtual class srm_base_reg extends srm_component;
     adapter = handle.adapter_policy.get_adapter(this);
     adapter.execute(generic_xact, handle.seq_priority);
 
+    // Gather coverage if enabled.
+    if(handle.enable_functional_coverage) begin
+      for(int i = 0; i < _coverage_cbs.size(); i++) begin
+        _coverage_cbs[i].sample_xact(generic_xact);
+      end
+    end
+
     handle.generic_xact_status = generic_xact.status;
 
   endtask

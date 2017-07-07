@@ -21,6 +21,10 @@ class srm_base_coverage;
     // Add code for fcov of reads.
   endfunction
 
+  virtual function void sample_xact(const ref srm_generic_xact_t xact);
+    // Add code for fcov of xact.
+  endfunction
+
 endclass
 
 `endif
