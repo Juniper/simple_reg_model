@@ -68,6 +68,11 @@ virtual class srm_base_reg extends srm_component;
     return _fields.size();
   endfunction
 
+  // Function: get_index
+  // This is for callback to access the index of the array entry.
+  virtual function srm_addr_t get_index();
+    return 0;
+  endfunction
  
   //------------------
   // Group: Reset

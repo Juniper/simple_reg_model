@@ -19,9 +19,15 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   //------------------
   // Group: Private 
   //-------------------
+  // Function: clone
+  // Abstract method that is overwritten by the derived class.
+  // Should create a clone of the prototype at the specified index.
+  //
   pure virtual function srm_array_entry#(T) clone(srm_addr_t index);
 
-  virtual function void initialize(srm_array_entry#(T) obj);
+  // Function: initialize
+  // Private function to create the clone.
+  protected function void __initialize(srm_array_entry#(T) obj);
     foreach(obj._fields[i])
       obj._fields[i].set_policy_map(_fields[i]);
 
@@ -31,6 +37,12 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   //----------------------
   // Group: Address computation 
   //----------------------
+
+  // Function: get_index
+  // Returns the index of the entry.
+  virtual function srm_addr_t get_index();
+    return _index;
+  endfunction
 
   // Function: get_offset
   // Get the offset of entry 0 and then add the index*width.

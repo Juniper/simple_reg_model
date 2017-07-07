@@ -51,7 +51,7 @@ class cpu_table32 extends srm_component;
         r1_reg obj;
         obj = new(.name($psprintf("%s_%0d", get_name(), index)),
                   .parent(_parent), .index(index), .reset_kind(get_last_reset_kind()));
-        initialize(obj);
+        __initialize(obj);
         return obj;
       endfunction
     endclass

@@ -7,14 +7,20 @@ class test_table_coverage extends srm_unit_test;
   // Define a custom coverage model.
   class r1_fcov_model extends srm_base_coverage;
     cpu_table32::r1_struct_t data;
+    srm_addr_t index;
 
-    covergroup r1_covergroup;
+    covergroup r1_data_cg;
       coverpoint {data.field == 32'hdeadbeef };
+    endgroup
+
+    covergroup r1_index_cg;
+      coverpoint {index == 9};
     endgroup
 
     function new();
       super.new("r1_fcov_model");
-      r1_covergroup = new;
+      r1_data_cg = new;
+      r1_index_cg = new;
     endfunction
 
     virtual function void post_write(srm_base_reg entry);
@@ -23,7 +29,9 @@ class test_table_coverage extends srm_unit_test;
       for(int i = 0; i < bytes.size(); i++) begin
         data[i*8 +: 8] = bytes[i];
       end
-      r1_covergroup.sample();
+      index = entry.get_index();
+      r1_data_cg.sample();
+      r1_index_cg.sample();
     endfunction
 
 
@@ -89,13 +97,17 @@ class test_table_coverage extends srm_unit_test;
     regmodel.r1.attach(fcov_inst);
     `TEST_VALUE(1, regmodel.r1.get_num_coverage_cbs(), "r1 must have 1 observer");
 
-    entry = regmodel.r1.entry_at(0);
+    entry = regmodel.r1.entry_at(7);
     wr_data.field = 32'h0;
     entry.write(cpu_handle, wr_data);
-    `TEST_VALUE(50, $rtoi(fcov_inst.r1_covergroup.get_coverage()), "coverage false achieved");
+    `TEST_VALUE(50, $rtoi(fcov_inst.r1_data_cg.get_coverage()), "false data coverage achieved");
+    `TEST_VALUE(50, $rtoi(fcov_inst.r1_index_cg.get_coverage()), "false addr coverage achieved");
 
+    entry = regmodel.r1.entry_at(9);
     wr_data.field = 32'hdeadbeef;
     entry.write(cpu_handle, wr_data);
+    `TEST_VALUE(100, $rtoi(fcov_inst.r1_data_cg.get_coverage()), "data coverage achieved");
+    `TEST_VALUE(100, $rtoi(fcov_inst.r1_index_cg.get_coverage()), "addr coverage achieved");
   endtask
 
   virtual task run();
