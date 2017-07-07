@@ -32,7 +32,6 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
     end
     obj._coverage_cbs = _coverage_cbs;
     obj._reset_kind = _reset_kind;
-    obj._last_reset_kind = _last_reset_kind;
   endfunction
 
   //----------------------

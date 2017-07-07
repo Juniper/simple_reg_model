@@ -109,10 +109,6 @@ class srm_reg_array #(type T = int) extends srm_component;
     end
   endfunction
 
-  virtual function string get_last_reset_kind();
-    return _prototype.get_last_reset_kind();
-  endfunction
-
   //------------------
   // Group: Debug
   //------------------

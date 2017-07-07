@@ -13,8 +13,7 @@ typedef class srm_base_field;
 virtual class srm_base_reg extends srm_component;
   protected srm_base_field _fields[$];
   protected int _reset_kind[string];
-  protected string _last_reset_kind;
-
+  
   //------------------
   // Group: Initialization
   //-------------------
@@ -92,8 +91,7 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   // Function: is_reset_present
-  // Check if register has reset. Use the last_reset_kind to get
-  // the value of the register in that case.
+  // Check if register has reset.
   virtual function bit is_reset_present();
     return _reset_kind.size() > 0;
   endfunction
@@ -102,16 +100,10 @@ virtual class srm_base_reg extends srm_component;
   // If resettable, reset all the fields of the register.
   virtual function void reset(string kind);
     if(is_resettable(kind)) begin
-      foreach(_fields[i]) _fields[i].apply_reset(kind);
-      _last_reset_kind = kind;
+      foreach(_fields[i]) _fields[i].reset(kind);
     end
   endfunction
 
-  // Function: get_last_reset_kind
-  // Get the last reset applied kind.
-  virtual function string get_last_reset_kind();
-    return _last_reset_kind;
-  endfunction
 
   //------------------
   // Group: Model Access 
@@ -217,6 +209,7 @@ virtual class srm_base_reg extends srm_component;
   //------------------
   // Group: Private API
   //-------------------
+
 
   // Function: __write_bytes
   // Send the bus xact to the adapter class. if no response from adapter then the

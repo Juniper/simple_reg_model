@@ -102,18 +102,11 @@ class srm_field#(type T = int) extends srm_base_field;
   // If the field has not been written and has reset then return the last reset kind value.
   // If not resettable then reading before writing is a fatal error.
   virtual function T get();
-    T dummy;
-    if(_is_initialized) begin
-      return _entry;
-    end else if(_parent.is_reset_present()) begin
-      string last_reset_kind = _parent.get_last_reset_kind();
-      return _reset_values[last_reset_kind];
-    end
-    else begin
+    if(!_is_initialized && !_parent.is_reset_present()) begin
       `uvm_error("ReadBeforeWrite", 
         $sformatf("Uninitialized field \"%s\" that is not resettable.", get_full_name()));
-      return dummy;
     end
+    return _entry;
   endfunction
 
   // Function: get_bytes
@@ -234,6 +227,13 @@ class srm_field#(type T = int) extends srm_base_field;
     return _reset_values[kind];
   endfunction
   
+  // Function: reset
+  //
+  // Reset the field with the specified reset.
+  //
+  virtual function void reset(string kind);
+    _entry = get_reset_value(kind);
+  endfunction
 
 
 endclass

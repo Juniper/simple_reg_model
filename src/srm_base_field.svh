@@ -12,10 +12,10 @@ virtual class srm_base_field;
   protected srm_base_reg _parent;
   protected int _n_bits;
   protected int _lsb_pos;
-  bit _is_initialized; // Derived class also sets it in "set" function. FIXME
 
   local bit _volatile;
   protected srm_base_policy _policy_map[string];
+  bit _is_initialized; //FIXME
 
   //-----------------
   // Group: Initialization
@@ -29,6 +29,7 @@ virtual class srm_base_field;
     _n_bits = n_bits;
     _lsb_pos = lsb_pos;
     _volatile = volatile;
+    _is_initialized = 0;
   endfunction
 
   //-----------------
@@ -62,17 +63,6 @@ virtual class srm_base_field;
   // Function: is_volatile
   function bit is_volatile();
     return _volatile;
-  endfunction
-
-  //-------------------------------------
-  // Group: Reset
-  //-------------------------------------
-  // Function: apply_reset
-  //
-  // Reset the field with the specified reset.
-  //
-  virtual function void apply_reset(string kind);
-    _is_initialized = 0;
   endfunction
 
   //-------------------
@@ -111,6 +101,11 @@ virtual class srm_base_field;
   // Private function to clone the policies of the fields.
   virtual function void set_policy_map(srm_base_field other);
     _policy_map = other._policy_map;
+  endfunction
+
+  // Function: reset
+  // Overridden by the derived class.
+  virtual function void reset(string kind);
   endfunction
 
 endclass
