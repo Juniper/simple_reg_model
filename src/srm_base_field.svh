@@ -12,7 +12,7 @@ virtual class srm_base_field;
   protected srm_base_reg _parent;
   protected int _n_bits;
   protected int _lsb_pos;
-  protected bit _is_initialized; // Derived class also sets it in "set" function.
+  bit _is_initialized; // Derived class also sets it in "set" function. FIXME
 
   local bit _volatile;
   protected srm_base_policy _policy_map[string];

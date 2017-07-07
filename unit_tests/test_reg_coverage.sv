@@ -100,12 +100,21 @@ class test_reg_coverage extends srm_unit_test;
     `TEST_VALUE(100, $rtoi(fcov_inst.reg32_covergroup.get_coverage()), "coverage target achieved");
   endtask
 
+  task test_r1_read_sample;
+    regmodel.r1.attach(fcov_inst);
+    `TEST_VALUE(1, regmodel.r1.get_num_coverage_cbs(), "r1 must have 1 observer");
+    `TEST_VALUE(0, regmodel.r2.get_num_coverage_cbs(), "r2 must have 0 observer");
+    cpu_handle.enable_functional_coverage = 1;
+    regmodel.r1.read(cpu_handle, rd_data);
+  endtask
+
 
   virtual task run();
     `RUN_TEST(test_attach_observer);
     `RUN_TEST(test_detach_observer);
     `RUN_TEST(test_detach_all);
     `RUN_TEST(test_r1_write_sample);
+    `RUN_TEST(test_r1_read_sample);
   endtask
 
 endclass

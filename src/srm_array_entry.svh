@@ -9,11 +9,9 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   local srm_addr_t _index;   // For address computation in array.
   
   // Function: new
-  function new(string name, srm_component parent, srm_addr_t index, 
-                                                  string reset_kind);
+  function new(string name, srm_component parent, srm_addr_t index);
     super.new(name, parent);
     _index = index;
-    _last_reset_kind = reset_kind;
   endfunction
   
   //------------------
@@ -28,10 +26,13 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   // Function: initialize
   // Private function to create the clone.
   protected function void __initialize(srm_array_entry#(T) obj);
-    foreach(obj._fields[i])
+    foreach(obj._fields[i]) begin
       obj._fields[i].set_policy_map(_fields[i]);
-
+      obj._fields[i]._is_initialized = _fields[i]._is_initialized;
+    end
     obj._coverage_cbs = _coverage_cbs;
+    obj._reset_kind = _reset_kind;
+    obj._last_reset_kind = _last_reset_kind;
   endfunction
 
   //----------------------

@@ -48,10 +48,9 @@ class test_field_access extends srm_unit_test;
   endtask
 
   task test_table_field_set();
-    cpu_multi_field::r2_table::r2_entry  entry;
+    cpu_multi_field::r2_table::r2_entry entry;
 
     entry = regmodel.r2.entry_at(13);
-
     entry.f0.set('h1);
     entry = regmodel.r2.entry_at(13);
     rd_data = entry.get();

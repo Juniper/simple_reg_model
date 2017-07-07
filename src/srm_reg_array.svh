@@ -101,7 +101,8 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Function: reset
   // Reset the prototype for future entries and delete existing entries.
   virtual function void reset(string kind);
-    // If reset succeeds then all entries must be deleted.
+    // If reset succeeds then all entries must be resetted.
+    // Donot delete the entries since it would invalidate existing handles.
     if(_prototype.is_resettable(kind)) begin
       _prototype.reset(kind);
       foreach(_entries[i]) _entries[i].reset(kind);

@@ -47,6 +47,7 @@ class test_volatile_field extends srm_unit_test;
   task test_table_volatile;
     cpu_volatile_field::r2_table::r2_entry entry;  
     cpu_volatile_field::r2_struct_t rd_data;
+
     regmodel.reset("BIST");
     regmodel.r2.store(cpu_handle);
     `TEST_VALUE(8'hff, adapter.last_data, "ensure that table data is written");
@@ -62,10 +63,18 @@ class test_volatile_field extends srm_unit_test;
   endtask
 
 
+  task test_table_debug;
+    cpu_volatile_field::r2_table::r2_entry entry;  
+    cpu_volatile_field::r2_struct_t rd_data;
+    regmodel.reset("BIST");
+    regmodel.r2.store(cpu_handle);
+    `TEST_VALUE(8'hff, adapter.last_data, "ensure that table data is written");
+  endtask
   
   virtual task run();
-    `RUN_TEST(test_reg_volatile);
-    `RUN_TEST(test_table_volatile);
+    //`RUN_TEST(test_reg_volatile);
+    //`RUN_TEST(test_table_volatile);
+    `RUN_TEST(test_table_debug);
   endtask
 
 endclass

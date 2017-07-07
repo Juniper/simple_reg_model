@@ -86,9 +86,8 @@ class cpu_volatile_field extends srm_component;
       srm_field#(bit[1:0]) f1;
       srm_field#(bit) f0;
 
-      function new(string name, srm_component parent, srm_addr_t index=-1, 
-                                                      string reset_kind="");
-        super.new(name, parent, index, reset_kind);
+      function new(string name, srm_component parent, srm_addr_t index=-1);
+        super.new(name, parent, index);
         // If resettable, then all fields must be resettable and value defined.
         set_reset_kind("HARD");
         set_reset_kind("BIST");
@@ -122,8 +121,8 @@ class cpu_volatile_field extends srm_component;
 
       virtual function r2_entry clone(srm_addr_t index);
         r2_entry obj;
-        obj = new(.name($psprintf("%s_%0d", get_name(), index)),
-                  .parent(_parent), .index(index), .reset_kind(get_last_reset_kind()));
+        obj = new(.name($psprintf("%s_%0d", get_name(), index)), .parent(_parent), .index(index));
+        __initialize(obj);
         return obj;
       endfunction
     endclass
@@ -136,19 +135,12 @@ class cpu_volatile_field extends srm_component;
       _prototype = entry;
     endfunction
 
-    //-----------------------
-    // Composite 
-    //-----------------------
-    function r2_entry entry_at(srm_addr_t index);
-      string name;
-      srm_array_entry#(r2_struct_t) entry;
-      r2_entry e;
-      entry = super.entry_at(index);
-      // NCsim does not like me returning r2_entry directly.
-      $cast(e, entry);
-      return e;
+    // Convienence
+    virtual function r2_entry entry_at(srm_addr_t index);
+      r2_entry entry;
+      $cast(entry, super.entry_at(index));
+      return entry;
     endfunction
-
   endclass
 
   // Instantiate all the registers and tables.
