@@ -26,12 +26,7 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   // Function: initialize
   // Private function to create the clone.
   protected function void __initialize(srm_array_entry#(T) obj);
-    foreach(obj._fields[i]) begin
-      obj._fields[i].set_policy_map(_fields[i]);
-      obj._fields[i]._is_initialized = _fields[i]._is_initialized;
-    end
-    obj._coverage_cbs = _coverage_cbs;
-    obj._reset_kind = _reset_kind;
+    super.__initialize(obj);
   endfunction
 
   //----------------------

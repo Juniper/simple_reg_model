@@ -210,6 +210,14 @@ virtual class srm_base_reg extends srm_component;
   // Group: Private API
   //-------------------
 
+  // Function: __initialize
+  // Private function to create the clone.
+  protected function void __initialize(srm_base_reg obj);
+    foreach(obj._fields[i]) 
+      obj._fields[i].__initialize(_fields[i]);
+    obj._coverage_cbs = _coverage_cbs;
+    obj._reset_kind = _reset_kind;
+  endfunction
 
   // Function: __write_bytes
   // Send the bus xact to the adapter class. if no response from adapter then the

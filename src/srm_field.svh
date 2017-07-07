@@ -14,6 +14,7 @@ class srm_field#(type T = int) extends srm_base_field;
   local T _entry;
   local T _reset_values[string];
   local int _reset_kind[string];
+  local bit _is_set;
 
   //---------------------------
   // Group: Initialization
@@ -94,7 +95,7 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   virtual function void set(T data);
     _entry = data;
-    _is_initialized = 1;
+    _is_set = 1;
   endfunction
 
   // Function: get
@@ -102,7 +103,7 @@ class srm_field#(type T = int) extends srm_base_field;
   // If the field has not been written and has reset then return the last reset kind value.
   // If not resettable then reading before writing is a fatal error.
   virtual function T get();
-    if(!_is_initialized && !_parent.is_reset_present()) begin
+    if(!_is_set && !_parent.is_reset_present()) begin
       `uvm_error("ReadBeforeWrite", 
         $sformatf("Uninitialized field \"%s\" that is not resettable.", get_full_name()));
     end
@@ -235,6 +236,20 @@ class srm_field#(type T = int) extends srm_base_field;
     _entry = get_reset_value(kind);
   endfunction
 
+
+  //-------------------------------------
+  // Group: Private
+  //-------------------------------------
+  // Function: __initialize
+  // Initialize the state from the current value.
+  virtual function void __initialize(srm_base_field obj);
+    srm_field#(T) field;
+    super.__initialize(obj);
+    $cast(field, obj);
+    _entry = field._entry;
+    _reset_values = field._reset_values;
+    _reset_kind = field._reset_kind;
+  endfunction
 
 endclass
 
