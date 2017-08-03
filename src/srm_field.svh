@@ -206,6 +206,10 @@ class srm_field#(type T = int) extends srm_base_field;
       set_bytes(field_bytes);
     end
 
+    if(handle.enable_functional_coverage) begin
+      p.post_read();
+    end
+
   endtask
 
   //-------------------------------------

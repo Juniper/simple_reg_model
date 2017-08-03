@@ -122,6 +122,10 @@ class srm_reg#(type T = int) extends srm_base_reg;
       end
     end
 
+    if(handle.enable_functional_coverage) begin
+      post_read();
+    end
+
     // Return data to the user.
     data = bytes_2_data(bytes);
   endtask
@@ -159,9 +163,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
     end
 
     if(handle.enable_functional_coverage) begin
-      for(int i = 0; i < _coverage_cbs.size(); i++) begin
-        _coverage_cbs[i].post_write(this);
-      end
+      post_write();
     end
 
   endtask

@@ -181,7 +181,7 @@ virtual class srm_base_reg extends srm_component;
   endtask
 
   //----------------------
-  // Group: Coverage Interface 
+  // Group: Functional Coverage
   //----------------------
 
   // Function: attach
@@ -204,6 +204,30 @@ virtual class srm_base_reg extends srm_component;
   // Detach all observers
   virtual function void detach_all();
     _coverage_cbs = {};
+  endfunction
+
+  // Function: post_write
+  // Post write functional callbacks.
+  virtual function void post_write();
+    for(int i = 0; i < _coverage_cbs.size(); i++) begin
+      _coverage_cbs[i].post_write(this);
+    end
+  endfunction
+
+  // Function: post_read
+  // Post read functional coverage.
+  virtual function void post_read();
+    for(int i = 0; i < _coverage_cbs.size(); i++) begin
+      _coverage_cbs[i].post_read(this);
+    end
+  endfunction
+
+  // Function: sample_xact
+  // Generate xact functional covearage.
+  virtual function void sample_xact(const ref srm_generic_xact_t generic_xact);
+    for(int i = 0; i < _coverage_cbs.size(); i++) begin
+      _coverage_cbs[i].sample_xact(generic_xact);
+    end
   endfunction
 
   //------------------
@@ -241,9 +265,7 @@ virtual class srm_base_reg extends srm_component;
 
     // Gather coverage if enabled.
     if(handle.enable_functional_coverage) begin
-      for(int i = 0; i < _coverage_cbs.size(); i++) begin
-        _coverage_cbs[i].sample_xact(generic_xact);
-      end
+      sample_xact(generic_xact);
     end
 
     handle.generic_xact_status = generic_xact.status;
