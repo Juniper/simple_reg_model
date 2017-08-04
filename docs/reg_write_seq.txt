@@ -7,5 +7,6 @@ srm_base_reg -> adapter: execute(bus_xact)
 adapter --> srm_base_reg: SRM_IS_OK 
 srm_base_reg --> srm_reg : SRM_IS_OK
 srm_reg -> srm_reg : set_bytes
+note left: Update the model value.
 srm_reg --> sequence : SRM_IS_OK
 @enduml

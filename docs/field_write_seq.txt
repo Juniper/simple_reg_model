@@ -4,11 +4,12 @@ sequence -> srm_field: write
 srm_field -> srm_field: data_2_bytes
 srm_field -> srm_base_reg : parent.get_bytes
 srm_field -> srm_utils: merge_bytes
+note right: Get model value for other fields.
 srm_utils --> srm_field : register_bytes
 srm_field -> srm_base_reg : __write_bytes
-srm_field -> srm_base_policy: write_policy(field, bytes)
+srm_base_reg --> srm_field : SRM_OK 
 note left: skip or modify the existing bytes
-srm_base_policy --> srm_field: allow_update, new_bytes 
 srm_field -> srm_field : set_bytes
+note left: Update the model value of the field.
 srm_field --> sequence : SRM_IS_OK
 @enduml
