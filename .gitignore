@@ -4,4 +4,5 @@ run/*
 *.o
 *.so
 *.swn
-docs/images
+docs/temp_images
+setup.csh

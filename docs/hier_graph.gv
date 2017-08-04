@@ -1,0 +1,4 @@
+digraph RegModel {
+  chip -> blockA -> regA;
+  chip -> blockB -> tableB;
+}

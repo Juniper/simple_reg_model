@@ -274,7 +274,7 @@ class srm_component;
   // Call store_update on all the children of the node.
   //
   virtual task store_update(srm_base_handle handle, const ref srm_component node, 
-                            bit skip_duplicate);
+                            bit skip_duplicate=TRUE);
     srm_component next_node;
 
     foreach(_children[i]) begin
