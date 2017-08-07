@@ -9,9 +9,9 @@ Hence a need for developing a open source, clean slate, simple register model(SR
 
 ### Static Memory Allocation
 The current uvm_reg api causes memory to be allocated for the entire register model independent of the actual locations accessed by the test. It is known that most tests, especially at system level, only access a small fraction of the address space. Hence is is wasteful to pay for the unused locations for all tests.
-![HeavyWeight](http://www.verilab.com/files/litterick_register_final_1.pdf).
+[Litterick](http://www.verilab.com/files/litterick_register_final_1.pdf).
 
-The graph below shows the memory footprint of a uvm testbench with different number of 8B registers in uvm_reg model. This testbench is a modified version of the popular example on the web ![BenchmarkTB](http://cluelogic.com/2012/10/uvm-tutorial-for-candy-lovers-register-abstraction/) In this benchmark we scale the number of registers only in the register model and the test does only single write read operation on one register. It can be seen from the graph that the memory footprint starts ncreasing exponentially after the size of 10K bytes. By 400K bytes it has increased over 1Gbytes. Source code is available on ![BenchmarkCode](https://github.com/sanjeevs/uvm_reg_gotchas)
+The graph below shows the memory footprint of a uvm testbench with different number of 8B registers in uvm_reg model. This testbench is a modified version of the popular example on the web [Cluelogic](http://cluelogic.com/2012/10/uvm-tutorial-for-candy-lovers-register-abstraction/) In this benchmark we scale the number of registers only in the register model and the test does only single write read operation on one register. It can be seen from the graph that the memory footprint starts ncreasing exponentially after the size of 10K bytes. By 400K bytes it has increased over 1Gbytes. Source code is available on [BenchmarkCode](https://github.com/sanjeevs/uvm_reg_gotchas)
 
 ![Memory Profiling](docs/images/tutorial_9.png)
 
@@ -33,7 +33,7 @@ As shown below the time taken by the randomization call is exponential and only 
 SRM fixes the problems of embedded memories by creating a new abstraction *srm_reg_array* that efficiently handles capacity and randomization.
 
 ### Confusing Access API
-uvm_reg adds the random constraints and the selection of the access policy (frontdoor/backdoor) as part of the register model access api. For example to support constraint randomization, it adds the *mirror* and *update* routine. For supporting backdoor access, it has the *peek* and *poke* routine. This creates a large monolithic api for unrelated concerns instead of a more modular api.  ![Non Intuitive API](http://agilesoc.com/2014/03/09/youre-either-with-me-or-youre-with-the-uvm-register-package/)
+uvm_reg adds the random constraints and the selection of the access policy (frontdoor/backdoor) as part of the register model access api. For example to support constraint randomization, it adds the *mirror* and *update* routine. For supporting backdoor access, it has the *peek* and *poke* routine. This creates a large monolithic api for unrelated concerns instead of a more modular api.  [AgileSoc](http://agilesoc.com/2014/03/09/youre-either-with-me-or-youre-with-the-uvm-register-package/)
 
 SRM refactors the acess api from the randomization and selection of the access policy. Access api for  register model is intuitively similar to real world software programming. Hence SRM access api provides basic tasks like *read*, *write* api of the software land. Constraint randomization is done by a separate hierarchy of constraint classes that are used to generate the data to be written. Similarly the access type (frontdoor, backdoor, etc) are implemented by their own separate *srm_access_policy* classes. This allows the policy to be actually selected depending on the context the sequence was spawned. For example the same sequence if run as part of configuration would use any avaialable backdoor writes but if run as part of background noise, would ignore all background writes and instead always use frontdoor writes.
 
@@ -58,7 +58,10 @@ In this case a predictor is used to observe the bus transactions and then forwar
 
 
 ## References
-[BenchmarkTB][http://cluelogic.com/2012/10/uvm-tutorial-for-candy-lovers-register-abstraction/]
+[Cluelogic][http://cluelogic.com/2012/10/uvm-tutorial-for-candy-lovers-register-abstraction/]
+
 [BenchmarkCode][https://github.com/sanjeevs/uvm_reg_gotchas]
-[Non Intuitive API][http://agilesoc.com/2014/03/09/youre-either-with-me-or-youre-with-the-uvm-register-package/]
-[HeavyWeight][http://www.verilab.com/files/litterick_register_final_1.pdf]
+
+[AgileSoc][http://agilesoc.com/2014/03/09/youre-either-with-me-or-youre-with-the-uvm-register-package/]
+
+[Litterick][http://www.verilab.com/files/litterick_register_final_1.pdf]
