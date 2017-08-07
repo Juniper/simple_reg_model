@@ -8,10 +8,11 @@ Hence a need for developing a open source, clean slate, simple register model(SR
 ## Major Issues With UVM REG
 
 ### Static Memory Allocation
-The current uvm_reg api causes memory to be allocated for the entire register model independent of the actual locations accessed by the test. It is known that most tests, especially at system level, only access a small fraction of the address space. Hence is is wasteful to pay for the unused locations for all tests.
-[Litterick](http://www.verilab.com/files/litterick_register_final_1.pdf).
+The current uvm_reg api causes memory to be allocated for the entire register model independent of the actual locations accessed by the test. It is known that most tests, especially at system level, only access a small fraction of the address space. Hence is is wasteful to pay for the unused locations for all tests.[Litterick](http://www.verilab.com/files/litterick_register_final_1.pdf).
 
-The graph below shows the memory footprint of a uvm testbench with different number of 8B registers in uvm_reg model. This testbench is a modified version of the popular example on the web [Cluelogic](http://cluelogic.com/2012/10/uvm-tutorial-for-candy-lovers-register-abstraction/) In this benchmark we scale the number of registers only in the register model and the test does only single write read operation on one register. It can be seen from the graph that the memory footprint starts ncreasing exponentially after the size of 10K bytes. By 400K bytes it has increased over 1Gbytes. Source code is available on [BenchmarkCode](https://github.com/sanjeevs/uvm_reg_gotchas)
+The graph below shows the memory footprint of a uvm testbench with different number of 8B registers in uvm_reg model. This testbench is a modified version of the popular example on the web [Cluelogic](http://cluelogic.com/2012/10/uvm-tutorial-for-candy-lovers-register-abstraction/) 
+
+In this benchmark we scale the number of registers only in the register model and the test does only single write read operation on one register. It can be seen from the graph that the memory footprint starts ncreasing exponentially after the size of 10K bytes. By 400K bytes it has increased over 1Gbytes. Source code is available on [BenchmarkCode](https://github.com/sanjeevs/uvm_reg_gotchas)
 
 ![Memory Profiling](docs/images/tutorial_9.png)
 
