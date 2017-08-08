@@ -51,12 +51,12 @@ logfile = options.logfile
 cflags_opts = ""
 testname = options.testname || abort("ERROR: UVM test name must be specified")
 uvm_home = ENV["UVM_HOME"] || abort("UVM_HOME must be set in the env")
-svm_home = ENV["SRM_HOME"] || abort("SRM_HOME must be set in the env")
+srm_home = ENV["SRM_HOME"] || abort("SRM_HOME must be set in the env")
 
-#compile_opts = " +define+SVM "
-#-compile_opts += %Q(+incdir+#{uvm_home}/src +incdir+#{svm_home}/dpi +incdir+#{svm_home}/src #{uvm_home}/src/uvm.sv #{uvm_home}/src/dpi/uvm_dpi.cc )
-compile_opts = " +define+SVM -uvm +ncaccess+r+w "
-compile_opts += %Q(+incdir+#{svm_home}/dpi +incdir+#{svm_home}/src +incdir+#{svm_home}/tests/cluelogic )
+#compile_opts = " +define+srm "
+#-compile_opts += %Q(+incdir+#{uvm_home}/src +incdir+#{srm_home}/dpi +incdir+#{srm_home}/src #{uvm_home}/src/uvm.sv #{uvm_home}/src/dpi/uvm_dpi.cc )
+compile_opts = " +define+srm -uvm +ncaccess+r+w "
+compile_opts += %Q(+incdir+#{srm_home}/dpi +incdir+#{srm_home}/src +incdir+#{srm_home}/tests/cluelogic )
 loader_opts = ""
 
 runtime_opts = "-l #{options.logfile} "
