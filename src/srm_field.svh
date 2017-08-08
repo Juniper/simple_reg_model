@@ -100,13 +100,7 @@ class srm_field#(type T = int) extends srm_base_field;
 
   // Function: get
   // Get the value of the field.
-  // If the field has not been written and has reset then return the last reset kind value.
-  // If not resettable then reading before writing is a fatal error.
   virtual function T get();
-    if(!_is_set && !_parent.is_reset_present()) begin
-      `uvm_error("ReadBeforeWrite", 
-        $sformatf("Uninitialized field \"%s\" that is not resettable.", get_full_name()));
-    end
     return _entry;
   endfunction
 
