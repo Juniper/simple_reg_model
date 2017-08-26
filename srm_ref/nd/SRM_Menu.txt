@@ -1,0 +1,90 @@
+Format: Development Release 01-12-2008 (1.35 base)
+
+
+# You can add a title and sub-title to your menu like this:
+# Title: [project name]
+# SubTitle: [subtitle]
+
+Footer: Released under MIT license.
+Timestamp: Updated month day, year
+#   m     - One or two digit month.  January is "1"
+#   mm    - Always two digit month.  January is "01"
+#   mon   - Short month word.  January is "Jan"
+#   month - Long month word.  January is "January"
+#   d     - One or two digit day.  1 is "1"
+#   dd    - Always two digit day.  1 is "01"
+#   day   - Day with letter extension.  1 is "1st"
+#   yy    - Two digit year.  2006 is "06"
+#   yyyy  - Four digit year.  2006 is "2006"
+#   year  - Four digit year.  2006 is "2006"
+
+# These are indexes you deleted, so Natural Docs will not add them again
+# unless you remove them from this line.
+
+Don't Index: Typedefs
+
+
+# --------------------------------------------------------------------------
+# 
+# Cut and paste the lines below to change the order in which your files
+# appear on the menu.  Don't worry about adding or removing files, Natural
+# Docs will take care of that.
+# 
+# You can further organize the menu by grouping the entries.  Add a
+# "Group: [name] {" line to start a group, and add a "}" to end it.
+# 
+# You can add text and web links to the menu by adding "Text: [text]" and
+# "Link: [name] ([URL])" lines, respectively.
+# 
+# The formatting and comments are auto-generated, so don't worry about
+# neatness when editing the file.  Natural Docs will clean it up the next
+# time it is run.  When working with groups, just deal with the braces and
+# forget about the indentation and comments.
+# 
+# You can use this file on other computers even if they use different
+# directories.  As long as the command line points to the same source files,
+# Natural Docs will be able to correct the locations automatically.
+# 
+# --------------------------------------------------------------------------
+
+
+File: Introduction (no auto-title, SRM_ROOT/srm_ref/intro.txt)
+Group: Register Layer  {
+
+   File: Overview (no auto-title, SRM_ROOT/srm_ref/overview.txt)
+   Group: Base {
+      File: srm_component  (no auto-title, SRM_ROOT/distrib/src/srm_component.svh)
+      } # Group: Base
+
+   Group: Field {
+      File: srm_base_field  (no auto-title, SRM_ROOT/distrib/src/srm_base_field.svh)
+      File: srm_field  (no auto-title, SRM_ROOT/distrib/src/srm_field.svh)
+      } # Group : Field
+
+   Group: Register {
+      File: srm_base_reg  (no auto-title, SRM_ROOT/distrib/src/srm_base_reg.svh)
+      File: srm_reg  (no auto-title, SRM_ROOT/distrib/src/srm_reg.svh)
+      }  # Group : Register
+
+   Group: RegisterArray {
+      File: srm_array_entry  (no auto-title, SRM_ROOT/distrib/src/srm_array_entry.svh)
+      File: srm_reg_array  (no auto-title, SRM_ROOT/distrib/src/srm_reg_array.svh)
+      } # Group : RegisterArray
+
+   Group: Testbench  {
+      File: srm_adapter_policy  (no auto-title, SRM_ROOT/distrib/src/srm_adapter_policy.svh)
+      File: srm_base_handle  (no auto-title, SRM_ROOT/distrib/src/srm_base_handle.svh)
+      File: srm_bus_adapter  (no auto-title, SRM_ROOT/distrib/src/srm_bus_adapter.svh)
+      File: srm_bus_predictor  (no auto-title, SRM_ROOT/distrib/src/srm_bus_predictor.svh)
+      File: srm_rw_policy  (no auto-title, SRM_ROOT/distrib/src/srm_field_policies.svh)
+      }  # Group: Testbench 
+
+   Group: Misc {
+      File: srm_utils  (no auto-title, SRM_ROOT/distrib/src/srm_utils.svh)
+      } # Group : Misc
+
+   }  # Group: Register Layer
+
+##### Do not change or remove these lines. #####
+Data: 1(D3333RuEG3pGH89A6u3N/E3`8t3aOPh3N/E3f86tH8Y36H9)
+Data: 1(h3333RuEG3pGH89A6u3N/E3`8t3aOPh3N/E3N/EVHGc)

@@ -1,0 +1,10 @@
+Title: Overview
+
+There are 2 major classes. The template class "srm_reg" models single entry register. Register arrays are just a composite class of many such register. Each register consist of a list of fields modelled as a template "srm_field" class. Each srm_field has certain attributes like width, access policy etc. 
+
+The class diagram of a register layer model is shown below. 
+
+The parent class is called "srm_component" which represents the node in the hierarchy tree. The class "srm_base_reg" handles all the generic operations on the register. Similarly the "srm_base_field" handles all the generic field operations. The class "srm_array_entry" derived from "srm_reg" represents each entry in the array.
+
+(see basic_class_hier.png)
+
