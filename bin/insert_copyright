@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'ostruct'
+require 'pp'
+
+options = OpenStruct.new
+options.copyright = ENV["SRM_HOME"] + "/bin/copyright.txt"
+options.del_copyright = false
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: insert_copyright [-d] [-c copyright_file] source_file"
+
+  opts.on("-c", "--copyright FILE", "Copyright file to insert") do |cfile|
+    options.copyright = cfile
+  end
+
+  opts.on("-d", "--del", "Delete existing copyright") do |del|
+    options.del_copyright = true
+  end
+end.parse!(ARGV)
+
+abort "Must specify a source file" unless ARGV
+source_file = ARGV[0]
+abort "Input file \"#{source_file}\" is missing." unless File.exists?(source_file)
+
+copyright = IO.readlines(options.copyright)
+source = IO.readlines(source_file)
+
+num_skips = 0
+if(options.del_copyright) 
+  source.each do |line|
+    if(line =~ /^\/\//)
+      num_skips += 1
+    else
+      break
+    end
+  end
+end
+source.shift(num_skips)
+
+destination = copyright + source
+
+File.open(source_file, "w") do |fh|
+  destination.each do |line|
+    fh.write line
+  end
+end
+

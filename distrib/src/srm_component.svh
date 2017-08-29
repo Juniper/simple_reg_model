@@ -1,3 +1,22 @@
+//
+// --------------------------------------------------------------
+// Copyright (c) 2017-2023, Juniper Networks, Inc.
+// All rights reserved.
+//
+// This code is licensed to you under the MIT license. 
+// You many not use this code except in compliance with this license.
+// This code is not an official Juniper product. You may obtain a copy
+// of the license at 
+//
+// https://opensource.org/licenses/MIT
+//
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is  distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or 
+// implied.  See the License for the specific language governing
+// permissions and limitations under the License.
+// -------------------------------------------------------------
+//
 `ifndef INCLUDED_srm_component_svh
 `define INCLUDED_srm_component_svh
 
@@ -7,8 +26,14 @@ typedef class srm_base_policy;
 
 //------------------------------------------------------------
 // CLASS: srm_component
-// A node in the tree hierarchy.
+// A node in the design tree hierarchy.
 //
+// A component represents a node in the design hierarchy. Leaf nodes are
+// specialized version of this class representing register or register array.
+//
+// The design hierarchy is an access path for the testwriter to select a component. The
+// hierarchy remains the same across multiple address maps. However the offset of a node
+// would depend on the address map selected.
 //------------------------------------------------------------
 class srm_component;
   local string _name;
@@ -25,6 +50,9 @@ class srm_component;
   //---------------------
 
   // Function: new
+  //
+  // Create a new instance of node with a pointer to parent.
+  //
   function new(string name, srm_component parent);
     _name = name;
     _parent = parent;
@@ -35,17 +63,23 @@ class srm_component;
   //----------------------
  
   // Function: get_parent
+  // 
+  // Return the parent of the node.
+  //
   function srm_component get_parent();
     return _parent;
   endfunction
 
   // Function: get_name
+  // 
   // Return the name of the node.
+  //
   function string get_name();
     return _name;
   endfunction
 
   // Function: get_full_name
+  // 
   // Return the full hierarical path of the node.
   //
   function string get_full_name();
@@ -75,37 +109,51 @@ class srm_component;
   //----------------------
 
   // Function: is_leaf_node
+  //
+  // Return true if the node is a leaf node.
+  //
   function bit is_leaf_node();
     return (_children.size() == 0);
   endfunction
 
   // Function: is_root_node
+  // 
+  // Return true if the node is a root node.
+  //
   function bit is_root_node();
     return (_parent == null);
   endfunction
 
   // Function: add_child
+  //
   // Add a child below itself.
   // 
-  // It also creates an entry in the offset table to record the offset.
   function void add_child(srm_component child);
     _children.push_back(child);
   endfunction
 
   // Function: number of children
-  // Return the number of children
+  // 
+  // Return the number of children of the node.
+  //
   function int num_children();
     return _children.size();
   endfunction
 
+  // Function: get_children
+  //
+  // Return array of children of the node.
+  //
   function void get_children(ref srm_component children[$]);
     foreach(_children[i])
       children.push_back(_children[i]);
 
   endfunction
 
-
   // Function: get_root_node
+  // 
+  // Return the root node of the tree.
+  //
   function srm_component get_root_node();
     srm_component ptr = this;
     while(!ptr.is_root_node()) ptr = ptr._parent;
@@ -113,6 +161,7 @@ class srm_component;
   endfunction
 
   // Function: get_leaf_nodes
+  //
   // Recursively find all the leaf nodes below itself.
   //
   function void get_leaf_nodes(ref srm_component leaves[$]);
@@ -142,15 +191,26 @@ class srm_component;
   //----------------------
  
   // Function: set_offset
+  //
   // Set the offset of the node in the address map.
+  //
+  // ~addr_map_name~ specifies the address map name.
+  // 
+  // ~offset~ specifies the offset in the address map.
+  // A single node may belong to multiple address maps at different offsets.
+  //
   virtual function void set_offset(string addr_map_name, srm_addr_t offset);
     _offset_table[addr_map_name] = offset;
   endfunction
 
   // Function: get_offset
+  //
   // Return the offset of node in address map by adding all the offset in path.
   //
+  // ~addr_map_name~ specifies the address map to use.
+  // Walks up the tree from the current node to the root, adding all the offset.
   // If address map name does not exists, then it is a fatal error.
+  //
   virtual function srm_addr_t get_offset(string addr_map_name);
     srm_addr_t offset;
     srm_component p;
@@ -172,13 +232,26 @@ class srm_component;
   endfunction
 
   // Function: set_size
-  // Set the size of the node in the address map.
+  //
+  // Set the size of the node in bytes for the address map.
+  //
+  // ~addr_map_name~ is the address map name.
+  // ~size~ is the software address map size of the node.
+  // The size allocated by sofware can be larger than the actual physical size 
+  // of the node.
+  //
   virtual function void set_size(string addr_map_name, srm_addr_t size);
     _size_table[addr_map_name] = size;
   endfunction
 
   // Function: get_size
-  // Return the number of bytes in address map.
+  // Return the number of bytes needed by the node.
+  //
+  // Overriden by register to return the size of the entry. For register array
+  // it returns the size of the entry * number of entries. For non leaf nodes,
+  // it returns the sum of the sizes of its children.
+  // ~addr_map_name~ is the address map name.
+  // The function recursively adds all the children's size to get the resultant size.
   //
   virtual function srm_addr_t get_size(string addr_map_name);
     srm_addr_t size = 0;
@@ -187,7 +260,7 @@ class srm_component;
       foreach(_children[i]) begin
         node_size = _children[i]._offset_table[addr_map_name] 
                              + _children[i].get_size(addr_map_name);
-        if(node_size > size) size = node_size;
+        size += node_size;
       end
       _size_table[addr_map_name] = size;
     end
@@ -195,8 +268,10 @@ class srm_component;
   endfunction
 
   // Function: address_2_instance
-  // Get the instance of the node given the address.
   //
+  // Get the instance of the node given the address.
+  // ~addr_map_name~ is the address map to be used.
+  // ~addr~ is the address to be converted.
   virtual function srm_component address_2_instance(string addr_map_name, srm_addr_t addr);
     srm_component root = get_root_node();
     return root.__address_2_instance(addr_map_name, addr);
@@ -222,14 +297,17 @@ class srm_component;
   // Group: Adapter Management 
   //----------------------
   // Function: add_adapter
+  //
   // Add the adapter to the list.
   //
-  // Each node maintains a list of adapters.
+  // Each node maintains a list of adapters. Depending on the policy one 
+  // of the adapters is selected and the leaf node is accessed.
   virtual function void add_adapter(srm_bus_adapter adapter);
     _adapters.push_back(adapter);
   endfunction
 
   // Function: get_adapters
+  //
   // Return the list of adapters at this node.
   //
   virtual function srm_adapters_t get_adapters();
@@ -242,7 +320,10 @@ class srm_component;
   //----------------------
 
   // Task: load
-  // Call load on all the leaf nodes of the tree.
+  //
+  // Call load on all the leaf nodes of the tree. 
+  // 
+  //The leaf node will actually call the read and update the model.
   //
   virtual task load(srm_base_handle handle);
     srm_component leaves[$];
@@ -256,8 +337,11 @@ class srm_component;
   endtask
 
   // Task: store 
+  //
   // Call store on all the leaf nodes of the tree.
-  // Leaf class will override this for the base case.
+  // 
+  //The leaf node will actually call write and update the design.
+  //
   virtual task store(srm_base_handle handle);
     srm_component leaves[$];
 
@@ -271,6 +355,7 @@ class srm_component;
 
 
   // Task: store_update 
+  //
   // Call store_update on all the children of the node.
   //
   virtual task store_update(srm_base_handle handle, const ref srm_component node, 
@@ -291,6 +376,7 @@ class srm_component;
   
 
   // Function: set_policy
+  //
   // Sets the policy on all the child nodes. 
   //
   virtual function void set_policy(string addr_map_name, srm_base_policy policy);
@@ -300,7 +386,9 @@ class srm_component;
   endfunction
 
   // Function: reset
+  //
   // Reset all the leaf nodes.
+  //
   // Leaf nodes implement the base case.
   virtual function void reset(string kind);
     foreach(_children[i]) begin
@@ -313,7 +401,11 @@ class srm_component;
   //-------------------
 
   // Function: predictor_update
+  //
   // Update the component due to the bus transaction.
+  //
+  // For passive operation the predictor component converts the bus transaction to
+  // generic transaction. This function updates the model with this transaction.
   virtual function void predictor_update(const ref srm_generic_xact_t xact);
     if(xact.kind == SRM_WRITE) begin
     end
@@ -326,6 +418,7 @@ class srm_component;
   //----------------------
 
   // Function: attach
+  //
   // Attach an observer to all the leaf nodes.
   //
   // No reason for non leaf nodes to detect a read/write.
@@ -341,7 +434,8 @@ class srm_component;
   endfunction
 
   // Function: detach
-  // Detach all the instances of the observer
+  //
+  // Detach all the instances of the observer from leaves.
   //
   virtual function void detach(srm_base_coverage observer);
     srm_component leaves[$];
@@ -355,6 +449,7 @@ class srm_component;
   endfunction
   
   // Function: detach_all
+  //
   // Detach all the the coverage callbacks 
   //
   virtual function void detach_all();
@@ -368,9 +463,9 @@ class srm_component;
 
   endfunction
   // Function: get_num_coverage_cbs
+  //
   // Returns the number of coverage callbacks on the node.
   //
-  // For unit testing.
   virtual function int get_num_coverage_cbs();
     return _coverage_cbs.size();
   endfunction

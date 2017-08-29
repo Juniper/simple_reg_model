@@ -1,14 +1,32 @@
+//
+// --------------------------------------------------------------
+// Copyright (c) 2017-2023, Juniper Networks, Inc.
+// All rights reserved.
+//
+// This code is licensed to you under the MIT license. 
+// You many not use this code except in compliance with this license.
+// This code is not an official Juniper product. You may obtain a copy
+// of the license at 
+//
+// https://opensource.org/licenses/MIT
+//
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is  distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or 
+// implied.  See the License for the specific language governing
+// permissions and limitations under the License.
+// -------------------------------------------------------------
+//
 `ifndef INCLUDED_srm_base_reg_svh
 `define INCLUDED_srm_base_reg_svh
 
 typedef class srm_base_field;
 //--------------------------------------------------------
 // CLASS: srm_base_reg
-// Abstract register base model:
+// Base class for the register.
 //
-// Register without the template data. This allows the base 
-// field to access the contents of the register and updates 
-// coming from the monitor to update the value.
+// Do not directly instantiate this class. It is used by the framework
+// to deal with template registers in a generic way.
 //--------------------------------------------------------
 virtual class srm_base_reg extends srm_component;
   protected srm_base_field _fields[$];
@@ -25,12 +43,21 @@ virtual class srm_base_reg extends srm_component;
 
   // Function: add_field
   //
+  // Add a field to the register.
+  //
+  // A register maintains a collection of fields. The fields need not
+  // be sorted in any particular order.
+  //
   function void add_field(srm_base_field f);
     _fields.push_back(f);
   endfunction
 
   // Function: set_policy
-  // Sets the policy on all the field nodes.
+  //
+  // Sets the policy on all the fields of the register .
+  //
+  // This is a helper function. It is also possible to set different policy on
+  // each field by setting it directly on the field.
   //
   virtual function void set_policy(string addr_map_name, srm_base_policy policy);
     foreach(_fields[i]) begin
@@ -41,8 +68,14 @@ virtual class srm_base_reg extends srm_component;
   //------------------
   // Group: Introspection
   //-------------------
+
   // Function: get_width_bytes
+  //
   // Returns the width of the register in bytes
+  //
+  // Add up the number of bits in each field. The register by definition
+  // need to be byte aligned. Hence the user must add reserved fields to ensure
+  // that this is always true.
   //
   virtual function int get_width_bytes();
     int num_bits = 0;
@@ -52,52 +85,68 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   // Function: get_size
-  // Return the number of bytes in address map.
+  // FIXME: Return the number of bytes in address map. SHould it not be the same
+  // for all address maps since the field is the same ?
   //
+  // ~addr_map_name~ FIXME: May not be required.
+  // For a register it is the width of the register. The value is cached for
+  // performance reason.
   virtual function srm_addr_t get_size(string addr_map_name);
     if(!_size_table.exists(addr_map_name)) 
-      _size_table[addr_map_name] = get_width_bytes();
+      _size_table[addr_map_name] = get_width_bytes(); // Cache
     return _size_table[addr_map_name];
   endfunction
 
   // Function: get_num_fields
+  //
   // Return the number of fields in the entry.
   //
   virtual function int get_num_fields();
     return _fields.size();
   endfunction
 
-  // Function: get_index
-  // This is for callback to access the index of the array entry.
-  virtual function srm_addr_t get_index();
-    return 0;
-  endfunction
- 
   //------------------
   // Group: Reset
   //-------------------
  
   // Function: set_reset_kind
+  //
   // Set the type of reset supported on the register.
-  // The model needs to ensure same kind supported by all the fields
+  //
+  // The spec needs to ensure same kind supported by all the fields
   // in the register.
   virtual function void set_reset_kind(string kind);
     _reset_kind[kind] = 1;
   endfunction
 
   // Function: is_resettable
+  //
+  // Return true if the register supports this kind of reset.
+  //
+  // ~kind~ is the type of reset.
+  //
   virtual function bit is_resettable(string kind);
     return _reset_kind.exists(kind);
   endfunction
 
   // Function: is_reset_present
-  // Check if register has reset.
+  //
+  // Returns true if the register is resettable.
+  //
+  // A register can have multiple reset types. This checks that there
+  // there is at least one.
+  //
   virtual function bit is_reset_present();
     return _reset_kind.size() > 0;
   endfunction
 
   // Function: reset
-  // If resettable, reset all the fields of the register.
+  //
+  // Reset all the fields of the register.
+  //
+  // ~kind~ is the type of reset.
+  // This has no effect on the register if the register does not support that
+  // kind of reset.
   virtual function void reset(string kind);
     if(is_resettable(kind)) begin
       foreach(_fields[i]) _fields[i].reset(kind);
@@ -106,13 +155,16 @@ virtual class srm_base_reg extends srm_component;
 
 
   //------------------
-  // Group: Model Access 
+  // Group: Access Model Only 
   //-------------------
   
   // Function: get_bytes
-  // Get the value of the register model as a list of bytes.
   //
-  // Get the value from the constituent fields and merge them together.
+  // Return the value of the register model as a list of bytes.
+  //
+  // Get the value from the constituent fields and merge them together. This is
+  // used by the framework to treat registers in a generic fashion.
+  //
   virtual function srm_data_t get_bytes();
     srm_data_t field_bytes, reg_bytes;
     int num_bytes = get_width_bytes();
@@ -128,9 +180,12 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   // Function: set_bytes
-  // Set the value of the register model.
   //
-  // Extract the field values and set them.
+  // Set the value in the register model to the list of bytes.
+  //
+  // ~bytes~ are the list of bytes that are to be written to the model.
+  // Extract the field values from the list of bytes and set them.
+  //
   virtual function void set_bytes(const ref srm_data_t bytes);
     srm_data_t field_bytes;
 
@@ -142,13 +197,16 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   //------------------
-  // Group: Model+Design Access 
+  // Group: Access Model+Design
   //-------------------
   
   // Task: load
+  //
   // Load the design data into the model.
   //
-  // No checking is done and the model is silently updated.
+  // ~handle~ Options required for the read.
+  // Read the data from the design and silently update the model.
+  // No checking is done for non volatile fields.
   virtual task load(srm_base_handle handle);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
@@ -165,8 +223,12 @@ virtual class srm_base_reg extends srm_component;
   endtask
 
   // Task: store
+  //
   // Store the model data into the design.
   //
+  // ~handle~ Options required for the write.
+  // Writes the data from the model to the design. All the byte enables
+  // are turned on for this write.
   virtual task store(srm_base_handle handle);
     srm_data_t bytes;
     srm_byte_enable_t byte_enables;
@@ -185,14 +247,20 @@ virtual class srm_base_reg extends srm_component;
   //----------------------
 
   // Function: attach
+  //
   // Attach an observer to itself.
+  //
+  // ~observer~ is the coverage observer attached to the register.
   //
   virtual function void attach(srm_base_coverage observer);
     _coverage_cbs.push_back(observer);
   endfunction
 
   // Function: detach
+  //
   // Detach an observer if it exists.
+  // 
+  // ~observer~ is the instance to be detached.
   //
   virtual function void detach(srm_base_coverage observer);
     foreach(_coverage_cbs[i]) begin
@@ -201,13 +269,21 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   // Function: detach_all
+  //
   // Detach all observers
+  //
+  // Remove all the observers from the node.
+  //
   virtual function void detach_all();
     _coverage_cbs = {};
   endfunction
 
   // Function: post_write
-  // Post write functional callbacks.
+  //
+  // Post write functional callback.
+  //
+  // Calls ~post_write~ on all the callback clients after the write task.
+  //
   virtual function void post_write();
     for(int i = 0; i < _coverage_cbs.size(); i++) begin
       _coverage_cbs[i].post_write(this);
@@ -215,7 +291,11 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   // Function: post_read
+  //
   // Post read functional coverage.
+  //
+  // Calls post_read on all the callback clients after the read task.
+  //
   virtual function void post_read();
     for(int i = 0; i < _coverage_cbs.size(); i++) begin
       _coverage_cbs[i].post_read(this);
@@ -223,7 +303,9 @@ virtual class srm_base_reg extends srm_component;
   endfunction
 
   // Function: sample_xact
+  //
   // Generate xact functional covearage.
+  // FIXME: What is the use case ?
   virtual function void sample_xact(const ref srm_generic_xact_t generic_xact);
     for(int i = 0; i < _coverage_cbs.size(); i++) begin
       _coverage_cbs[i].sample_xact(generic_xact);
@@ -243,6 +325,14 @@ virtual class srm_base_reg extends srm_component;
     obj._reset_kind = _reset_kind;
   endfunction
 
+  // Function: get_index
+  //
+  // This is for callback to access the index of the array entry.
+  //
+  virtual function srm_addr_t get_index();
+    return 0;
+  endfunction
+ 
   // Function: __write_bytes
   // Send the bus xact to the adapter class. if no response from adapter then the
   // model value is updated at the end otherwise done later by the xact from monitor.

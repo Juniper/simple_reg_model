@@ -1,16 +1,46 @@
+//
+// --------------------------------------------------------------
+// Copyright (c) 2017-2023, Juniper Networks, Inc.
+// All rights reserved.
+//
+// This code is licensed to you under the MIT license. 
+// You many not use this code except in compliance with this license.
+// This code is not an official Juniper product. You may obtain a copy
+// of the license at 
+//
+// https://opensource.org/licenses/MIT
+//
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is  distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or 
+// implied.  See the License for the specific language governing
+// permissions and limitations under the License.
+// -------------------------------------------------------------
+//
 `ifndef INCLUDED_srm_reg_svh
 `define INCLUDED_srm_reg_svh
 
 //--------------------------------------------------------
 // CLASS: srm_reg
-// Register model
+// Template class to represent a register.
+//
+// A register represents a set of fields that are accessible as a single
+// entity. The template parameter must be packed structure representing the 
+// fields of the register.
+//
 //--------------------------------------------------------
 class srm_reg#(type T = int) extends srm_base_reg;
+
   //------------------
   // Group: Initialization
   //-------------------
   
   // Function: new
+  //
+  // Create a new instance of a register.
+  //
+  // ~parent~ represents the component in the tree hierarchy.
+  //
   function new(string name, srm_component parent);
     super.new(name, parent);
   endfunction
@@ -18,11 +48,14 @@ class srm_reg#(type T = int) extends srm_base_reg;
   //------------------
   // Group: Converter
   //-------------------
+
   // Function: data_2_bytes
+  //
   // Converts the tempate data type into a list of bytes.
   //
   // {byte_n, byte_n_1,......, byte_1, byte_0} = [msb....lsb]
   // Template data type must be byte aligned.
+  //
   virtual function srm_data_t data_2_bytes(const ref T data);
     int num_bytes;
     srm_data_t bytes;
@@ -41,9 +74,11 @@ class srm_reg#(type T = int) extends srm_base_reg;
   endfunction
 
   // Function: bytes_2_data
+  //
   // Converts a list of bytes into the template data type.
   //
   // [msb.....lsb] = {byte_n_1,......, byte_1, byte_0}
+  //
   virtual function T bytes_2_data(const ref srm_data_t bytes);
     bit [$bits(T)-1:0] datax;
     T data;
@@ -67,32 +102,42 @@ class srm_reg#(type T = int) extends srm_base_reg;
   endfunction
 
   //------------------
-  // Group: Model Access 
+  // Group: Access Model Only 
   //-------------------
   
   // Function: get
-  // Get the value of the register model.
   //
-  // Get the bytes from the fields and convert to template data. 
+  // Return the template data of the register.
+  //
+  // Gets all the data from the constituent fields and packs them into
+  // the template type.
+  //
   virtual function T get();
     srm_data_t bytes = get_bytes();
     return bytes_2_data(bytes);
   endfunction
 
   // Function: set 
+  //
   // Set the value of the data in the model.
+  //
   // Could do 'const ref' but that prevents passing a literal constant.
   virtual function void set(T data);
     srm_data_t bytes;
     bytes = data_2_bytes(data);
     set_bytes(bytes);
   endfunction
+
   //------------------
-  // Group: Model+Design Access 
+  // Group: Access Model+Design 
   //-------------------
   
   // Task: read
+  //
   // Read the data from the design and compare against all non volatile model values.
+  //
+  // ~handle~ has all the option setting for the read.
+  // ~data~ is the data returned from the design.
   //
   // Task will call uvm_error if the field is not volatile and the model value does not
   // match the value read from the design.
@@ -131,10 +176,12 @@ class srm_reg#(type T = int) extends srm_base_reg;
   endtask
 
   // Task: write
+  //
   // Write the data to the design and model.
   //
-  // Data is converted to a list of bytes which then updates the 
-  // storage inside the model.
+  // ~handle~ has all the option setting for the write.
+  // ~data~ is the data to be written to the design and model.
+  //
   // It is possible to make data as const ref but then I cannot pass 
   // literal constants. 
   virtual task write(srm_base_handle handle, T data);

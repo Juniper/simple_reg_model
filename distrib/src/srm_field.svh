@@ -1,3 +1,22 @@
+//
+// --------------------------------------------------------------
+// Copyright (c) 2017-2023, Juniper Networks, Inc.
+// All rights reserved.
+//
+// This code is licensed to you under the MIT license. 
+// You many not use this code except in compliance with this license.
+// This code is not an official Juniper product. You may obtain a copy
+// of the license at 
+//
+// https://opensource.org/licenses/MIT
+//
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is  distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or 
+// implied.  See the License for the specific language governing
+// permissions and limitations under the License.
+// -------------------------------------------------------------
+//
 `ifndef INCLUDED_srm_field_svh
 `define INCLUDED_srm_field_svh
 
@@ -7,18 +26,27 @@ typedef class srm_base_handle;
 // Template class to model the fields in a register.
 //
 // A field has 'n' bits, multiple reset values and an access
-// policy.
+// policy. 
 //---------------------------------------------------
 class srm_field#(type T = int) extends srm_base_field;
 
   local T _entry;
   local T _reset_values[string];
   local int _reset_kind[string];
-  local bit _is_set;
 
   //---------------------------
   // Group: Initialization
   //---------------------------
+  
+  // Function: new
+  //
+  // Create a new instance of a field.
+  //
+  // ~name~ is the name of the field.
+  // ~parent~ is the pointer to the register to which the field belongs.
+  // ~nbits~ is the size of the field in bits.
+  // ~lsb_pos~ is the least significant position 
+  //
   function new(string name, srm_base_reg parent, int n_bits, int lsb_pos,
                bit volatile);
     super.new(name, parent, n_bits, lsb_pos, volatile);
@@ -95,11 +123,12 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   virtual function void set(T data);
     _entry = data;
-    _is_set = 1;
   endfunction
 
   // Function: get
+  //
   // Get the value of the field.
+  //
   virtual function T get();
     return _entry;
   endfunction
@@ -133,6 +162,7 @@ class srm_field#(type T = int) extends srm_base_field;
   // other field values are set to the value from the model.
   // It is possible to make data as const ref but then I cannot pass 
   // literal constants. 
+  //
   virtual task write(srm_base_handle handle, T data);
     srm_base_policy policy;
     int allow_update;
@@ -167,6 +197,7 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   // A read to the parent register is issued with the correct byte enables.
   // The field data is them stripped and compared to the model data.
+  //
   virtual task read(srm_base_handle handle, output T data);
     srm_base_policy policy;
     int allow_update;
@@ -213,6 +244,10 @@ class srm_field#(type T = int) extends srm_base_field;
   // Function: set_reset_value
   //
   // Sets the reset value of the field under different kinds of reset.
+  //
+  // ~value~ is the reset value.
+  // ~kind~ is the type of reset. For example hard, bist, soft etc.
+  //
   virtual function void set_reset_value(T value, input string kind);
     _reset_kind[kind] = 1;
     _reset_values[kind] = value;
@@ -222,6 +257,8 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   // Get the reset value of the field under different kinds of reset.
   //
+  // ~kind~ is the type of reset. For example hard, bist, soft etc.
+  //
   virtual function T get_reset_value(string kind);
     return _reset_values[kind];
   endfunction
@@ -229,6 +266,9 @@ class srm_field#(type T = int) extends srm_base_field;
   // Function: reset
   //
   // Reset the field with the specified reset.
+  //
+  // ~kind~ is the type of reset. For example hard, bist, soft etc.
+  // Updates the field data with the reset value.
   //
   virtual function void reset(string kind);
     _entry = get_reset_value(kind);
@@ -239,7 +279,11 @@ class srm_field#(type T = int) extends srm_base_field;
   // Group: Private
   //-------------------------------------
   // Function: __initialize
+  //
   // Initialize the state from the current value.
+  //
+  // Used by the framework to clone array register entries.
+  //
   virtual function void __initialize(srm_base_field obj);
     srm_field#(T) field;
     super.__initialize(obj);
