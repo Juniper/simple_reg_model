@@ -59,6 +59,8 @@ Group: Register Layer  {
    Group: Field {
       File: srm_base_field  (no auto-title, SRM_ROOT/distrib/src/srm_base_field.svh)
       File: srm_field  (no auto-title, SRM_ROOT/distrib/src/srm_field.svh)
+      File: srm_base_policy (no auto-title, SRM_ROOT/distrib/src/srm_base_policy.svh)
+      File: srm_field_policies  (no auto-title, SRM_ROOT/distrib/src/srm_field_policies.svh)
       } # Group : Field
 
    Group: Register {
@@ -71,12 +73,15 @@ Group: Register Layer  {
       File: srm_reg_array  (no auto-title, SRM_ROOT/distrib/src/srm_reg_array.svh)
       } # Group : RegisterArray
 
+   Group: Coverage {
+      File: srm_base_coverage(no auto-title, SRM_ROOT/distrib/src/srm_base_coverage.svh)
+      } # Group: Coverage
+
    Group: Testbench  {
       File: srm_bus_adapter  (no auto-title, SRM_ROOT/distrib/src/srm_bus_adapter.svh)
       File: srm_adapter_policy  (no auto-title, SRM_ROOT/distrib/src/srm_adapter_policy.svh)
       File: srm_bus_predictor  (no auto-title, SRM_ROOT/distrib/src/srm_bus_predictor.svh)
       File: srm_base_handle  (no auto-title, SRM_ROOT/distrib/src/srm_base_handle.svh)
-      File: srm_rw_policy  (no auto-title, SRM_ROOT/distrib/src/srm_field_policies.svh)
       }  # Group: Testbench 
 
    Group: Misc {

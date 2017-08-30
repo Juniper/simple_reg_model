@@ -282,8 +282,8 @@ virtual class srm_base_reg extends srm_component;
   //
   // Post write functional callback.
   //
-  // Calls ~post_write~ on all the callback clients after the write task.
-  //
+  // Calls ~post_write~ on all the callback clients after the write task completes.
+  // Both the design and model have been updated before this gets invoked.
   virtual function void post_write();
     for(int i = 0; i < _coverage_cbs.size(); i++) begin
       _coverage_cbs[i].post_write(this);
@@ -294,7 +294,8 @@ virtual class srm_base_reg extends srm_component;
   //
   // Post read functional coverage.
   //
-  // Calls post_read on all the callback clients after the read task.
+  // Calls post_read on all the callback clients after the read task completes.
+  // The model has already been updated with the read data before this is invoked.
   //
   virtual function void post_read();
     for(int i = 0; i < _coverage_cbs.size(); i++) begin
@@ -334,8 +335,7 @@ virtual class srm_base_reg extends srm_component;
   endfunction
  
   // Function: __write_bytes
-  // Send the bus xact to the adapter class. if no response from adapter then the
-  // model value is updated at the end otherwise done later by the xact from monitor.
+  // Send the bus xact to the adapter class.
   //
   // For use by framework classes only.
   virtual task __write_bytes(srm_base_handle handle, const ref srm_data_t bytes, 

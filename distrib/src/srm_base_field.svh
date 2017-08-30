@@ -147,7 +147,9 @@ virtual class srm_base_field;
   // Set policy of a field as per address map.
   //
   // ~addr_map_name~ represents the address map.
+  //
   // ~policy~ represents the access policy.
+  //
   // A field may have different policy (like read_write, read_only) as per the address
   // map.
   //

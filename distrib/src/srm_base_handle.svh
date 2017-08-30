@@ -1,3 +1,22 @@
+//
+// --------------------------------------------------------------
+// Copyright (c) 2017-2023, Juniper Networks, Inc.
+// All rights reserved.
+//
+// This code is licensed to you under the MIT license. 
+// You many not use this code except in compliance with this license.
+// This code is not an official Juniper product. You may obtain a copy
+// of the license at 
+//
+// https://opensource.org/licenses/MIT
+//
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is  distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or 
+// implied.  See the License for the specific language governing
+// permissions and limitations under the License.
+// -------------------------------------------------------------
+//
 `ifndef INCLUDED_srm_base_handle_svh
 `define INCLUDED_srm_base_handle_svh
 
@@ -42,11 +61,21 @@ class srm_base_handle extends uvm_object;
   //------------------
   // Group: Initialization
   //-------------------
+  
+  // Function: new
+  //
+  // Create a new instance.
+  //
+  // Use UVM Factory instead to create the instance.
   function new(string name="");
     super.new(name);
   endfunction
 
   // Function: initialize 
+  //
+  // Initialize the instance of base handle.
+  //
+  // Factory uses the default constructor.
   virtual function void initialize(srm_adapter_policy adapter_policy, string addr_map_name);
     this.adapter_policy = adapter_policy;
     this.addr_map_name = addr_map_name;
@@ -56,6 +85,7 @@ class srm_base_handle extends uvm_object;
   endfunction
 
   // Function: append_error
+  //
   // Append error msgs for debug later by the client.
   //
   function void append_error(string msg);

@@ -50,7 +50,9 @@ class srm_bus_adapter extends uvm_object;
   // Execute the generic bus transaction on the actual bus.
   //
   // ~generic_xact~ is the generic transaction emitted by the register model.
+  //
   // ~seq_priority~ is the priority of the sequence generating the transaction.
+  //
   // This is a virtual task that must be implemented by the subclass.
   //
   virtual task execute(ref srm_generic_xact_t generic_xact, int seq_priority);

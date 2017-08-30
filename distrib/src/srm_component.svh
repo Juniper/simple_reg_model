@@ -31,9 +31,9 @@ typedef class srm_base_policy;
 // A component represents a node in the design hierarchy. Leaf nodes are
 // specialized version of this class representing register or register array.
 //
-// The design hierarchy is an access path for the testwriter to select a component. The
-// hierarchy remains the same across multiple address maps. However the offset of a node
-// would depend on the address map selected.
+// The design hierarchy is an access path for the testwriter to select a component. 
+// A design heierarchy can support multiple address map ie the components can have
+// different offsets depending on the address map.
 //------------------------------------------------------------
 class srm_component;
   local string _name;
@@ -236,7 +236,9 @@ class srm_component;
   // Set the size of the node in bytes for the address map.
   //
   // ~addr_map_name~ is the address map name.
+  //
   // ~size~ is the software address map size of the node.
+  //
   // The size allocated by sofware can be larger than the actual physical size 
   // of the node.
   //
@@ -248,9 +250,11 @@ class srm_component;
   // Return the number of bytes needed by the node.
   //
   // Overriden by register to return the size of the entry. For register array
-  // it returns the size of the entry * number of entries. For non leaf nodes,
+  // it returns the (size of the entry * number of entries). For non leaf nodes,
   // it returns the sum of the sizes of its children.
+  //
   // ~addr_map_name~ is the address map name.
+  //
   // The function recursively adds all the children's size to get the resultant size.
   //
   virtual function srm_addr_t get_size(string addr_map_name);

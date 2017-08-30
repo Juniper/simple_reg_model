@@ -1,9 +1,9 @@
 `ifndef INCLUDED_srm_field_policies_svh
 `define INCLUDED_srm_field_policies_svh
 
-// List of all the field level policies defined.
 
 // Class: srm_rw_policy
+//
 // Read Write Policy
 //
 class srm_rw_policy extends srm_base_policy;
@@ -34,7 +34,9 @@ class srm_rw_policy extends srm_base_policy;
 endclass
 
 // Class: srm_ro_policy
+//
 // Read Only Policy
+//
 class srm_ro_policy extends srm_base_policy;
   local static srm_ro_policy _policy;
 
