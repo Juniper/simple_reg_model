@@ -1,4 +1,4 @@
-setenv SRM_HOME `pwd` 
+setenv SRM_ROOT `pwd` 
 setenv PATH $PATH\:$SRM_HOME/bin
 setenv UML_HOME $HOME/work/uml
 setenv GRAPHVIZ_DOT /usr/bin/dot

@@ -1,4 +1,4 @@
-$SRM_HOME/src/srm_pkg.sv
+$SRM_HOME/distrib/src/srm_pkg.sv
 $SRM_HOME/unit_tests/models/cpu_reg32.svh
 $SRM_HOME/unit_tests/models/cpu_table32.svh
 $SRM_HOME/unit_tests/models/cpu_top.svh

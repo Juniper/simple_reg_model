@@ -4,7 +4,7 @@ require 'ostruct'
 require 'pp'
 
 options = OpenStruct.new
-options.copyright = ENV["SRM_HOME"] + "/bin/copyright.txt"
+options.copyright = ENV["SRM_ROOT"] + "/bin/copyright.txt"
 options.del_copyright = false
 
 OptionParser.new do |opts|
