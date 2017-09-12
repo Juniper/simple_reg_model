@@ -46,7 +46,7 @@ class test_leaf_policies extends srm_unit_test;
   endtask
 
   task test_w0crs_table();
-    srm_base_policy p;
+    srm_base_field_policy p;
     bit[7:0] temp;
     cpu_multi_field::r2_table::r2_entry  entry;
 

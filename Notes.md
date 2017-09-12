@@ -13,12 +13,19 @@ export PATH=$PATH:$SRM_ROOT/bin
 In Csh
 ```
 setenv SRM_ROOT `pwd`
-setenv PATH $PATH:$SRM_ROOT/bin
+set path = ( $path $SRM_ROOT/bin )
 ```
 
 Try running. May require additonal ruby packages like "Rainbow".
 ```
 srun -h
+Usage: srun -f <sim.cfile> -t <testname>
+    -f, --file SIMFILE               Require the path to the simulation control file
+    -t, --testname TEST              Require the name of the uvm top level test to run
+    -u, --unit_test TEST             Optional name of the unit test to run
+    -o, --out output_dir             output directory to create the build and run dir.
+    -l, --log logfile                test.log output file.
+
 ```
 
 # Run Unit Tests

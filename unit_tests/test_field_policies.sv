@@ -32,7 +32,7 @@ class test_field_policies extends srm_unit_test;
   endfunction
 
   task test_reg_set_policy();
-    srm_base_policy p;
+    srm_base_field_policy p;
     regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
     p = srm_rc_policy::get();
     `TEST_VALUE(p, regmodel.r1.f0.get_policy("cpu_map"), "Sets the register policy");
@@ -40,7 +40,7 @@ class test_field_policies extends srm_unit_test;
   endtask
 
   task test_table_set_policy();
-    srm_base_policy p;
+    srm_base_field_policy p;
     cpu_multi_field::r2_table::r2_entry  entry;
 
     regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
@@ -143,7 +143,7 @@ class test_field_policies extends srm_unit_test;
   endtask
 
   task test_w0crs_table_field();
-    srm_base_policy p;
+    srm_base_field_policy p;
     bit temp;
     cpu_multi_field::r2_table::r2_entry  entry;
 
