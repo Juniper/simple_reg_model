@@ -247,7 +247,7 @@ class srm_component;
   endfunction
 
   // Function: get_size
-  // Return the number of bytes needed by the node.
+  // Return the number of bytes occupied by the node in the address space.
   //
   // Overriden by register to return the size of the entry. For register array
   // it returns the (size of the entry * number of entries). For non leaf nodes,
@@ -255,16 +255,19 @@ class srm_component;
   //
   // ~addr_map_name~ is the address map name.
   //
-  // The function recursively adds all the children's size to get the resultant size.
+  // The function recursively searches for the child that is the last in the address
+  // space. The last address occupied will give the total address space occupied by the
+  // node.
   //
   virtual function srm_addr_t get_size(string addr_map_name);
     srm_addr_t size = 0;
-    srm_addr_t node_size;
+    srm_addr_t node_addr_region;
     if(!_size_table.exists(addr_map_name)) begin
       foreach(_children[i]) begin
-        node_size = _children[i]._offset_table[addr_map_name] 
+        node_addr_region = _children[i]._offset_table[addr_map_name] 
                              + _children[i].get_size(addr_map_name);
-        size += node_size;
+        if(size < node_addr_region)
+          size = node_addr_region;
       end
       _size_table[addr_map_name] = size;
     end
