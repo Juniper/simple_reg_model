@@ -1,6 +1,6 @@
 Title: Introduction
 
-The "Simple Register Model" is an open source, clean slate system verilog framework for generating registers and memories in verilog design. It is designed to be used in uvm test benches instead of the default uvm_reg package.
+The "Simple Register Model" is an open source (MIT license), clean slate system verilog framework for generating registers and memories in verilog design. It is designed to be used in uvm test benches instead of the default uvm_reg package.
 
 Like uvm_reg, srm package defines several base classes that when properly extended, abstract the read/write operations to registers and memories in the design under verification. It integrates into the uvm testbench using "adapters" that convert generic transaction to bus specific transactions. For passive testbenches it uses "predictors" to convert the bus transactions to generic transactions that update the model.
 

@@ -1,12 +1,35 @@
+//
+// --------------------------------------------------------------
+// Copyright (c) 2017-2023, Juniper Networks, Inc.
+// All rights reserved.
+//
+// This code is licensed to you under the MIT license. 
+// You many not use this code except in compliance with this license.
+// This code is not an official Juniper product. You may obtain a copy
+// of the license at 
+//
+// https://opensource.org/licenses/MIT
+//
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is  distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or 
+// implied.  See the License for the specific language governing
+// permissions and limitations under the License.
+// -------------------------------------------------------------
+//
 `ifndef INCLUDED_srm_field_policies_svh
 `define INCLUDED_srm_field_policies_svh
 
 
+// Class: Built In Field Access Policies
+// Singleton classes implementing the various accessibility policy of the fields.
+//
+
 // Class: srm_rw_policy
 //
-// Read Write Policy implemented as singleton.
-// This saves memory as a single copy exists for all the rw fields.
+// Read Write Field
 //
+
 class srm_rw_policy extends srm_base_field_policy;
   local static srm_rw_policy _policy;
 
@@ -60,7 +83,7 @@ endclass
 
 // Class: srm_ro_policy
 //
-// Read Only Policy implemented as singleton.
+// Read Only Field
 //
 class srm_ro_policy extends srm_base_field_policy;
   local static srm_ro_policy _policy;
@@ -96,7 +119,10 @@ class srm_ro_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_rc_policy
-// Read clears all the bits. Write has no effect.
+// Read clear Field.
+//
+// Read clears all the bits in Field. Write has no effect.
+//
 class srm_rc_policy extends srm_base_field_policy;
   local static srm_rc_policy _policy;
 
@@ -132,8 +158,12 @@ class srm_rc_policy extends srm_base_field_policy;
 
 endclass
 
+//
 // Class: srm_rs_policy
+// Read Set Field
+//
 // Read sets all the bits. Write has no effect.
+//
 class srm_rs_policy extends srm_base_field_policy;
   local static srm_rs_policy _policy;
 
@@ -170,6 +200,8 @@ class srm_rs_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_wrc_policy
+// Write Read Clear Field.
+//
 // Read clears all the bits. Write as is.
 class srm_wrc_policy extends srm_base_field_policy;
   local static srm_wrc_policy _policy;
@@ -205,7 +237,10 @@ class srm_wrc_policy extends srm_base_field_policy;
 
 endclass
 
+//
 // Class: srm_wrs_policy
+// Write Read Seta Field. 
+//
 // Read sets all the bits. Write as is.
 class srm_wrs_policy extends srm_base_field_policy;
   local static srm_wrs_policy _policy;
@@ -242,8 +277,10 @@ class srm_wrs_policy extends srm_base_field_policy;
   endfunction
 
 endclass
-
+//
 // Class: srm_wc_policy
+// Write Clear Field.
+//
 // Write clears all the bits. Read has no effect.
 class srm_wc_policy extends srm_base_field_policy;
   local static srm_wc_policy _policy;
@@ -281,6 +318,8 @@ class srm_wc_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_ws_policy
+// Write Set Field.
+//
 // Write sets all the bits. Read has no effect.
 class srm_ws_policy extends srm_base_field_policy;
   local static srm_ws_policy _policy;
@@ -318,6 +357,8 @@ class srm_ws_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_wsrc_policy
+// Write Set Read Clear Field.
+//
 // Write sets all the bits. Read clears all the fields.
 class srm_wsrc_policy extends srm_base_field_policy;
   local static srm_wsrc_policy _policy;
@@ -359,6 +400,8 @@ class srm_wsrc_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_wcrs_policy
+// Write Clear Read Set.
+//
 // Write clears all the bits. Read sets all the bits.
 class srm_wcrs_policy extends srm_base_field_policy;
   local static srm_wcrs_policy _policy;
@@ -399,6 +442,8 @@ class srm_wcrs_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_w1c_policy
+// Write 1 Clear Field.
+//
 // Write 1-clears the bit, 0-no effect, Read: no affect
 class srm_w1c_policy extends srm_base_field_policy;
   local static srm_w1c_policy _policy;
@@ -495,6 +540,8 @@ class srm_w1s_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_w1t_policy
+// Write 1 Set Field.
+//
 // Write 1-toggles the bit, 0-no effect, Read: no affect
 class srm_w1t_policy extends srm_base_field_policy;
   local static srm_w1t_policy _policy;
@@ -542,6 +589,8 @@ class srm_w1t_policy extends srm_base_field_policy;
 endclass
 
 // Class: srm_w0c_policy
+// Write 0 Clear Field.
+//
 // Write 1- no effect, 0- clear, Read: no affect
 class srm_w0c_policy extends srm_base_field_policy;
   local static srm_w0c_policy _policy;
@@ -590,7 +639,10 @@ endclass
 
 
 // Class: srm_w0s_policy
+// Write 0 Set Field.
+//
 // Write 1- no effect, 0- set, Read: no affect
+// 
 class srm_w0s_policy extends srm_base_field_policy;
   local static srm_w0s_policy _policy;
 

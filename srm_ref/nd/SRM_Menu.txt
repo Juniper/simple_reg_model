@@ -59,7 +59,7 @@ Group: Register Layer  {
    Group: Field {
       File: srm_base_field  (no auto-title, SRM_ROOT/distrib/src/srm_base_field.svh)
       File: srm_field  (no auto-title, SRM_ROOT/distrib/src/srm_field.svh)
-      File: srm_base_policy (no auto-title, SRM_ROOT/distrib/src/srm_base_policy.svh)
+      File: srm_base_field_policy (no auto-title, SRM_ROOT/distrib/src/srm_base_field_policy.svh)
       File: srm_field_policies  (no auto-title, SRM_ROOT/distrib/src/srm_field_policies.svh)
       } # Group : Field
 

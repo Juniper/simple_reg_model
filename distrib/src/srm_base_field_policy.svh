@@ -23,34 +23,43 @@
 typedef class srm_base_field;
 //----------------------------------------------------------------
 // Class: srm_base_field_policy
-// Base class for access policy.
+// Base class for access policy on a field per address map.
 //
-// A field has different policies for each address map.
+// A policy represents the update to be done to the field model when
+// a read or write issued to the design.  For example a field can be 
+// read_write in 'cpu_map' but read_only for 'gpu_map'.
+// ReadWrite policy would imply that the write to the design or read from 
+// the design from the cpu_map would update the field model. 
+// A ReadOnly policy would imply that only reads from the design in gpu_map would 
+// update the field model. Writes to the design field would be ignored by the model.
+//
 //----------------------------------------------------------------
+
 virtual class srm_base_field_policy;
 
+  // Function: read_policy
+  // Model the affect of doing a read from the field in the design.
+  //
+  // Returns 0: Skip update to the field model.
+  //         1: Update the field model.
+  //
+  pure virtual function bit read_policy(srm_base_field field, 
+                                        ref srm_data_t bytes);
+
+  // Function: write_policy
+  // Model the affect of doing a write to the field in the design.
+  //
+  // Returns 0: Skip update to the field model.
+  //         1: Update the field model with data.
+  //
+  pure virtual function bit write_policy(srm_base_field field, 
+                                         ref srm_data_t bytes);
+  
   // Function: get_name
   // Name of the policy
   //
   pure virtual function string get_name();
 
-  // Function: read_policy
-  // Update the contents of the model due to the sideaffect of
-  // doing a read from the field.
-  //
-  // Returns 0 is the update to the model needs to be skippped.
-  //
-  pure virtual function bit read_policy(srm_base_field field, 
-                                        ref srm_data_t bytes);
-
-  // Function : write_policy
-  // Update the contents of th model due to the sideaffects of
-  // doing a write to the field.
-  //
-  // Returns 0 is the update to the model needs to be skippped.
-  //
-  pure virtual function bit write_policy(srm_base_field field, 
-                                         ref srm_data_t bytes);
 endclass
 
 `endif

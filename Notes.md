@@ -37,3 +37,16 @@ This will create the run directory where the stdout.txt and stderr.txt holds the
 ## Run Individual Test
 
 srun -f unit_tests/sim.cfiles -u <testname>
+
+
+# Generate NaturalDocs
+1. Setup SRM_HOME to the distrib directory. 
+2. Run srm_ref/nd/gen_nd
+```
+setenv SRM_HOME `pwd`/distrib
+cd srm_ref/nd
+./gen_nd
+cd $SRM_HOME
+firefox SRM_Reference.html
+```
+
