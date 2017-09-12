@@ -15,11 +15,15 @@ import srm_pkg::*;
 
 class cpu_multi_field extends srm_component;
 
+  // |------------------------------------|
+  // 31.....24  23.....16 15.....8  7....-0
+  // |-f3---|   |---f2-|  |--f1--|  |-f0--|
+  // |------------------------------------|
   typedef struct packed {
-    bit[7:0] f3;
-    bit[7:0] f2;
-    bit[7:0] f1;
-    bit[7:0] f0;
+    bit[7:0] f3; // Bit 31:24, Byte 3<---MSB
+    bit[7:0] f2; // Bit 23:16, Byte 2     |
+    bit[7:0] f1; // Bit 15:8,  Byte 1     |
+    bit[7:0] f0; // Bit 7:0,   Byte 0<---LSB
   } r1_struct_t;
 
   // Define a register with the fields.

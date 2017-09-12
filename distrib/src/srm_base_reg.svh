@@ -59,7 +59,7 @@ virtual class srm_base_reg extends srm_component;
   // This is a helper function. It is also possible to set different policy on
   // each field by setting it directly on the field.
   //
-  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
+  virtual function void set_policy(string addr_map_name, srm_base_field_policy policy);
     foreach(_fields[i]) begin
       _fields[i].set_policy(addr_map_name, policy);
     end

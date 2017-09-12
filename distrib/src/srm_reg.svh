@@ -146,7 +146,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
     srm_data_t bytes, field_bytes;
     srm_byte_enable_t byte_enables;
     int num_bytes;
-    srm_base_policy policy;
+    srm_base_field_policy policy;
     bit allow_update;
 
     num_bytes = $bits(T)/8;
@@ -187,7 +187,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   virtual task write(srm_base_handle handle, T data);
     srm_data_t bytes, field_bytes;
     srm_byte_enable_t byte_enables;
-    srm_base_policy policy;
+    srm_base_field_policy policy;
     bit allow_update;
     int num_bytes;
 

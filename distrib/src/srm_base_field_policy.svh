@@ -17,17 +17,17 @@
 // permissions and limitations under the License.
 // -------------------------------------------------------------
 //
-`ifndef INCLUDED_srm_base_policy_svh
-`define INCLUDED_srm_base_policy_svh
+`ifndef INCLUDED_srm_base_field_policy_svh
+`define INCLUDED_srm_base_field_policy_svh
 
 typedef class srm_base_field;
 //----------------------------------------------------------------
-// Class: srm_base_policy
+// Class: srm_base_field_policy
 // Base class for access policy.
 //
 // A field has different policies for each address map.
 //----------------------------------------------------------------
-virtual class srm_base_policy;
+virtual class srm_base_field_policy;
 
   // Function: get_name
   // Name of the policy

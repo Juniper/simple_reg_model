@@ -105,7 +105,7 @@ class srm_reg_array #(type T = int) extends srm_component;
   // ~policy~ is the policy to be used for the address map.
   // FIXME: Do all the fields of the entry share the same policies ?
   //
-  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
+  virtual function void set_policy(string addr_map_name, srm_base_field_policy policy);
     _prototype.set_policy(addr_map_name, policy);
   endfunction
 

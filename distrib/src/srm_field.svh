@@ -164,7 +164,7 @@ class srm_field#(type T = int) extends srm_base_field;
   // literal constants. 
   //
   virtual task write(srm_base_handle handle, T data);
-    srm_base_policy policy;
+    srm_base_field_policy policy;
     int allow_update;
     srm_data_t field_bytes, reg_bytes;
     srm_byte_enable_t byte_enables;
@@ -199,7 +199,7 @@ class srm_field#(type T = int) extends srm_base_field;
   // The field data is them stripped and compared to the model data.
   //
   virtual task read(srm_base_handle handle, output T data);
-    srm_base_policy policy;
+    srm_base_field_policy policy;
     int allow_update;
     srm_byte_enable_t byte_enables;
     srm_base_reg p;

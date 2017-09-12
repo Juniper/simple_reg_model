@@ -1,8 +1,25 @@
 # Setup Env
 
-source setup.csh 
+Neeed to set the envrionment variable *SRM_ROOT* to the current directory and 
+add the path the to scripts in bin directory. Note for users with just the distrib
+we use the *SRM_HOME* to point to the root directory.
 
-This will setup the SRM_ROOT to point to the current working dir.
+In bash
+```
+export SRM_ROOT=`pwd`
+export PATH=$PATH:$SRM_ROOT/bin
+```
+
+In Csh
+```
+setenv SRM_ROOT `pwd`
+setenv PATH $PATH:$SRM_ROOT/bin
+```
+
+Try running. May require additonal ruby packages like "Rainbow".
+```
+srun -h
+```
 
 # Run Unit Tests
 

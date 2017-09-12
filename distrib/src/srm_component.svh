@@ -22,7 +22,7 @@
 
 typedef class srm_base_handle;
 typedef srm_bus_adapter srm_adapters_t[$];
-typedef class srm_base_policy;
+typedef class srm_base_field_policy;
 
 //------------------------------------------------------------
 // CLASS: srm_component
@@ -383,7 +383,7 @@ class srm_component;
   //
   // Sets the policy on all the child nodes. 
   //
-  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
+  virtual function void set_policy(string addr_map_name, srm_base_field_policy policy);
     foreach(_children[i]) begin
       _children[i].set_policy(addr_map_name, policy);
     end

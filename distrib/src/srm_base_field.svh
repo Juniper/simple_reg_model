@@ -36,7 +36,7 @@ virtual class srm_base_field;
   protected int _lsb_pos;
 
   local bit _volatile;
-  protected srm_base_policy _policy_map[string];
+  protected srm_base_field_policy _policy_map[string];
 
   //-----------------
   // Group: Initialization
@@ -153,7 +153,7 @@ virtual class srm_base_field;
   // A field may have different policy (like read_write, read_only) as per the address
   // map.
   //
-  virtual function void set_policy(string addr_map_name, srm_base_policy policy);
+  virtual function void set_policy(string addr_map_name, srm_base_field_policy policy);
     _policy_map[addr_map_name] = policy;
   endfunction
 
@@ -162,8 +162,8 @@ virtual class srm_base_field;
   // Return the policy for the address map. 
   //
   // ~addr_map_name~ represents the address map.
-  virtual function srm_base_policy get_policy(string addr_map_name);
-    srm_base_policy p =  _policy_map[addr_map_name];
+  virtual function srm_base_field_policy get_policy(string addr_map_name);
+    srm_base_field_policy p =  _policy_map[addr_map_name];
     if(p == null) begin
       p = srm_rw_policy::get();
     end
