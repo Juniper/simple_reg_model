@@ -79,7 +79,7 @@ Group: Register Layer  {
 
    Group: Testbench  {
       File: srm_bus_adapter  (no auto-title, SRM_ROOT/distrib/src/srm_bus_adapter.svh)
-      File: srm_adapter_policy  (no auto-title, SRM_ROOT/distrib/src/srm_adapter_policy.svh)
+      File: srm_search_adapter  (no auto-title, SRM_ROOT/distrib/src/srm_search_adapter.svh)
       File: srm_bus_predictor  (no auto-title, SRM_ROOT/distrib/src/srm_bus_predictor.svh)
       File: srm_base_handle  (no auto-title, SRM_ROOT/distrib/src/srm_base_handle.svh)
       }  # Group: Testbench 

@@ -53,7 +53,7 @@ package srm_pkg;
   `include "srm_bus_adapter.svh"
   `include "srm_component.svh"
   `include "srm_bus_predictor.svh"
-  `include "srm_adapter_policy.svh"
+  `include "srm_search_adapter.svh"
   `include "srm_base_field_policy.svh"
   `include "srm_field_policies.svh"
   `include "srm_base_reg.svh"

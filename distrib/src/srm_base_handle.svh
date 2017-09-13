@@ -20,7 +20,7 @@
 `ifndef INCLUDED_srm_base_handle_svh
 `define INCLUDED_srm_base_handle_svh
 
-typedef class srm_adapter_policy;
+typedef class srm_search_adapter;
 //-----------------------------------------------------------------
 // CLASS: srm_base_handle
 // Client options for configurating the access.
@@ -34,9 +34,9 @@ class srm_base_handle extends uvm_object;
   // Priority of the sub sequence.
   int seq_priority;
 
-  // Variable: adapter_policy
-  // Pointer to the adapter policy to use.
-  srm_adapter_policy adapter_policy;
+  // Variable: search_adapter 
+  // Pointer to the adapter instance search logic.
+  srm_search_adapter search_adapter;
 
   // Variable: addr_map_name
   // Name of the address map.
@@ -76,8 +76,8 @@ class srm_base_handle extends uvm_object;
   // Initialize the instance of base handle.
   //
   // Factory uses the default constructor.
-  virtual function void initialize(srm_adapter_policy adapter_policy, string addr_map_name);
-    this.adapter_policy = adapter_policy;
+  virtual function void initialize(srm_search_adapter search_adapter, string addr_map_name);
+    this.search_adapter = search_adapter;
     this.addr_map_name = addr_map_name;
     this.skip_read_error_msg = 0;
     this.generic_xact_status = SRM_IS_OK;

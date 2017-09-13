@@ -17,18 +17,19 @@
 // permissions and limitations under the License.
 // -------------------------------------------------------------
 //
-`ifndef INCLUDED_srm_adapter_policy_svh
-`define INCLUDED_srm_adapter_policy_svh
+`ifndef INCLUDED_srm_search_adapter_svh
+`define INCLUDED_srm_search_adapter_svh
 
 //-----------------------------------------------------------------
-// CLASS: srm_adapter_policy
-// Select the correct bus adapter.
+// CLASS: srm_search_adapter
+// Select the correct bus adapter instance from the hierarchy.
 //
-// Walk from the leaf to the root looking for correct adapter. 
-//
+// Walk from the leaf to the root looking for correct adapter inst. 
+// Derived class must override the virtual function *is_correct_adapter*
+// to select the correct instance.
 //-----------------------------------------------------------------
-class srm_adapter_policy extends uvm_object;
-  `uvm_object_utils(srm_adapter_policy)
+class srm_search_adapter extends uvm_object;
+  `uvm_object_utils(srm_search_adapter)
 
   srm_bus_adapter adapters[$];
 
@@ -38,7 +39,7 @@ class srm_adapter_policy extends uvm_object;
   
   // Function: new
   //
-  // Create a new instance of adapter policy.
+  // Create a new instance of search adapter .
   //
   // Use UVM factory to create the instance.
   function new(string name="");

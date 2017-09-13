@@ -23,6 +23,11 @@
 // Class: srm_bus_predictor
 // Abstract base class for updating the register model with the transaction on the bus.
 //
+// This uvm component is used in *passive* mode where we need to update the model (say
+// for coverage) due to accesses by an embedded cpu or legacy traffic. The TbWriter would
+// subclass this component and provide the implementation of bus2_generic_xact. Then he/she
+// would hook the output of the bus monitor to the analysis port of this component.
+//
 class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
 
   `uvm_component_param_utils(srm_bus_predictor#(BUSTYPE))
@@ -52,15 +57,23 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   endfunction
 
   // Function: bus2reg
-  // Convert the bus transacation to a generic register transaction
-  // FIXME:Pure is not compiling.
+  // Convert the bus transacation to a generic register transaction.
+  // 
+  // Derived class must override this to convert bus to generic transaction.
+  //
   virtual function srm_generic_xact_t bus_2_generic_xact(BUSTYPE tr);
     srm_generic_xact_t x;
     return x;
-  endfunction
+  //endfunction
 
   // Function: write
-  // Not a user level method. Do not call directly.
+  // Triggered when the bus transaction appears on the analysis import *bus_in*
+  //
+  // Converts the bus xact to generic, extract the address and do a reverse map to find
+  // the node instance. Then it updates the node with the transaction.
+  //
+  // If the reverse map fails then the function will raise uvm_fatal.
+  //
   virtual function void write(BUSTYPE tr);
     srm_generic_xact_t xact;
     srm_component node;

@@ -22,7 +22,7 @@
 
 //-----------------------------------------------------------------
 // CLASS: srm_bus_adapter
-// Abstract base class for adapter.
+// Abstract base class for bus adapter.
 //
 // Derived class must override the execute method to convert the generic
 // bus operation to a design specific transaction.
