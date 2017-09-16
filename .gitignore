@@ -8,3 +8,4 @@ docs/temp_images
 setup.csh
 srm_ref/nd/Proj/
 distrib/docs/html/
+rgen/*
