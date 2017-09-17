@@ -4,11 +4,11 @@
 import srm_pkg::*;
 import uvm_pkg::*;
 
-class <%=@name%> extends srm_component;
-<% for @node in @nodes %>
+class <%=name%> extends srm_component;
+<% for node in nodes %>
   typedef struct packed {
-    <% for @field in @node.fields %>
-      <%=@field.name%>;
+    <% for field in node.fields %>
+      reg[<%=field.msb_pos%>:<%=field.lsb_pos%>] <%=field.name%>;
     <%end%>
    }
 <% end %>

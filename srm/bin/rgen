@@ -2,6 +2,9 @@
 
 require 'optparse'
 require 'srm'
+require 'json'
+require 'ostruct'
+require 'erb'
 
 options = {}
 options[:srm_filename] = ""
@@ -37,4 +40,15 @@ else
 
 end
 
-puts json_string
+class ErbBinding < OpenStruct
+  def get_binding
+    return binding()
+  end
+end
+
+json_object = JSON.parse(json_string, object_class: ErbBinding)
+template = "../lib/templates/test.erb"
+template = "../lib/templates/simple_reg_model.erb"
+
+renderer = ERB.new(File.open(template).read)
+puts output = renderer.result(json_object.get_binding)

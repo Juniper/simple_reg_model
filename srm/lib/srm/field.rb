@@ -6,12 +6,12 @@ require 'json'
 
 module SRM
 class Field
-  attr_reader :name, :nbits, :lsb_pos, :volatile, :reset_types
+  attr_reader :name, :nbits, :lsb_pos, :volatile, :reset_types, :policies
 
   def initialize(name:, nbits:, lsb_pos:, volatile:false, **reset_types)
     @name = name
-    @nbits = nbits
-    @lsb_pos = lsb_pos
+    @nbits = nbits.to_i
+    @lsb_pos = lsb_pos.to_i
     @volatile = volatile
     @reset_types = reset_types
     @policies = {}
@@ -47,15 +47,21 @@ class Field
     @policies[address_map_name]
   end
 
+  def msb_pos
+    lsb_pos + nbits - 1
+  end
+
+
   def to_json(options={})
     {
       "type" => "Field",
-      "name" => @name, 
-      "nbits" => @nbits, 
-      "lsb_pos" => @lsb_pos,
-      "volatile" => @volatile, 
-      "reset_types" => @reset_types,
-      "policies" => @policies
+      "name" => name, 
+      "nbits" => nbits, 
+      "lsb_pos" => lsb_pos,
+      "msb_pos" => msb_pos,
+      "volatile" => volatile, 
+      "reset_types" => reset_types,
+      "policies" => policies
     }.to_json(options)
   end
 

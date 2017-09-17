@@ -15,6 +15,8 @@ class TestField < MiniTest::Test
     assert_equal 0xaaabbb, @f1.lsb_pos
     assert_equal 0x0, @f1.reset_types[:hard_reset]
     assert_equal 0xaaabbaacc, @f1.reset_types[:mbist]
+    assert_equal 0xaaabbb, @f1.lsb
+    assert_equal 0xaaabbb, @f1.msb
   end
 
   def test_hash
