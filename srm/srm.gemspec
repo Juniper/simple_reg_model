@@ -7,5 +7,6 @@ Gem::Specification.new do |s|
   s.email = "snjvsingh123@gmail.com"
   s.homepage = "http://github.com/sanjeevs"
   s.files = ["lib/srm.rb", "lib/field.rb", "lib/register_array.rb", "lib/register.rb", "lib/reg_block.rb"]
+  s.executables << 'rgen'
   s.license = 'MIT'
 end

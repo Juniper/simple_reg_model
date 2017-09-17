@@ -59,6 +59,8 @@ class TestRegister < MiniTest::Test
   def test_offset
     @r1.offset(cpu_map: 0x100)
     assert_equal(@r1.offsets[:cpu_map], [0x100, 1])
+    assert_equal(0x100, @r1.start_offset(:cpu_map))
+    assert_equal 1, @r1.size(:cpu_map)
   end
 
   def test_alt_offset_syntax

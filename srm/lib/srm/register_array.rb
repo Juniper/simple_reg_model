@@ -40,7 +40,7 @@ class RegisterArray
   end
 
   def offset(args)
-    args.each do |addr_map, value|
+    args.each do |address_map_name, value|
       if value.kind_of?(Array)
         raise(Argumenterror, "Must Specify offset and size") if value.size > 2
         start = value[0]
@@ -50,9 +50,17 @@ class RegisterArray
         start = value
         size = @default_size
       end
-      @offsets[addr_map] = [start, size]
+      @offsets[address_map_name] = [start, size]
     end
     self
+  end
+
+  def start_offset(address_map_name)
+    @offsets[address_map_name][0]
+  end
+
+  def size(address_map_name)
+    @offsets[address_map_name][1]
   end
 
   def to_json(options={})
