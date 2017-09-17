@@ -1,0 +1,9 @@
+# Create a 32 bit register in cpu map at offset 0x100.
+
+RegBlock.new(name: "top") do |block|
+  block << Register.new(name: "r1_reg") do |reg|
+    reg << Field.new(name: "field", nbits: 32, lsb_pos:0, hard_reset: 0xdeadbeef)
+  end.offset(cpu_map: 0x100)
+end
+
+

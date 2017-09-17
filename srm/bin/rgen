@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'srm'
+
+options = {}
+options[:srm_filename] = ""
+options[:json_filename] = ""
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: rgen <spec_file> [options]"
+  opts.on("-s", "--src [SpecFile]",
+          "Ruby register specification file") do |src|
+    options[:srm_filename] = src
+  end
+  opts.on("-j", "--json [JsonFile]",
+          "Json register specification file") do |f|
+    options[:json_filename] = f
+  end
+
+end.parse!
+
+abort "Invalid argument #{ARGV}" unless ARGV.empty?
+
+if options.has_key?(:srm_filename)
+  srm_filename = options[:srm_filename]
+  abort "Did not find srm source filename \'#{srm_filename}\`" unless File.exists?(srm_filename)
+  top = SRM.module_eval(File.read(srm_filename), srm_filename )
+  json_string = JSON.pretty_generate(top)
+
+elsif options.has_key?(:json_filename)
+  json_filename = options[:json_filename]
+  json_string = File.read(json_filename)
+
+else
+  abort "Must specify either a srm register specifiction or a json file"
+
+end
+
+puts json_string

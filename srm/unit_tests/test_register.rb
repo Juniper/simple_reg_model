@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative "../lib/register"
+require_relative "../lib/srm/register"
 require 'pp'
 
 class TestRegister < MiniTest::Test

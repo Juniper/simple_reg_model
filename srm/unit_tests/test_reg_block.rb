@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'ostruct'
-require_relative "../lib/reg_block"
-require_relative "../lib/register"
+require_relative "../lib/srm/reg_block"
+require_relative "../lib/srm/register"
 
 
 class TestRegBlock < MiniTest::Test

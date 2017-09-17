@@ -1,0 +1,16 @@
+`ifndef INCLUDED_<%=@name%>_svh
+`define INCLUDED_<%=@name%>_svh
+
+import srm_pkg::*;
+import uvm_pkg::*;
+
+class <%=@name%> extends srm_component;
+<% for @node in @nodes %>
+  typedef struct packed {
+    <% for @field in @node.fields %>
+      <%=@field.name%>;
+    <%end%>
+   }
+<% end %>
+endclass
+`endif

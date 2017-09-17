@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'ostruct'
-require_relative "../lib/field"
+require_relative "../lib/srm/field"
 
 class TestField < MiniTest::Test
 

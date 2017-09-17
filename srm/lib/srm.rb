@@ -1,5 +1,5 @@
-require_relative "field"
-require_relative "register_array"
-require_relative "register"
-require_relative "reg_block"
+require_relative "srm/field"
+require_relative "srm/register_array"
+require_relative "srm/register"
+require_relative "srm/reg_block"
 
