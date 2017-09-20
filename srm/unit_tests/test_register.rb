@@ -5,7 +5,7 @@ require 'pp'
 class TestRegister < MiniTest::Test
   include SRM
   def setup
-    @r1 = Register.new(name: "r1") do |r|
+    @r1 = Register.new(name: "r1", reset_kinds: ["hard", "bist"]) do |r|
       r.fields << Field.new(name: 'f1', nbits: 1, lsb_pos: 0,  hard_reset: 0x0, mbist: 0xaaabbaacc)
     end
   end
@@ -13,6 +13,10 @@ class TestRegister < MiniTest::Test
   def test_name
     register = Register.new(name: "r1")
     assert_equal "r1", register.name
+  end
+
+  def test_reset_kind
+    assert_equal ["hard", "bist"], @r1.reset_kinds
   end
 
   def test_field
@@ -99,8 +103,8 @@ class TestRegister < MiniTest::Test
     assert_equal "Register", h.type
     assert_equal "r1", h.name
     assert_equal "f1", h.fields[0].name
-    assert_equal 0xaaabbaacc, h.fields[0].reset_types.mbist
-    assert_equal 0x0, h.fields[0].reset_types.hard_reset
+    assert_equal 0xaaabbaacc, h.fields[0].reset_values.mbist
+    assert_equal 0x0, h.fields[0].reset_values.hard_reset
   end
 
   def test_json_offsets

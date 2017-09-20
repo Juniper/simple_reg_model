@@ -13,10 +13,10 @@ class TestField < MiniTest::Test
     assert_equal "f1", @f1.name
     assert_equal  1, @f1.nbits 
     assert_equal 0xaaabbb, @f1.lsb_pos
-    assert_equal 0x0, @f1.reset_types[:hard_reset]
-    assert_equal 0xaaabbaacc, @f1.reset_types[:mbist]
-    assert_equal 0xaaabbb, @f1.lsb
-    assert_equal 0xaaabbb, @f1.msb
+    assert_equal 0x0, @f1.reset_values[:hard_reset]
+    assert_equal 0xaaabbaacc, @f1.reset_values[:mbist]
+    assert_equal 0xaaabbb, @f1.lsb_pos
+    assert_equal 0xaaabbb, @f1.msb_pos
   end
 
   def test_hash
@@ -51,8 +51,8 @@ class TestField < MiniTest::Test
     assert_equal "f1", h.name
     assert_equal 1, h.nbits
     assert_equal 0xaaabbb, h.lsb_pos
-    assert_equal 0x0, h.reset_types["hard_reset"]
-    assert_equal 0xaaabbaacc, h.reset_types["mbist"]
+    assert_equal 0x0, h.reset_values["hard_reset"]
+    assert_equal 0xaaabbaacc, h.reset_values["mbist"]
     assert_equal "srm_rw_policy", h.policies["cpu_map"]
   end
 

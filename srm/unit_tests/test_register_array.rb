@@ -96,7 +96,7 @@ class TestRegisterArray < MiniTest::Test
     assert_equal "r", h.name
     assert_equal 34, h.num_entries
     assert_equal "f1", h.fields[0].name
-    assert_equal 0xaaabbaacc, h.fields[0].reset_types.mbist
-    assert_equal 0x0, h.fields[0].reset_types.hard_reset
+    assert_equal 0xaaabbaacc, h.fields[0].reset_values.mbist
+    assert_equal 0x0, h.fields[0].reset_values.hard_reset
   end
 end

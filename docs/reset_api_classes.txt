@@ -4,8 +4,6 @@ class srm_reg << template >>
 class srm_field << template >>
 abstract class srm_array_entry << template >>
 
-abstract class srm_base_field
-abstract class srm_base_reg
 
 class srm_component {
   -_children[]
@@ -13,29 +11,20 @@ class srm_component {
 }
 note left: Calls reset on all the children
 
-class srm_base_reg {
-  #_reset_kind[string]
-  #_last_reset_kind
+class srm_reg {
+  #_reset_kinds[string]
   +set_reset_kind(kind)
   +is_resettable(kind)
-  +is_reset_present()
   +reset(kind)
-  +get_last_reset_kind()
 }
 
-class srm_base_field {
-  -_is_initialized
-  -_parent:srm_base_reg
-  +apply_reset(kind)
-}
 
 class srm_field {
   -T _reset_values[string]
-  -_reset_kind[string]
   +set_reset_value(T, kind)
-  +T get_reset_value()
+  +T get_reset_value(kind)
 }
-note bottom: unitialized get() will return reset value
+note bottom: unitialized get() will return garbage value.
 
 class srm_array_entry {
   -_index
@@ -44,19 +33,14 @@ class srm_array_entry {
 
 class srm_reg_array {
   +is_resettable(kind)
-  +is_reset_present()
   +reset(kind)
-  +get_last_reset_kind()
 }
-note left: Delegate to the prototype member
+note left: Reset all the existing entries and prototype member
 
 srm_component <|-- srm_reg_array
-srm_component <|-- srm_base_reg
-srm_base_reg <|-- srm_reg
+srm_component <|-- srm_reg
 srm_component "1" *-- "many" srm_component : contains
-srm_base_reg "1" *-- "many" srm_base_field : contains
-srm_base_field --> srm_base_reg : _parent
+srm_reg "1" *-- "many" srm_field : contains
 srm_reg <|-- srm_array_entry
-srm_base_field <|-- srm_field
 srm_reg_array --> "prototype" srm_array_entry
 @enduml

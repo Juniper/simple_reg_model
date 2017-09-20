@@ -6,14 +6,14 @@ require 'json'
 
 module SRM
 class Field
-  attr_reader :name, :nbits, :lsb_pos, :volatile, :reset_types, :policies
+  attr_reader :name, :nbits, :lsb_pos, :volatile, :reset_values, :policies
 
-  def initialize(name:, nbits:, lsb_pos:, volatile:false, **reset_types)
+  def initialize(name:, nbits:, lsb_pos:, volatile:false, **reset_values)
     @name = name
     @nbits = nbits.to_i
     @lsb_pos = lsb_pos.to_i
     @volatile = volatile
-    @reset_types = reset_types
+    @reset_values = reset_values
     @policies = {}
   end
 
@@ -26,7 +26,7 @@ class Field
   end
 
   def to_s1
-    "Field: name:#{name}, nbits:${n_bits}, lsb_pos:#{lsb_pos}, volatile: #{volatile}, reset_types: #{reset_types}"
+    "Field: name:#{name}, nbits:${n_bits}, lsb_pos:#{lsb_pos}, volatile: #{volatile}, reset_values: #{reset_values}"
   end
 
   def eql?(other)
@@ -35,7 +35,7 @@ class Field
   
   def ==(other)
     name == other.name && nbits == other.nbits &&
-    lsb_pos == other.lsb_pos && reset_types == other.reset_types
+    lsb_pos == other.lsb_pos && reset_values == other.reset_values
   end
 
   def set_policy(args)
@@ -60,7 +60,7 @@ class Field
       "lsb_pos" => lsb_pos,
       "msb_pos" => msb_pos,
       "volatile" => volatile, 
-      "reset_types" => reset_types,
+      "reset_values" => reset_values,
       "policies" => policies
     }.to_json(options)
   end

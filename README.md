@@ -14,4 +14,7 @@ The intended users of the package are design verificatipn (DV) engineers involve
 
 4. For just getting started with the repository refer to [HowTo](docs/HOW_TO.md)
 
+5. Misc API
+
+     a. [Reset API](docs/ResetAPI.md)
 

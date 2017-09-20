@@ -7,8 +7,6 @@ require 'ostruct'
 require 'erb'
 
 options = {}
-options[:srm_filename] = ""
-options[:json_filename] = ""
 
 OptionParser.new do |opts|
   opts.banner = "Usage: rgen <spec_file> [options]"
@@ -21,34 +19,59 @@ OptionParser.new do |opts|
     options[:json_filename] = f
   end
 
+  opts.on("-o", "--out [OutputFile]",
+          "Output file. An extension of json produces json else system verilog") do |f|
+    options[:output_filename] = f
+  end
+
+  opts.on("-t", "--template [TemplateFile]",
+          "template file to use for producting system verilog. ") do |f|
+    options[:_template_filename] = f
+  end
 end.parse!
 
 abort "Invalid argument #{ARGV}" unless ARGV.empty?
 
 if options.has_key?(:srm_filename)
   srm_filename = options[:srm_filename]
+  ext = File.extname srm_filename
+  output_filename = File.basename(srm_filename, ext) + ".sv"
   abort "Did not find srm source filename \'#{srm_filename}\`" unless File.exists?(srm_filename)
   top = SRM.module_eval(File.read(srm_filename), srm_filename )
   json_string = JSON.pretty_generate(top)
 
 elsif options.has_key?(:json_filename)
   json_filename = options[:json_filename]
+  output_filename = File.basename json_filename + ".sv"
   json_string = File.read(json_filename)
 
 else
   abort "Must specify either a srm register specifiction or a json file"
-
 end
 
-class ErbBinding < OpenStruct
-  def get_binding
-    return binding()
+#
+# if the output filename has extension .json then just write the generated json string.
+# Else generate the verilog and write it out.
+#
+output_filename = options[:output_filename] || output_filename
+ext = File.extname output_filename
+
+if ext == ".json"
+  output = json_string
+else
+  class ErbBinding < OpenStruct
+    def get_binding
+      return binding()
+    end
   end
+
+  json_object = JSON.parse(json_string, object_class: ErbBinding)
+  template = options[:template_filename] || "../lib/templates/simple_reg_model.erb"
+
+  renderer = ERB.new(File.open(template).read)
+  output = renderer.result(json_object.get_binding)
 end
 
-json_object = JSON.parse(json_string, object_class: ErbBinding)
-template = "../lib/templates/test.erb"
-template = "../lib/templates/simple_reg_model.erb"
-
-renderer = ERB.new(File.open(template).read)
-puts output = renderer.result(json_object.get_binding)
+File.open(output_filename, "w") do |fh|
+  fh.write output
+end

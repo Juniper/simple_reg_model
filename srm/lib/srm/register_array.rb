@@ -3,12 +3,13 @@ require_relative "field"
 module SRM
 # A register array is a register with num_entries.
 class RegisterArray
-  attr_reader :type, :name, :fields, :width, :num_entries, :offsets
+  attr_reader :type, :name, :fields, :reset_kinds, :width, :num_entries, :offsets
 
-  def initialize(name:, fields: [], num_entries: 1)
+  def initialize(name:, fields: [], reset_kinds: [], num_entries: 1)
     @type = "RegisterArray"
     @name = name
     @fields = fields
+    @reset_kinds = reset_kinds
     @num_entries  = num_entries
     yield self if block_given?
 
@@ -68,6 +69,7 @@ class RegisterArray
       "type" => type,
       "name" => name,
       "num_entries" => num_entries,
+      "reset_kinds" => reset_kinds,
       "width" => width,
       "fields" => @fields,
       "offsets" => @offsets

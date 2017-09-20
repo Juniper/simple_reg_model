@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+require 'json'
+
+abort "Please specify the input json file" unless ARGV.size == 1
+
+json_file = ARGV[0]
+
+json_string = File.open(json_file).read
+json_object = JSON.parse(json_string, object_class: OpenStruct)
+
+def incr_error(rule_string)
+  puts "#{rule_string}...FAIL"
+  1
+end
+
+err_cnt = 0
+err_cnt += incr_error("Top level object must be of type block") unless json_object.type == "Block"
+
+json_object.nodes.each do |node|
+  if node.type == "Register"
+    err_cnt += incr_error("A register must have at least one field") unless node.fields.size > 0
+
+    bit_pos = 0
+    node.fields.each do |f|
+      err_cnt += incr_error("Field #{f.name} lsb must be contiguous") unless f.lsb_pos == bit_pos
+      err_cnt += incr_error("Field #{f.name} nbits cannot be 0") unless f.nbits > 0
+      bit_pos += f.nbits - 1
+      err_cnt += incr_error("Field #{f.name} msb must be contiguous") unless f.msb_pos == bit_pos
+      bit_pos += 1
+      node.reset_kinds.each do |reset_kind|
+        puts "Checking #{reset_kind} in #{f.reset_values[reset_kind]}"
+        err_cnt += incr_error("Reset kind \'#{reset_kind}\' must be the same in reg and field") unless f.reset_values[reset_kind]
+      end
+    end
+  end
+end

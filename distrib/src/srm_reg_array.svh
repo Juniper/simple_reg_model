@@ -77,7 +77,6 @@ class srm_reg_array #(type T = int) extends srm_component;
   // ~index~ is the position in the array.
   // Will cause uvm fatal error if the index is more than the size of the array.
   // FIXME: Explain how entries not yet written are created ?
-  // FIXME: Do we need the tables to have a reset vlaue ?
   //
   function srm_array_entry#(T) entry_at(srm_addr_t index);
     string name;
@@ -155,14 +154,6 @@ class srm_reg_array #(type T = int) extends srm_component;
   //
   virtual function bit is_resettable(string kind);
     return _prototype.is_resettable(kind);
-  endfunction
-
-  // Function: is_reset_present();
-  //
-  // Returns true if the array has a reset.
-  //
-  virtual function bit is_reset_present();
-    return _prototype.is_reset_present();
   endfunction
 
   // Function: reset

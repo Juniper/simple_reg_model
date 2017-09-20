@@ -32,7 +32,6 @@ class srm_field#(type T = int) extends srm_base_field;
 
   local T _entry;
   local T _reset_values[string];
-  local int _reset_kind[string];
 
   //---------------------------
   // Group: Initialization
@@ -249,7 +248,6 @@ class srm_field#(type T = int) extends srm_base_field;
   // ~kind~ is the type of reset. For example hard, bist, soft etc.
   //
   virtual function void set_reset_value(T value, input string kind);
-    _reset_kind[kind] = 1;
     _reset_values[kind] = value;
   endfunction
 
@@ -290,7 +288,6 @@ class srm_field#(type T = int) extends srm_base_field;
     $cast(field, obj);
     _entry = field._entry;
     _reset_values = field._reset_values;
-    _reset_kind = field._reset_kind;
   endfunction
 
 endclass

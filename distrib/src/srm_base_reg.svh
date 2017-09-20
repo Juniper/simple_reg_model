@@ -30,7 +30,7 @@ typedef class srm_base_field;
 //--------------------------------------------------------
 virtual class srm_base_reg extends srm_component;
   protected srm_base_field _fields[$];
-  protected int _reset_kind[string];
+  protected int _reset_kinds[string];
   
   //------------------
   // Group: Initialization
@@ -116,7 +116,7 @@ virtual class srm_base_reg extends srm_component;
   // The spec needs to ensure same kind supported by all the fields
   // in the register.
   virtual function void set_reset_kind(string kind);
-    _reset_kind[kind] = 1;
+    _reset_kinds[kind] = 1;
   endfunction
 
   // Function: is_resettable
@@ -126,20 +126,9 @@ virtual class srm_base_reg extends srm_component;
   // ~kind~ is the type of reset.
   //
   virtual function bit is_resettable(string kind);
-    return _reset_kind.exists(kind);
+    return _reset_kinds.exists(kind);
   endfunction
-
-  // Function: is_reset_present
-  //
-  // Returns true if the register is resettable.
-  //
-  // A register can have multiple reset types. This checks that there
-  // there is at least one.
-  //
-  virtual function bit is_reset_present();
-    return _reset_kind.size() > 0;
-  endfunction
-
+  
   // Function: reset
   //
   // Reset all the fields of the register.
@@ -323,7 +312,7 @@ virtual class srm_base_reg extends srm_component;
     foreach(obj._fields[i]) 
       obj._fields[i].__initialize(_fields[i]);
     obj._coverage_cbs = _coverage_cbs;
-    obj._reset_kind = _reset_kind;
+    obj._reset_kinds = _reset_kinds;
   endfunction
 
   // Function: get_index
