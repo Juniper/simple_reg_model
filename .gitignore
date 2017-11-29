@@ -1,4 +1,11 @@
 run/*
+*~
+core.*
+*.tar.gz
+*.diff
+*.orig
+*.patch
+
 *.swp
 *.swo
 *.o
