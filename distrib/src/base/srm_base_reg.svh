@@ -20,7 +20,6 @@
 `ifndef INCLUDED_srm_base_reg_svh
 `define INCLUDED_srm_base_reg_svh
 
-typedef class srm_base_field;
 //--------------------------------------------------------
 // CLASS: srm_base_reg
 // Base class for the register.

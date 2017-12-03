@@ -46,22 +46,22 @@ package srm_pkg;
     SRM_HIER
   } srm_hier_e;
 
-  `include "srm_utils.svh"
-  `include "srm_generic_xact.svh"
-  `include "srm_base_coverage.svh"
-  `include "srm_base_handle.svh"
-  `include "srm_bus_adapter.svh"
-  `include "srm_component.svh"
-  `include "srm_bus_predictor.svh"
-  `include "srm_search_adapter.svh"
-  `include "srm_base_field_policy.svh"
-  `include "srm_field_policies.svh"
-  `include "srm_base_reg.svh"
-  `include "srm_base_field.svh"
-  `include "srm_field.svh"
-  `include "srm_reg.svh"
-  `include "srm_array_entry.svh"
-  `include "srm_reg_array.svh"
+  `include "common/srm_utils.svh"
+  `include "bus/srm_generic_xact.svh"
+  `include "bus/srm_bus_adapter.svh"
+  `include "bus/srm_bus_predictor.svh"
+  `include "bus/srm_search_adapter.svh"
+  `include "base/srm_base_field_policy.svh"
+  `include "base/srm_base_field.svh"
+  `include "base/srm_field.svh"
+  `include "base/srm_field_policies.svh"
+  `include "base/srm_base_coverage.svh"
+  `include "base/srm_base_handle.svh"
+  `include "base/srm_component.svh"
+  `include "base/srm_base_reg.svh"
+  `include "base/srm_reg.svh"
+  `include "base/srm_array_entry.svh"
+  `include "base/srm_reg_array.svh"
 endpackage
 
 `endif

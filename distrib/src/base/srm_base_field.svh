@@ -29,6 +29,9 @@
 // This is a base class and should not be used directly by the user.
 //
 //------------------------------------------------------
+typedef class srm_base_reg;
+typedef class srm_rw_policy;
+
 virtual class srm_base_field;
   local string _name;
   protected srm_base_reg _parent;

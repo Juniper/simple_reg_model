@@ -28,6 +28,8 @@
 // subclass this component and provide the implementation of bus2_generic_xact. Then he/she
 // would hook the output of the bus monitor to the analysis port of this component.
 //
+typedef class srm_component;
+
 class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
 
   `uvm_component_param_utils(srm_bus_predictor#(BUSTYPE))
