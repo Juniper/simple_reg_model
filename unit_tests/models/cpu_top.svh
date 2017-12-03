@@ -9,12 +9,12 @@
 // 'h1000    cpu_table32
 //---------------------------------------------------
 
-class cpu_top extends srm_component;
+class cpu_top extends srm_node;
 
  cpu_reg32 cpu_reg32;
  cpu_table32 cpu_table32;
 
- function new(string name, srm_component parent);
+ function new(string name, srm_node parent);
   super.new(name, parent);
 
   cpu_reg32 = new(.name("cpu_reg32"), .parent(this));

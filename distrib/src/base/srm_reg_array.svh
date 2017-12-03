@@ -30,7 +30,7 @@
 // use the same abstraction.
 //----------------------------------------------------------
 
-class srm_reg_array #(type T = int) extends srm_component;
+class srm_reg_array #(type T = int) extends srm_node;
   protected srm_addr_t _num_entries;
   protected srm_array_entry#(T) _prototype;
   protected srm_array_entry#(T) _entries[srm_addr_t];
@@ -49,7 +49,7 @@ class srm_reg_array #(type T = int) extends srm_component;
   // Arrays are implemented using sparse associative array and so actual memory used
   // depends on the number of locations accessed.
   //
-  function new(string name, srm_component parent, srm_addr_t num_entries);
+  function new(string name, srm_node parent, srm_addr_t num_entries);
     super.new(name, parent);
     _num_entries = num_entries;
   endfunction

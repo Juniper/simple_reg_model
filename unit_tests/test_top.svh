@@ -16,7 +16,7 @@ class test_top extends srm_unit_test;
   endfunction
 
   task test_tree;
-    srm_component leaves[$];
+    srm_node leaves[$];
     regmodel.get_leaf_nodes(leaves);
     `TEST_VALUE(1, regmodel.is_root_node(), "Root node match"); 
     `TEST_VALUE(2, regmodel.num_children(), "Root node has 2 children");

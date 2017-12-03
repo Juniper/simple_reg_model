@@ -52,8 +52,8 @@ class srm_search_adapter extends uvm_object;
   //
   // Return null if no correct adapter found.
   //
-  virtual function srm_bus_adapter get_adapter(srm_component obj);
-    srm_component ptr = obj;
+  virtual function srm_bus_adapter get_adapter(srm_node obj);
+    srm_node ptr = obj;
     srm_bus_adapter adapters[$];
 
     // Walkup from leaf to root looking for correct adapter.

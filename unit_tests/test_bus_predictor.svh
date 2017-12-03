@@ -31,7 +31,7 @@ class test_bus_predictor extends srm_unit_test;
   endtask
 
   task test_address_reg;
-    srm_component r = reg32_model.address_2_instance("cpu_map", 64'h10100);
+    srm_node r = reg32_model.address_2_instance("cpu_map", 64'h10100);
     `TEST_HANDLE(reg32_model.r1, r, "Handle r1 must be the same");
     r = reg32_model.address_2_instance("cpu_map", 64'h10200);
     `TEST_HANDLE(reg32_model.r2, r,  "Handle r2 must be the same");
@@ -44,7 +44,7 @@ class test_bus_predictor extends srm_unit_test;
   endtask
 
   task test_address_table;
-    srm_component r;
+    srm_node r;
 
     `TEST_VALUE(1, table32_model.r1.is_leaf_node(), "Table r1 must be a leaf node");
 

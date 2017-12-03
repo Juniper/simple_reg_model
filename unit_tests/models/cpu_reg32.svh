@@ -17,7 +17,7 @@
 //           'h20 --> r5
 //---------------------------------------------------------
 
-class cpu_reg32 extends srm_component;
+class cpu_reg32 extends srm_node;
 
   //------------------------------------------------------
   // 32 Bit Register
@@ -46,7 +46,7 @@ class cpu_reg32 extends srm_component;
 
     srm_field#(bit[31:0]) field;
 
-    function new(string name, srm_component parent);
+    function new(string name, srm_node parent);
       super.new(name, parent);
       field = new(.name("field"), .parent(this), .n_bits(32), .lsb_pos(0),
                   .volatile(0));
@@ -55,10 +55,10 @@ class cpu_reg32 extends srm_component;
 
   endclass
 
-  class blk extends srm_component;
+  class blk extends srm_node;
     r1_reg r4;
     r1_reg r5;
-    function new(string name, srm_component parent);
+    function new(string name, srm_node parent);
       super.new(name, parent);
     
 
@@ -81,7 +81,7 @@ class cpu_reg32 extends srm_component;
   r1_reg r3;
   blk    blk4;
 
-  function new(string name, srm_component parent);
+  function new(string name, srm_node parent);
     super.new(name, parent);
 
     r1 = new(.name("r1"), .parent(this));

@@ -43,7 +43,7 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   // ~parent~ represents the array to which the entry belongs.
   // ~index~ represents the position within the array.
   //
-  function new(string name, srm_component parent, srm_addr_t index);
+  function new(string name, srm_node parent, srm_addr_t index);
     super.new(name, parent);
     _index = index;
   endfunction

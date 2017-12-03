@@ -57,7 +57,7 @@ package srm_pkg;
   `include "base/srm_field_policies.svh"
   `include "base/srm_base_coverage.svh"
   `include "base/srm_base_handle.svh"
-  `include "base/srm_component.svh"
+  `include "base/srm_node.svh"
   `include "base/srm_base_reg.svh"
   `include "base/srm_reg.svh"
   `include "base/srm_array_entry.svh"

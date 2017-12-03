@@ -13,7 +13,7 @@
 //           f2, f4 are volatile  
 //----------------------------------------------------------------
 
-class cpu_volatile_field extends srm_component;
+class cpu_volatile_field extends srm_node;
 
   typedef struct packed {
     bit[7:0] f3;
@@ -30,7 +30,7 @@ class cpu_volatile_field extends srm_component;
     srm_field#(bit[7:0]) f2;
     srm_field#(bit[7:0]) f3;
 
-    function new(string name, srm_component parent);
+    function new(string name, srm_node parent);
       super.new(name, parent);
 
       // If resettable register then all fields must be resettable.
@@ -84,7 +84,7 @@ class cpu_volatile_field extends srm_component;
       srm_field#(bit[1:0]) f1;
       srm_field#(bit) f0;
 
-      function new(string name, srm_component parent, srm_addr_t index=-1);
+      function new(string name, srm_node parent, srm_addr_t index=-1);
         super.new(name, parent, index);
         // If resettable, then all fields must be resettable and value defined.
         set_reset_kind("HARD");
@@ -126,7 +126,7 @@ class cpu_volatile_field extends srm_component;
     endclass
 
     // Table definition
-    function new(string name, srm_component parent);
+    function new(string name, srm_node parent);
       r2_entry entry;
       super.new(name, parent, .num_entries(100));
       entry = new(.name("r2_entry"), .parent(this));
@@ -145,7 +145,7 @@ class cpu_volatile_field extends srm_component;
   r1_reg r1;
   r2_table r2;
 
-  function new(string name, srm_component parent);
+  function new(string name, srm_node parent);
     super.new(name, parent);
 
     r1= new(.name("r1"), .parent(this)); 

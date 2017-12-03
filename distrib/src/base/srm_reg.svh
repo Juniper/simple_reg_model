@@ -41,7 +41,7 @@ class srm_reg#(type T = int) extends srm_base_reg;
   //
   // ~parent~ represents the component in the tree hierarchy.
   //
-  function new(string name, srm_component parent);
+  function new(string name, srm_node parent);
     super.new(name, parent);
   endfunction
 

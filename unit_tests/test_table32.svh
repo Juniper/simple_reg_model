@@ -17,7 +17,7 @@ class test_table32 extends srm_unit_test;
   endfunction
 
   task test_set_get;
-    srm_component leaves[$];
+    srm_node leaves[$];
     // NC verilog has a issue with function chaining. Works for vcs.
     srm_reg#(cpu_table32::r1_struct_t) entry;  
     wr_data.field = 'ha5;
@@ -34,7 +34,7 @@ class test_table32 extends srm_unit_test;
   endtask
   
   task test_tree;
-    srm_component leaves[$];
+    srm_node leaves[$];
     regmodel.get_leaf_nodes(leaves);
     `TEST_VALUE(1, regmodel.is_root_node(), "Root node match"); 
     `TEST_VALUE(4, regmodel.num_children(), "Root node has 4 children");

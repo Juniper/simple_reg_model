@@ -28,7 +28,7 @@
 // subclass this component and provide the implementation of bus2_generic_xact. Then he/she
 // would hook the output of the bus monitor to the analysis port of this component.
 //
-typedef class srm_component;
+typedef class srm_node;
 
 class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
 
@@ -43,7 +43,7 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   // Variable: regmodel
   // This is used to update the corresponding register. Must be configured before
   // the run phase.
-  srm_component regmodel;
+  srm_node regmodel;
 
   // Variable: addr_map_name 
   // This is used to find the corresponding register. Must be configured before
@@ -78,7 +78,7 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   //
   virtual function void write(BUSTYPE tr);
     srm_generic_xact_t xact;
-    srm_component node;
+    srm_node node;
     xact = bus_2_generic_xact(tr);
     node = regmodel.address_2_instance(addr_map_name, xact.addr);
     if(node == null) begin

@@ -27,7 +27,7 @@
 // Do not directly instantiate this class. It is used by the framework
 // to deal with template registers in a generic way.
 //--------------------------------------------------------
-virtual class srm_base_reg extends srm_component;
+virtual class srm_base_reg extends srm_node;
   protected srm_base_field _fields[$];
   protected int _reset_kinds[string];
   
@@ -36,7 +36,7 @@ virtual class srm_base_reg extends srm_component;
   //-------------------
   
   // Function: new
-  function new(string name, srm_component parent);
+  function new(string name, srm_node parent);
     super.new(name, parent);
   endfunction
 

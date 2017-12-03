@@ -25,7 +25,7 @@ class test_reg32 extends srm_unit_test;
   endtask
 
   task test_tree;
-    srm_component leaves[$];
+    srm_node leaves[$];
     regmodel.get_leaf_nodes(leaves);
     `TEST_VALUE(1, regmodel.is_root_node(), "Root node match"); 
     `TEST_VALUE(4, regmodel.num_children(), "Root node has 4 children");

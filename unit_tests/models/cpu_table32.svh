@@ -17,7 +17,7 @@
 //           'h40 --> r5 with 10 entries
 //---------------------------------------------------------
 
-class cpu_table32 extends srm_component;
+class cpu_table32 extends srm_node;
 
   //------------------------------------------------------
   // Data type for each entry in the table.
@@ -37,7 +37,7 @@ class cpu_table32 extends srm_component;
     class r1_reg extends srm_array_entry#(r1_struct_t);
       srm_field#(bit[31:0]) field;
 
-      function new(string name, srm_component parent, srm_addr_t index=-1); 
+      function new(string name, srm_node parent, srm_addr_t index=-1); 
         super.new(name, parent, index);
         field = new(.name("field"), .parent(this), .n_bits(32), .lsb_pos(0),
                   .volatile(0));
@@ -53,7 +53,7 @@ class cpu_table32 extends srm_component;
       endfunction
     endclass
       
-    function new(string name,  srm_component parent);
+    function new(string name,  srm_node parent);
       r1_reg entry;
       super.new(name, parent, .num_entries(10));
       entry = new(.name("r1_reg_entry"), .parent(this));
@@ -61,11 +61,11 @@ class cpu_table32 extends srm_component;
     endfunction
   endclass
   
-  class blk extends srm_component;
+  class blk extends srm_node;
     r1_reg_array r4;
     r1_reg_array r5;
 
-    function new(string name, srm_component parent);
+    function new(string name, srm_node parent);
       super.new(name, parent);
 
       r4 = new(.name("r4"),  .parent(this));
@@ -86,7 +86,7 @@ class cpu_table32 extends srm_component;
   r1_reg_array r3;
   blk blk4;
 
-  function new(string name, srm_component parent);
+  function new(string name, srm_node parent);
     super.new(name, parent);
 
     r1 = new(.name("r1"), .parent(this));

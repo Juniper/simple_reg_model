@@ -17,15 +17,15 @@
 // permissions and limitations under the License.
 // -------------------------------------------------------------
 //
-`ifndef INCLUDED_srm_component_svh
-`define INCLUDED_srm_component_svh
+`ifndef INCLUDED_srm_node_svh
+`define INCLUDED_srm_node_svh
 
 typedef class srm_base_handle;
 typedef srm_bus_adapter srm_adapters_t[$];
 typedef class srm_base_field_policy;
 
 //------------------------------------------------------------
-// CLASS: srm_component
+// CLASS: srm_node
 // A node in the design tree hierarchy.
 //
 // A component represents a node in the design hierarchy. Leaf nodes are
@@ -35,10 +35,10 @@ typedef class srm_base_field_policy;
 // A design heierarchy can support multiple address map ie the components can have
 // different offsets depending on the address map.
 //------------------------------------------------------------
-class srm_component;
+class srm_node;
   local string _name;
-  protected srm_component _parent;
-  local srm_component _children[$];
+  protected srm_node _parent;
+  local srm_node _children[$];
 
   protected srm_addr_t _offset_table[string];
   protected srm_addr_t _size_table[string];
@@ -53,7 +53,7 @@ class srm_component;
   //
   // Create a new instance of node with a pointer to parent.
   //
-  function new(string name, srm_component parent);
+  function new(string name, srm_node parent);
     _name = name;
     _parent = parent;
   endfunction
@@ -66,7 +66,7 @@ class srm_component;
   // 
   // Return the parent of the node.
   //
-  function srm_component get_parent();
+  function srm_node get_parent();
     return _parent;
   endfunction
 
@@ -85,7 +85,7 @@ class srm_component;
   function string get_full_name();
     string name_lst[$];
     string full_name = "";
-    srm_component curr = this;
+    srm_node curr = this;
 
     while(!curr.is_root_node()) begin
       name_lst.push_front(curr.get_name());
@@ -128,7 +128,7 @@ class srm_component;
   //
   // Add a child below itself.
   // 
-  function void add_child(srm_component child);
+  function void add_child(srm_node child);
     _children.push_back(child);
   endfunction
 
@@ -144,7 +144,7 @@ class srm_component;
   //
   // Return array of children of the node.
   //
-  function void get_children(ref srm_component children[$]);
+  function void get_children(ref srm_node children[$]);
     foreach(_children[i])
       children.push_back(_children[i]);
 
@@ -154,8 +154,8 @@ class srm_component;
   // 
   // Return the root node of the tree.
   //
-  function srm_component get_root_node();
-    srm_component ptr = this;
+  function srm_node get_root_node();
+    srm_node ptr = this;
     while(!ptr.is_root_node()) ptr = ptr._parent;
     return ptr;
   endfunction
@@ -164,7 +164,7 @@ class srm_component;
   //
   // Recursively find all the leaf nodes below itself.
   //
-  function void get_leaf_nodes(ref srm_component leaves[$]);
+  function void get_leaf_nodes(ref srm_node leaves[$]);
     if(is_leaf_node()) begin
       leaves.push_back(this);
     end else begin
@@ -174,8 +174,8 @@ class srm_component;
     end
   endfunction
 
-  function srm_component find_node_by_name(string full_name);
-    srm_component p = null;
+  function srm_node find_node_by_name(string full_name);
+    srm_node p = null;
     if (full_name == get_full_name()) begin 
       return  this;
     end else begin
@@ -213,7 +213,7 @@ class srm_component;
   //
   virtual function srm_addr_t get_offset(string addr_map_name);
     srm_addr_t offset;
-    srm_component p;
+    srm_node p;
     if(!_offset_table.exists(addr_map_name)) begin
       // By default return 0 for root node even when the user has not specified it.
       if(is_root_node()) 
@@ -279,12 +279,12 @@ class srm_component;
   // Get the instance of the node given the address.
   // ~addr_map_name~ is the address map to be used.
   // ~addr~ is the address to be converted.
-  virtual function srm_component address_2_instance(string addr_map_name, srm_addr_t addr);
-    srm_component root = get_root_node();
+  virtual function srm_node address_2_instance(string addr_map_name, srm_addr_t addr);
+    srm_node root = get_root_node();
     return root.__address_2_instance(addr_map_name, addr);
   endfunction
 
-  virtual function srm_component __address_2_instance(string addr_map_name, srm_addr_t addr);
+  virtual function srm_node __address_2_instance(string addr_map_name, srm_addr_t addr);
     srm_addr_t start_addr, end_addr;
     
     foreach(_children[i]) begin
@@ -333,7 +333,7 @@ class srm_component;
   //The leaf node will actually call the read and update the model.
   //
   virtual task load(srm_base_handle handle);
-    srm_component leaves[$];
+    srm_node leaves[$];
 
     get_leaf_nodes(leaves);
 
@@ -350,7 +350,7 @@ class srm_component;
   //The leaf node will actually call write and update the design.
   //
   virtual task store(srm_base_handle handle);
-    srm_component leaves[$];
+    srm_node leaves[$];
 
     get_leaf_nodes(leaves);
 
@@ -365,9 +365,9 @@ class srm_component;
   //
   // Call store_update on all the children of the node.
   //
-  virtual task store_update(srm_base_handle handle, const ref srm_component node, 
+  virtual task store_update(srm_base_handle handle, const ref srm_node node, 
                             bit skip_duplicate);
-    srm_component next_node;
+    srm_node next_node;
 
     foreach(_children[i]) begin
       next_node = find_node_by_name(_children[i].get_full_name());
@@ -430,7 +430,7 @@ class srm_component;
   //
   // No reason for non leaf nodes to detect a read/write.
   virtual function void attach(srm_base_coverage observer);
-    srm_component leaves[$];
+    srm_node leaves[$];
 
     get_leaf_nodes(leaves);
 
@@ -445,7 +445,7 @@ class srm_component;
   // Detach all the instances of the observer from leaves.
   //
   virtual function void detach(srm_base_coverage observer);
-    srm_component leaves[$];
+    srm_node leaves[$];
 
     get_leaf_nodes(leaves);
 
@@ -460,7 +460,7 @@ class srm_component;
   // Detach all the the coverage callbacks 
   //
   virtual function void detach_all();
-    srm_component leaves[$];
+    srm_node leaves[$];
 
     get_leaf_nodes(leaves);
 
