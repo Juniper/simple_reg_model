@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_volatile_field_sv
 `define INCLUDED_test_volatile_field_sv
 
-import srm_pkg::*;
+
 
 //----------------------------------------------------
 // CLASS: test_volatile_field
@@ -25,7 +25,7 @@ class test_volatile_field extends srm_unit_test;
     regmodel = new(.name("regmodel"), .parent(null));
     adapter_policy = new();
     cpu_handle = new();
-    cpu_handle.initialize(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
+    cpu_handle.initialize(.search_adapter(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
     regmodel.add_adapter(adapter);
   endfunction

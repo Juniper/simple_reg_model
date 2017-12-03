@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+require 'erb'
+require_relative 'sim_cfiles'
+require 'optparse'
+
+def main()
+  options = {}
+  OptionParser.new  do |opts|
+    opts.banner = "Usage: gen_unit_tests -c <cfile>"
+    opts.on("-c", "--cfile <cfile>", "sim control file") do |c|
+      options[:cfile] = c
+    end
+  end.parse!
+
+  abort "Must specify the <sim.cfiles> for the sim" unless options[:cfile]
+  sim = UnitSim.new(options)
+  sim.render
+end
+
+class UnitSim
+  def initialize(options={})
+    puts "Eval #{options[:cfile]}"
+    @cfile = SimCfiles.new(options[:cfile])
+  end
+
+
+  def render
+    templates = `ls #{File.dirname(__FILE__)}/*.erb`.split
+    templates.each do |template|
+      t = File.open(template).read
+      renderer = ERB.new(t, 0, '>')
+      out_file = File.basename(template, ".erb")
+      puts "Creating output file \`#{out_file}`"
+      File.open(out_file, "w") do |fh|
+        fh.puts renderer.result(@cfile.get_binding())
+      end
+    end
+  end
+
+  def hello
+  end
+
+end
+
+main

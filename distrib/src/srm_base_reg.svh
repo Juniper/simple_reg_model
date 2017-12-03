@@ -339,7 +339,7 @@ virtual class srm_base_reg extends srm_component;
     generic_xact.byte_enables = byte_enables;
 
     // Launch the operation
-    adapter = handle.adapter_policy.get_adapter(this);
+    adapter = handle.search_adapter.get_adapter(this);
     adapter.execute(generic_xact, handle.seq_priority);
 
     // Gather coverage if enabled.
@@ -374,7 +374,7 @@ virtual class srm_base_reg extends srm_component;
     generic_xact.byte_enables = byte_enables;
 
     // Launch the operation
-    adapter = handle.adapter_policy.get_adapter(this);
+    adapter = handle.search_adapter.get_adapter(this);
     adapter.execute(generic_xact, handle.seq_priority);
     
     handle.generic_xact_status = generic_xact.status;

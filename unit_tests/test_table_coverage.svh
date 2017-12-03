@@ -1,7 +1,6 @@
 `ifndef INCLUDED_test_table_coverage_sv
 `define INCLUDED_test_table_coverage_sv
 
-import srm_pkg::*;
 class test_table_coverage extends srm_unit_test;
   
   // Define a custom coverage model.
@@ -65,7 +64,7 @@ class test_table_coverage extends srm_unit_test;
     fcov_inst = new();
     adapter_policy = new();
     cpu_handle = new("cpu_handle");
-    cpu_handle.initialize(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
+    cpu_handle.initialize(.search_adapter(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
     regmodel.add_adapter(adapter);
   endfunction

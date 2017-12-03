@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_field_access_sv
 `define INCLUDED_test_field_access_sv
 
-import srm_pkg::*;
+
 
 class test_field_access extends srm_unit_test;
 

@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_table32_sv
 `define INCLUDED_test_table32_sv
 
-import srm_pkg::*;
+
 class test_table32 extends srm_unit_test;
 
   cpu_table32 regmodel;

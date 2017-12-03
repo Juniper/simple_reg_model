@@ -1,8 +1,6 @@
 `ifndef INCLUDED_test_bus_predictor_svh
 `define INCLUDED_test_bus_predictor_svh
 
-import srm_pkg::*;
-
 class test_bus_predictor extends srm_unit_test;
   cpu_reg32 reg32_model;
   cpu_table32 table32_model;
@@ -34,15 +32,15 @@ class test_bus_predictor extends srm_unit_test;
 
   task test_address_reg;
     srm_component r = reg32_model.address_2_instance("cpu_map", 64'h10100);
-    `TEST_VALUE(reg32_model.r1, r, "Handle r1 must be the same");
+    `TEST_HANDLE(reg32_model.r1, r, "Handle r1 must be the same");
     r = reg32_model.address_2_instance("cpu_map", 64'h10200);
-    `TEST_VALUE(reg32_model.r2, r,  "Handle r2 must be the same");
+    `TEST_HANDLE(reg32_model.r2, r,  "Handle r2 must be the same");
     r = reg32_model.address_2_instance("cpu_map", 64'h10300);
-    `TEST_VALUE(reg32_model.r3, r,  "Handle r3 must be the same");
+    `TEST_HANDLE(reg32_model.r3, r,  "Handle r3 must be the same");
     r = reg32_model.address_2_instance("cpu_map", 64'h10410);
-    `TEST_VALUE(reg32_model.blk4.r4, r, "Handle r4 must be the same");
+    `TEST_HANDLE(reg32_model.blk4.r4, r, "Handle r4 must be the same");
     r = reg32_model.address_2_instance("cpu_map", 64'h10420);
-    `TEST_VALUE(reg32_model.blk4.r5, r, "Handle r5 must be the same");
+    `TEST_HANDLE(reg32_model.blk4.r5, r, "Handle r5 must be the same");
   endtask
 
   task test_address_table;
@@ -51,22 +49,22 @@ class test_bus_predictor extends srm_unit_test;
     `TEST_VALUE(1, table32_model.r1.is_leaf_node(), "Table r1 must be a leaf node");
 
     r = table32_model.address_2_instance("cpu_map", 64'h20100);
-    `TEST_VALUE(table32_model.r1, r, "Handle r1 must match the start of table r1");
+    `TEST_HANDLE(table32_model.r1, r, "Handle r1 must match the start of table r1");
     r = table32_model.address_2_instance("cpu_map", 64'h20128-1);
-    `TEST_VALUE(table32_model.r1, r, "Handle r1 must match the end of table r1");
+    `TEST_HANDLE(table32_model.r1, r, "Handle r1 must match the end of table r1");
     
     r = table32_model.address_2_instance("cpu_map", 64'h20224);
-    `TEST_VALUE(table32_model.r2, r, "Handle r2 must match the end of table r2");
+    `TEST_HANDLE(table32_model.r2, r, "Handle r2 must match the end of table r2");
     
     r = table32_model.address_2_instance("cpu_map", 64'h20410);
-    `TEST_VALUE(table32_model.blk4.r4, r, "Handle r4 must match the end of table r4");
+    `TEST_HANDLE(table32_model.blk4.r4, r, "Handle r4 must match the end of table r4");
 
     r = table32_model.address_2_instance("cpu_map", 64'h20440);
-    `TEST_VALUE(table32_model.blk4.r5, r, "Handle r5 must match the start of table r5");
+    `TEST_HANDLE(table32_model.blk4.r5, r, "Handle r5 must match the start of table r5");
     r = table32_model.address_2_instance("cpu_map", 64'h20444);
-    `TEST_VALUE(table32_model.blk4.r5, r, "Handle r5 must match the table r5");
+    `TEST_HANDLE(table32_model.blk4.r5, r, "Handle r5 must match the table r5");
     r = table32_model.address_2_instance("cpu_map", 64'h20440 + 9*4);
-    `TEST_VALUE(table32_model.blk4.r5, r, "Handle r5 must match the end of table r5");
+    `TEST_HANDLE(table32_model.blk4.r5, r, "Handle r5 must match the end of table r5");
 
   endtask
 

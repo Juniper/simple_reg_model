@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_field_policies_sv
 `define INCLUDED_test_field_policies_sv
 
-import srm_pkg::*;
+
 //---------------------------------------------
 // Class: test_field_policies
 // Test the read and write task to the field.
@@ -26,7 +26,7 @@ class test_field_policies extends srm_unit_test;
 
     adapter_policy = new();
     cpu_handle = new();
-    cpu_handle.initialize(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
+    cpu_handle.initialize(.search_adapter(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
     regmodel.add_adapter(adapter);
   endfunction
@@ -35,8 +35,8 @@ class test_field_policies extends srm_unit_test;
     srm_base_field_policy p;
     regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
     p = srm_rc_policy::get();
-    `TEST_VALUE(p, regmodel.r1.f0.get_policy("cpu_map"), "Sets the register policy");
-    `TEST_VALUE(p, regmodel.r1.f3.get_policy("cpu_map"), "Sets the register policy");
+    `TEST_HANDLE(p, regmodel.r1.f0.get_policy("cpu_map"), "Sets the register policy");
+    `TEST_HANDLE(p, regmodel.r1.f3.get_policy("cpu_map"), "Sets the register policy");
   endtask
 
   task test_table_set_policy();
@@ -46,8 +46,8 @@ class test_field_policies extends srm_unit_test;
     regmodel.set_policy("cpu_map", .policy(srm_rc_policy::get()));
     entry = regmodel.r2.entry_at(3);
     p = srm_rc_policy::get();
-    `TEST_VALUE(p, entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
-    `TEST_VALUE(p, entry.f4.get_policy("cpu_map"), "Sets the table entry policy for f4");
+    `TEST_HANDLE(p, entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
+    `TEST_HANDLE(p, entry.f4.get_policy("cpu_map"), "Sets the table entry policy for f4");
   endtask
 
   task test_read_only_field();
@@ -150,7 +150,7 @@ class test_field_policies extends srm_unit_test;
     regmodel.r2.set_policy("cpu_map", srm_w0crs_policy::get());
 
     entry = regmodel.r2.entry_at(1);
-    `TEST_VALUE(srm_w0crs_policy::get(), entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
+    `TEST_HANDLE(srm_w0crs_policy::get(), entry.f0.get_policy("cpu_map"), "Sets the table entry policy for f0");
 
     entry.set(8'ha5);
     entry.f0.write(cpu_handle, 8'h0);

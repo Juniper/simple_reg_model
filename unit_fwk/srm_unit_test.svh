@@ -35,6 +35,18 @@
   end                         \
  end while(0)
 
+`define TEST_HANDLE(a, b, msg) \
+ do begin                     \
+   if((a) == (b)) begin       \
+     pass_cnt += 1;           \
+     local_pass_cnt += 1;     \
+  end else begin              \
+     fail_cnt += 1;           \
+     local_fail_cnt += 1;     \
+     $display("TestFailed:%s:Handle Expected:%p, Got %p", msg, a, b); \
+  end                         \
+ end while(0)
+
 class srm_unit_test;
   string name;
   static int pass_cnt;

@@ -64,7 +64,7 @@ class srm_bus_predictor #(type BUSTYPE=int) extends uvm_component;
   virtual function srm_generic_xact_t bus_2_generic_xact(BUSTYPE tr);
     srm_generic_xact_t x;
     return x;
-  //endfunction
+  endfunction
 
   // Function: write
   // Triggered when the bus transaction appears on the analysis import *bus_in*

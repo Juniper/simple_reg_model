@@ -1,8 +1,6 @@
 `ifndef INCLUDED_test_utils_sv
 `define INCLUDED_test_utils_sv
 
-import srm_pkg::*;
-
 // A dummy adapter that remembers the last 32b of  written data.
 class dummy_adapter extends srm_bus_adapter;
   reg [31:0] last_data;
@@ -51,7 +49,7 @@ class dummy_adapter extends srm_bus_adapter;
 endclass
 
 // Adapter policy that chooses the first adapter found.
-class first_adapter_policy extends srm_adapter_policy;
+class first_adapter_policy extends srm_search_adapter;
   function bit is_correct_adapter(srm_bus_adapter adapter);
     return 1;
   endfunction

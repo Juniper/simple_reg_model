@@ -1,7 +1,6 @@
 `ifndef INCLUDED_test_reg32_sv
 `define INCLUDED_test_reg32_sv
 
-import srm_pkg::*;
 class test_reg32 extends srm_unit_test;
 
   cpu_reg32 regmodel;

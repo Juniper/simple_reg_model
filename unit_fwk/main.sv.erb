@@ -1,34 +1,26 @@
-module main;
+//
+// Auto Generated: Test runner.
+// Creates a list of all the unit tests. 
+//
+
+import srm_unit_test_pkg::*;
+import <%=unit_test_pkg%>::*;
+
+program main;
   string unit_test_name;
   srm_unit_test test;
 
-  test_reg32 t1 = new();
-  test_table32 t2 = new();
-  test_top t3 = new();
-  test_default_offset t4 = new();
-  test_field_access t5 = new();
-  test_reg_reset t6 = new();
-  test_table_reset t7 = new();
-  test_reg_rw t8 = new();
-  test_table_rw t9 = new();
-  test_srm_utils_1 t10 = new();
-  test_srm_utils_2 t11 = new();
-  test_volatile_field t12 = new();
-  test_field_rw t13 = new();
-  test_reg32_rand t14 = new();
-  test_bus_predictor t15 = new();
-  test_field_policies t16 = new();
-  test_leaf_policies t17 = new();
-  test_reg_coverage t18 = new();
-  test_table_coverage t19 = new();
-  test_model_coverage t20 = new();
+  // Instantiate all tests.
+<%@src_unit_tests.each_with_index {|t, i|%>
+  <%=t%> t_<%=i%> = new();
+<%}%>
 
   initial begin
     if($value$plusargs("UNIT_TEST_NAME=%s", unit_test_name)) begin
       $display("Running %s test(s)", unit_test_name);
     end
 
-    if(unit_test_name == "all") begin
+    if(unit_test_name == "") begin
       foreach(srm_unit_test::test_list[i]) begin
         $display("Run Test %s", srm_unit_test::test_list[i].get_name());
         srm_unit_test::test_list[i].run();
@@ -50,10 +42,10 @@ module main;
     end
 
     if(srm_unit_test::fail_cnt == 0) begin
-      $display("SRUN_TEST_PASS:PassCnt=%0d", srm_unit_test::pass_cnt);
+      $display("SUNIT_TEST_PASS:PassCnt=%0d", srm_unit_test::pass_cnt);
     end else begin
-      $display("SRUN_TEST_FAIL:PassCnt=%0d,FailCnt=%0d", 
+      $display("SUNIT_TEST_FAIL:PassCnt=%0d,FailCnt=%0d", 
                               srm_unit_test::pass_cnt, srm_unit_test::fail_cnt);
     end
   end
-endmodule
+endprogram

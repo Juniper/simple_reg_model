@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_top_sv
 `define INCLUDED_test_top_sv
 
-import srm_pkg::*;
+
 class test_top extends srm_unit_test;
 
   cpu_top regmodel;

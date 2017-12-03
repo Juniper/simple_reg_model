@@ -1,8 +1,6 @@
 `ifndef INCLUDED_test_reg32_rand_sv
 `define INCLUDED_test_reg32_rand_sv
 
-import uvm_pkg::*;
-import srm_pkg::*;
 
 class test_reg32_rand extends srm_unit_test;
 

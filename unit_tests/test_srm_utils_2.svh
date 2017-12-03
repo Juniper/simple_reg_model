@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_srm_utils_2_sv
 `define INCLUDED_test_srm_utils_2_sv
 
-import srm_pkg::*;
+
 class test_srm_utils_2 extends srm_unit_test;
   function bit[31:0] bytes_2_bits(srm_data_t bytes);
     reg[31:0] out_bits;

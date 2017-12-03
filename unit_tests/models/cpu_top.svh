@@ -9,8 +9,6 @@
 // 'h1000    cpu_table32
 //---------------------------------------------------
 
-import srm_pkg::*;
-
 class cpu_top extends srm_component;
 
  cpu_reg32 cpu_reg32;

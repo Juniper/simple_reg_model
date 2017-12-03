@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_default_offset
 `define INCLUDED_test_default_offset
 
-import srm_pkg::*;
+
 
 class test_default_offset extends srm_unit_test;
 

@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_field_rw_sv
 `define INCLUDED_test_field_rw_sv
 
-import srm_pkg::*;
+
 //---------------------------------------------
 // Class: test_field_rw
 // Test the read and write task to the field.
@@ -26,7 +26,7 @@ class test_field_rw extends srm_unit_test;
 
     adapter_policy = new();
     cpu_handle = new();
-    cpu_handle.initialize(.adapter_policy(adapter_policy), .addr_map_name("cpu_map"));
+    cpu_handle.initialize(.search_adapter(adapter_policy), .addr_map_name("cpu_map"));
     adapter = new(.name("cpu_map_adapter"));
     regmodel.add_adapter(adapter);
   endfunction

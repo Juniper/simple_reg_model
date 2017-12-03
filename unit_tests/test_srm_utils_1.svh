@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_srm_utils_1_sv
 `define INCLUDED_test_srm_utils_1_sv
 
-import srm_pkg::*;
+
 class test_srm_utils_1 extends srm_unit_test;
 
   function new();

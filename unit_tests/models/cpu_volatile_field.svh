@@ -13,8 +13,6 @@
 //           f2, f4 are volatile  
 //----------------------------------------------------------------
 
-import srm_pkg::*;
-
 class cpu_volatile_field extends srm_component;
 
   typedef struct packed {

@@ -1,7 +1,7 @@
 `ifndef INCLUDED_test_table_reset
 `define INCLUDED_test_table_reset
 
-import srm_pkg::*;
+
 
 class test_table_reset extends srm_unit_test;
 
@@ -18,7 +18,7 @@ class test_table_reset extends srm_unit_test;
 
   task test_get_reset_value();
     `TEST_VALUE(1, regmodel.r2.is_resettable("HARD"), "Table must be resettable");
-    `TEST_VALUE(1, regmodel.r2.is_reset_present(), "Table must have reset");
+    `TEST_VALUE(1, regmodel.r2.is_resettable("HARD"), "Table must have reset");
     entry = regmodel.r2.entry_at(8);
     `TEST_VALUE('h0, entry.get(), "read out hard value");
     regmodel.reset("BIST");    

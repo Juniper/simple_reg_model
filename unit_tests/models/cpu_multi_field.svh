@@ -11,8 +11,6 @@
 // 'h200 :   r2: 8b multi bit field table with 100 entries. 
 //----------------------------------------------------------------
 
-import srm_pkg::*;
-
 class cpu_multi_field extends srm_component;
 
   // |------------------------------------|
