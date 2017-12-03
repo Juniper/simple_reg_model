@@ -17,11 +17,11 @@
 // permissions and limitations under the License.
 // -------------------------------------------------------------
 //
-`ifndef INCLUDED_srm_reg_array_svh
-`define INCLUDED_srm_reg_array_svh
+`ifndef INCLUDED_srm_table_svh
+`define INCLUDED_srm_table_svh
 
 //----------------------------------------------------------
-// CLASS: srm_reg_array
+// CLASS: srm_table
 // A register array is a register with number of entries > 1.
 //
 // An array represents a table in software view. The design may
@@ -30,10 +30,10 @@
 // use the same abstraction.
 //----------------------------------------------------------
 
-class srm_reg_array #(type T = int) extends srm_node;
+class srm_table #(type T = int) extends srm_node;
   protected srm_addr_t _num_entries;
-  protected srm_array_entry#(T) _prototype;
-  protected srm_array_entry#(T) _entries[srm_addr_t];
+  protected srm_table_entry#(T) _prototype;
+  protected srm_table_entry#(T) _entries[srm_addr_t];
   
   //-----------------
   //Group: Initialization
@@ -78,9 +78,9 @@ class srm_reg_array #(type T = int) extends srm_node;
   // Will cause uvm fatal error if the index is more than the size of the array.
   // FIXME: Explain how entries not yet written are created ?
   //
-  function srm_array_entry#(T) entry_at(srm_addr_t index);
+  function srm_table_entry#(T) entry_at(srm_addr_t index);
     string name;
-    srm_array_entry#(T) entry;
+    srm_table_entry#(T) entry;
 
     if(index >= _num_entries) begin
       `uvm_fatal("TbConfigurationError", 
@@ -120,7 +120,7 @@ class srm_reg_array #(type T = int) extends srm_node;
   // the entries of the model are created.
   //
   virtual task load(srm_base_handle handle);
-    srm_array_entry#(T) entry;
+    srm_table_entry#(T) entry;
     for(int i = 0; i < get_num_entries(); i++) begin
       entry = entry_at(i);
       entry.load(handle);
@@ -135,7 +135,7 @@ class srm_reg_array #(type T = int) extends srm_node;
   // FIXME: explain how non written values are created and written out.
   //
   virtual task store(srm_base_handle handle);
-    srm_array_entry#(T) entry;
+    srm_table_entry#(T) entry;
     for(int i = 0; i < get_num_entries(); i++) begin
       entry = entry_at(i);
       entry.store(handle);

@@ -31,10 +31,10 @@ class cpu_table32 extends srm_node;
   // Table with 10 entries of 4B each.
   //------------------------------------------------------
   
-  class r1_reg_array extends srm_reg_array#(r1_struct_t);
+  class r1_reg_array extends srm_table#(r1_struct_t);
 
     // Entry in the table.
-    class r1_reg extends srm_array_entry#(r1_struct_t);
+    class r1_reg extends srm_table_entry#(r1_struct_t);
       srm_field#(bit[31:0]) field;
 
       function new(string name, srm_node parent, srm_addr_t index=-1); 

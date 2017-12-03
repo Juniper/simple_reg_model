@@ -74,10 +74,10 @@ class cpu_volatile_field extends srm_node;
     bit      f0;
   } r2_struct_t;
 
-  class r2_table extends srm_reg_array#(r2_struct_t);
+  class r2_table extends srm_table#(r2_struct_t);
 
     // Entry of the table.
-    class r2_entry extends srm_array_entry#(r2_struct_t);
+    class r2_entry extends srm_table_entry#(r2_struct_t);
       srm_field#(bit) f4;
       srm_field#(bit) f3;
       srm_field#(bit[2:0]) f2;

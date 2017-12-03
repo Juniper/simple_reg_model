@@ -17,11 +17,11 @@
 // permissions and limitations under the License.
 // -------------------------------------------------------------
 //
-`ifndef INCLUDED_srm_array_entry_svh
-`define INCLUDED_srm_array_entry_svh
+`ifndef INCLUDED_srm_table_entry_svh
+`define INCLUDED_srm_table_entry_svh
 
 //--------------------------------------------------------
-// CLASS: srm_array_entry
+// CLASS: srm_table_entry
 // Models the entry of the register array.
 //
 // The array entry is just a specialization of the register with an 
@@ -29,7 +29,7 @@
 // The template data must be a packed structure representing the fields
 // of the register.
 //--------------------------------------------------------
-virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
+virtual class srm_table_entry#(type T = int) extends srm_reg#(T);
   local srm_addr_t _index;   // For address computation in array.
  
   //-------------------------------
@@ -80,13 +80,13 @@ virtual class srm_array_entry#(type T = int) extends srm_reg#(T);
   //
   // Should create a clone of the prototype at the specified index.
   //
-  pure virtual function srm_array_entry#(T) clone(srm_addr_t index);
+  pure virtual function srm_table_entry#(T) clone(srm_addr_t index);
 
   // Function: initialize
   //
   // Private function to initialize the clone.
   //
-  protected function void __initialize(srm_array_entry#(T) obj);
+  protected function void __initialize(srm_table_entry#(T) obj);
     super.__initialize(obj);
   endfunction
 

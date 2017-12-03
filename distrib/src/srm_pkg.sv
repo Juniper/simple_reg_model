@@ -60,8 +60,8 @@ package srm_pkg;
   `include "base/srm_node.svh"
   `include "base/srm_base_reg.svh"
   `include "base/srm_reg.svh"
-  `include "base/srm_array_entry.svh"
-  `include "base/srm_reg_array.svh"
+  `include "base/srm_table_entry.svh"
+  `include "base/srm_table.svh"
 endpackage
 
 `endif
