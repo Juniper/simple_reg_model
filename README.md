@@ -8,6 +8,10 @@ It is designed to be used in uvm testbenches instead of the *uvm_reg* package th
 
 The intended users of the package are design verificatipn (DV) engineers involved in developing uvm testbneches and writing uvm sequences for verifying the design.
 
+## Getting the Distribution
+This git repo is the development directory for the register package. Users of the package should download and install the tar version from here.
+
+## Overview
 A typical setup of a uvm testbench using srm register package is shown below in Figure 1. A srm register model of a chip consist of a register map as shown. The register model generates generic bus transactions that are sent to the appropriate adapter which forwards it to the bus specific agent.
 
 ![Srm Example](docs/images/srm_example.jpg)
@@ -44,6 +48,7 @@ A typical setup of a uvm testbench using srm register package is shown below in 
 ## Additional Links
 
 Please follow the links below for more details.
+1. **Creating a distribution**: [Details](docs/release.md)
 
-1. **UVM Testbench Integration**:  [Details](docs/testbench.md)
+2. **UVM Testbench Integration**:  [Details](docs/testbench.md)
 
