@@ -43,7 +43,7 @@ class srm_field#(type T = int) extends srm_base_field;
   //
   // ~name~ is the name of the field.
   // ~parent~ is the pointer to the register to which the field belongs.
-  // ~nbits~ is the size of the field in bits.
+  // ~n_bits~ is the size of the field in bits.
   // ~lsb_pos~ is the least significant position 
   //
   function new(string name, srm_base_reg parent, int n_bits, int lsb_pos,

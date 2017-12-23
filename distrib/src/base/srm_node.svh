@@ -216,11 +216,12 @@ class srm_node;
     srm_node p;
     if(!_offset_table.exists(addr_map_name)) begin
       // By default return 0 for root node even when the user has not specified it.
-      if(is_root_node()) 
+      if(is_root_node()) begin 
         return 0;
-      else 
+      end else begin 
         `uvm_fatal("TbConfigurationError", 
           $psprintf("Unknown address map name \"%s\" for get_offset", addr_map_name));
+      end
     end
     offset = _offset_table[addr_map_name];
     p = get_parent();

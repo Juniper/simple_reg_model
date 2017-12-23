@@ -339,6 +339,11 @@ virtual class srm_base_reg extends srm_node;
 
     // Launch the operation
     adapter = handle.search_adapter.get_adapter(this);
+    if(adapter == null) begin
+      `uvm_fatal("TbConfigurationError", 
+          $psprintf("No adapter configured for write to offset=0x%0x in address map '%s'", 
+		    generic_xact.addr, handle.addr_map_name));
+    end
     adapter.execute(generic_xact, handle.seq_priority);
 
     // Gather coverage if enabled.
@@ -374,6 +379,11 @@ virtual class srm_base_reg extends srm_node;
 
     // Launch the operation
     adapter = handle.search_adapter.get_adapter(this);
+    if(adapter == null) begin
+      `uvm_fatal("TbConfigurationError", 
+          $psprintf("No adapter configured for read from offset=0x%0x in address map '%s'", 
+		    generic_xact.addr, handle.addr_map_name));
+    end
     adapter.execute(generic_xact, handle.seq_priority);
     
     handle.generic_xact_status = generic_xact.status;
