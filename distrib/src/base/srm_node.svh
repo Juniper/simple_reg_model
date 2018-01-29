@@ -312,6 +312,9 @@ class srm_node;
   // of the adapters is selected and the leaf node is accessed.
   virtual function void add_adapter(srm_bus_adapter adapter);
     _adapters.push_back(adapter);
+    `uvm_info("TbDebug", 
+      $psprintf("Added adapter '%s' to node '%s' at idx=%0d", adapter.get_name(),
+                get_name(), _adapters.size()), UVM_LOW)
   endfunction
 
   // Function: get_adapters
