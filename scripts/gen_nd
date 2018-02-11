@@ -1,0 +1,17 @@
+#!/bin/csh
+
+
+set nd_dir = ../natural_docs
+set outdir = ../distrib/docs/html
+
+rm -rf $outdir
+mkdir -p $outdir/images
+
+cp -r $nd_dir/images/b* $outdir/images
+cp $nd_dir/logo.html $outdir
+perl $nd_dir/NaturalDocs \
+    -do \
+    -ro \
+    -i ../distrib/src \
+    -p ./Proj \
+    -o FramedHTML $outdir
