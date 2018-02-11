@@ -1,15 +1,15 @@
-The UVM kit is licensed under the MIT license.  The full text of
-the license is provided in this kit in the file LICENSE.txt
+The UVM package is licensed under the MIT license.  The full text of
+the license is provided in this package in the file LICENSE.txt
 
 Extenal Dependecny
 -------------------
-This kit requires UVM package to be already installed. Please refer to the
+This package requires UVM package to be already installed. Please refer to the
 accellera website to download and install it.
 
-Installing the kit
+Installing the package
 ------------------
 
-Installation of SRM requires first unpacking the kit in a convenient
+Installation of SRM requires first unpacking the package in a convenient
 location.
 
     % mkdir path/to/convenient/location
