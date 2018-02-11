@@ -16,7 +16,7 @@ Easiest way to get started with srm is to download the tar file from the [releas
 2. Unpack the tar file in the install directory.
 ```
    cd <install_dir>
-   tar cvfz svm-1.0.tar.gz
+   tar xvfz svm-1.0.tar.gz
 ```
 
 3. Setup the environment variable SRM_HOME to point to the install directory. 
