@@ -1,54 +1,42 @@
-# Introduction
-This is the top level directory of the simple reg model repository. The distrib directory will contain code that is intended for distribution.
+# Simple Register Model
+Simple Register Model (srm) are system verilog classes that help to develop register model (aka regstore, register abstraction layer) for [uvm testbenches](http://accellera.org/downloads/standards/uvm).  
 
-## Simple Register Model
-Simple Register Model (srm) are system verilog classes that help to develop register model (aka regstore, register abstraction layer) for uvm testbenches. It is open sourced and available under MIT license.
+It is open sourced and available under MIT license.  
 
-It is designed to be used in uvm testbenches instead of the *uvm_reg* package that is shipped with uvm distribution. 
+It is designed to be used in uvm testbenches instead of the *uvm_reg* package that is shipped with uvm distribution.  
 
 The intended users of the package are design verificatipn (DV) engineers involved in developing uvm testbneches and writing uvm sequences for verifying the design.
 
-## Getting the Distribution
-This git repo is the development directory for the register package. Users of the package should download and install the tar version from here.
+## Getting Started
+Easiest way to get started with srm is to download the tar file from the [release area](https://github.com/Juniper/simple_reg_model/releases) and follow the instructions. 
 
-## Overview
-A typical setup of a uvm testbench using srm register package is shown below in Figure 1. A srm register model of a chip consist of a register map as shown. The register model generates generic bus transactions that are sent to the appropriate adapter which forwards it to the bus specific agent.
+## Installing the Package 
+1. Download tar file from release area. Say the name of file is svm-1.0.tar.gz
 
-![Srm Example](docs/images/srm_example.jpg)
+2. Unpack the tar file in the install directory.
+```
+   cd <install_dir>
+   tar xvfz svm-1.0.tar.gz
+```
 
-## Limitations Of UVM Register Package
+3. Setup the environment variable SRM_HOME to point to the install directory. 
+For example in Bash shell.  
 
-### A.	Large Memory Footprint
-  UVM register package causes memory to be statically allocated for all the locations in the address map, independent of the actual locations accessed by the test. In fact, each register needs to be as large as the largest register in the design. It is well known that most tests, especially at the system level, access only a small fraction of the address space. Hence it is wasteful to pay for all the locations in each test.
-  UVM register does provide a “vreg” lightweight api. This is just an access API with no storage inside the model intended for memories with their own custom model (like external memories). Hence this is not a valid solution for on chip structures.
+```
+   export SRM_HOME=<install_dir>/srm-1.0
+```
 
- ### B.	Randomization Fails For Large Tables
-  In current chips that I work on, I have extensive tables implemented as embedded memories inside the design. UVM register has no equivalent classes to model these tables and instead implements them as static array of registers. Time taken for randomization on these static arrays increases exponentially with the number of entries, and I find that I can practically only randomize tables of less than 5K entries.
-  
-### C.	Confusing Access API
-  The UVM register package exposes 3 values associated with each register (“mirrored value”, “desired value” and “random value”) to the test writer. To manipulate these, the test writer has to choose a multitude of access functions like “mirror”, “update”, “predict” etc.  I find this strategy of creating multiple access methods to implement independent concerns of randomization and access type, confusing and hard to remember for the test writer. It was interesting to find that others on the internet had reached the same conclusion. 
-  
-### D.	Hard to Understand Code
-  In UVM 1.1d, the 26 files are containing over 22,000 lines of source code for the register package. In the User Guide, the description of the UVM Register layer, is alone 26% of the number of pages. Hence it is hard to understand and modify it.
+## Using the Package
+You must compile the file $SRM_HOME/src/srm.sv first. You will need to specify the location of $SRM_HOME/src as a include directory in your
+compilation command line using the +incdir+ command-line option.  
 
-## Advantages Of SRM Register Package
+You can then make the SRM library accessible to your SystemVerilog code by importing the package 'srm_pkg' in the appropriate scope.  
 
-### A.	Efficient Memory Footprint
-  SRM models tables by the “srm_table” which uses an associative array for storage. Hence entries are allocated only when written. The registers are modeled as template classes “srm_reg” and so the storage is limited to the actual size of the register. 
+Examples for different simulator can be found in the installation directory $SRM_HOME/examples/  
 
-### B.	Randomization Works For Large Tables
-  Randomization in SRM is implemented separately as a separate hierarchy of system verilog constraint classes. The test writer can apply the constraints on each entry of the table individually in a loop instead of applying it to the entire table in one shot. 
 
-### C.	Clean Access API
-  The SRM access API exposes only the last value written by the test writer. Writes to the register always update this value and read, by default, checks all the nonvolatile fields in this value. Field access are allowed and the generic bus transactions have byte enables to identify the bytes being written and read to. It is the responsibility of the bus adapter to translate these partial transactions to actual writes and reads.
+## Demo 
+A example uvm testbench can be downloaded from [here](https://github.com/sanjeevs/srm_sap).  
 
-### D.	Modular Code
-  The core SRM consists of < 4K lines of code. It cleanly separates randomization, access type (frontdoor/sidedoor/backdoor) into a separate class hierarchy, so each class has only a single responsibility. Each class has unit tests to enable high coverage.
-
-## Additional Links
-
-Please follow the links below for more details.
-1. **Creating a distribution**: [Details](docs/release.md)
-
-2. **UVM Testbench Integration**:  [Details](docs/testbench.md)
-
+## Documentation
+Srm docuementation can be found [here](https://github.com/Juniper/simple_reg_model/wiki).
