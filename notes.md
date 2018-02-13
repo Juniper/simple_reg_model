@@ -17,6 +17,11 @@ Purpose of the handle class is to select the adapter and the address map. 2 use 
    to be the last one in the list. if not found then go back and select the sidedoor else just
    select the front door.  
 
+3. Handle should have intialize method for getting the name of the adapter.  
+```
+   handle.initialize(.name(adapter.get_name()));
+```
+
 ## Adapter
 ## convert data in adapter to uvm_hdl_data_t HDL_MAX_WIDTH
 
