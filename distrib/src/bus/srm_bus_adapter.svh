@@ -58,6 +58,39 @@ class srm_bus_adapter extends uvm_object;
   virtual task execute(ref srm_generic_xact_t generic_xact, int seq_priority);
   endtask
 
+  // Function: generic_xact_to_hdl_data
+  //
+  // Converts the byte array from generic xact to uvm_hdl_data_t type.
+  //
+  // ~generic_xact~ is the generic transaction emitted by the register model.
+  //
+  // Returns the uvm_hdl_data_t
+  //
+  function uvm_hdl_data_t generic_xact_to_hdl_data(ref srm_generic_xact_t generic_xact);
+    uvm_hdl_data_t hdl_data = 'd0;
+    // [31:0] = {byte3, byte2, byte1, byte0}
+    for(int i = generic_xact.data.size()-1; i >= 0; i--) begin
+      hdl_data <<= 8;
+      hdl_data[7:0] = generic_xact.data[i];
+    end
+    return hdl_data;
+  endfunction
+
+  // Function: hdl_data_to_generic_xact
+  //
+  // Converts the hdl data type to byte array inside the generic xact.
+  //
+  // ~generic_xact~ is the generic transaction that will be updated.
+  //
+  // ~hdl_data~ is the incoming data reg.
+  //
+  function hdl_data_to_generic_xact(ref srm_generic_xact_t generic_xact, uvm_hdl_data_t hdl_data);
+    foreach(generic_xact.data[i]) begin
+      generic_xact.data[i] = hdl_data[7:0];
+      hdl_data >>= 8;
+    end
+  endfunction
+
 endclass
 
 `endif
