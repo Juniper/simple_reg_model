@@ -20,7 +20,6 @@
 `ifndef INCLUDED_srm_base_handle_svh
 `define INCLUDED_srm_base_handle_svh
 
-typedef class srm_search_adapter;
 //-----------------------------------------------------------------
 // CLASS: srm_base_handle
 // Client options for configurating the access.
@@ -33,10 +32,6 @@ class srm_base_handle extends uvm_object;
   // Variable: priority
   // Priority of the sub sequence.
   int seq_priority;
-
-  // Variable: search_adapter 
-  // Pointer to the adapter instance search logic.
-  srm_search_adapter search_adapter;
 
   // Variable: addr_map_name
   // Name of the address map.
@@ -76,8 +71,7 @@ class srm_base_handle extends uvm_object;
   // Initialize the instance of base handle.
   //
   // Factory uses the default constructor.
-  virtual function void initialize(srm_search_adapter search_adapter, string addr_map_name);
-    this.search_adapter = search_adapter;
+  virtual function void initialize(string addr_map_name);
     this.addr_map_name = addr_map_name;
     this.skip_read_error_msg = 0;
     this.generic_xact_status = SRM_IS_OK;
@@ -92,6 +86,52 @@ class srm_base_handle extends uvm_object;
     error_msgs.push_back(msg);
   endfunction
 
+  // Function: is_correct_adapter
+  //
+  // Return true for the correct adapter.
+  //
+  // Virtual function that must be implemented by the subclass. Returns false
+  // by default.
+  //
+  virtual function bit is_correct_adapter(srm_bus_adapter adapter);
+    return 0;
+  endfunction
+  
+  // Function: search_backwards_for_adapter
+  //
+  // Walk backward to root looking for correct adapter.
+  //
+  // Return null if no correct adapter found.
+  //
+  virtual function srm_bus_adapter search_backwards_for_adapter(srm_node obj);
+    srm_node ptr = obj;
+    srm_bus_adapter adapters[$];
+
+    while(ptr != null) begin
+      adapters = ptr.get_adapters();
+      for(int i = 0; i < adapters.size(); i++) begin
+        if(is_correct_adapter(adapters[i])) return adapters[i];
+      end
+      ptr = ptr.get_parent();
+    end
+
+    return null;
+  endfunction
+
+  // Function: get_adapter
+  //
+  // Select the correct adapter and return it.
+  //
+  // TbConfiguraration Error is no adapter found. 
+  //
+  virtual function srm_bus_adapter get_adapter(srm_node obj);
+    srm_bus_adapter adapter = search_backwards_for_adapter(obj);
+    if(adapter == null) begin
+      `uvm_fatal("TbConfigurationError", 
+        $psprintf("Could not locate adapter for \"%s\" node", obj.get_full_name()));
+    end
+    return adapter;
+  endfunction
 endclass
 
 `endif

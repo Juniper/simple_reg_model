@@ -50,7 +50,6 @@ package srm_pkg;
   `include "bus/srm_generic_xact.svh"
   `include "bus/srm_bus_adapter.svh"
   `include "bus/srm_bus_predictor.svh"
-  `include "bus/srm_search_adapter.svh"
   `include "base/srm_base_field_policy.svh"
   `include "base/srm_base_field.svh"
   `include "base/srm_field.svh"
