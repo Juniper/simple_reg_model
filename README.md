@@ -1,7 +1,7 @@
 # Simple Register Model
 Simple Register Model (srm) are system verilog classes that help to develop register model (aka regstore, register abstraction layer) for [uvm testbenches](http://accellera.org/downloads/standards/uvm).  
 
-It is open sourced and available under MIT license.  I presented it in DVCon2018. Check a copy of the [slides](DvConSlides_2018.pdf).
+It is open sourced and available under MIT license.  I presented it in DVCon2018. Check a copy of the [slides](DVConSlides_2018.pdf).
 
 It is designed to be used in uvm testbenches instead of the *uvm_reg* package that is shipped with uvm distribution.  
 
